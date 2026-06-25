@@ -188,9 +188,11 @@ jest.mock('react-native', () => {
       Value: function (_v: number) {
         return { setValue: jest.fn(), interpolate: jest.fn() }
       },
-      timing: () => ({ start: (cb?: () => void) => cb?.() }),
-      parallel: (_arr: unknown[]) => ({ start: (cb?: () => void) => cb?.() }),
-      spring: () => ({ start: (cb?: () => void) => cb?.() }),
+      timing: () => ({ start: (cb?: () => void) => cb?.(), stop: () => {} }),
+      sequence: (_arr: unknown[]) => ({ start: (cb?: () => void) => cb?.(), stop: () => {} }),
+      loop: (_anim: unknown) => ({ start: (cb?: () => void) => cb?.(), stop: () => {} }),
+      parallel: (_arr: unknown[]) => ({ start: (cb?: () => void) => cb?.(), stop: () => {} }),
+      spring: () => ({ start: (cb?: () => void) => cb?.(), stop: () => {} }),
     },
     PanResponder: {
       create: () => ({ panHandlers: {} }),

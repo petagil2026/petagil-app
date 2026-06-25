@@ -13,6 +13,7 @@ import { LinearGradient } from 'expo-linear-gradient';
 import { useNavigation } from '@react-navigation/native';
 import type { NativeStackNavigationProp } from '@react-navigation/native-stack';
 import { ScreenContainer } from '@/components/ui';
+import { IconCheck } from '@/assets/icons';
 import { useAuth } from '@/app/providers';
 import type { Role } from '@/types/auth';
 import type { AuthStackParamList } from '@/navigation/types';
@@ -125,7 +126,7 @@ function CardContent({
 
       {isSelected ? (
         <View style={styles.radioOn}>
-          <Text style={styles.check}>✓</Text>
+          <IconCheck size={18} color="#FFFFFF" />
         </View>
       ) : (
         <View style={styles.radioOff} />
@@ -145,7 +146,7 @@ function Emoji({ char }: { char: string }) {
 const styles = StyleSheet.create({
   container: { flex: 1, paddingHorizontal: 22 },
 
-  header: {},
+  header: { marginTop: 56 },
 
   title: {
     fontFamily: 'Baloo2_800ExtraBold',
@@ -229,7 +230,6 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     justifyContent: 'center',
   },
-  check: { fontFamily: 'Nunito_600SemiBold', fontSize: 16, color: '#FFFFFF' },
   radioOff: {
     width: 28,
     height: 28,
@@ -239,8 +239,8 @@ const styles = StyleSheet.create({
   },
 
   buttonShadow: {
-    // marginTop auto fixa o botão na base; header + cards ficam compactos no topo (como no Figma)
-    marginTop: 'auto',
+    // Botão logo abaixo dos cards (fluxo natural, não fixo na base)
+    marginTop: 28,
     borderRadius: 20,
     shadowColor: '#1E5F92',
     shadowOpacity: 0.6,

@@ -1,10 +1,11 @@
 /**
- * AuthProvider — versão MOCKADA da fundação do PetÁgil.
+ * AuthProvider — autenticação real contra a API (NestJS).
  *
- * Sem SSO/PKCE/rede: `login(role)` cria um usuário fake, autentica e seleciona o
- * papel; a sessão (user + papel) é persistida em SecureStore e restaurada no mount
- * ANTES de `isLoading` virar `false`, para o RootNavigator já abrir no papel salvo.
- * Specs futuras substituem isto por auth real.
+ * `login(email, password)` chama `/api/auth/login`, persiste tokens + user em
+ * SecureStore e autentica. A sessão é restaurada do SecureStore no mount ANTES de
+ * `isLoading` virar `false`, para o RootNavigator já abrir no estado certo.
+ * Em falha de auth irrecuperável (401 após refresh), o `httpClient` notifica via
+ * `setOnAuthFailure` e a sessão é encerrada.
  */
 import {
   createContext,
@@ -17,6 +18,7 @@ import {
   type ReactNode,
 } from 'react'
 
+import { loginRequest, logoutRequest, setOnAuthFailure } from '@/services/api'
 import { secureStorage } from '@/services/storage'
 import type { Role, User } from '@/types/auth'
 
@@ -26,8 +28,8 @@ export interface AuthContextType {
   user: User | null
   error: string | null
   selectedRole: Role | null
-  /** Autentica (mock) já fixando o papel — substitui o antigo startSSOLogin (sem rede). */
-  login: (role: Role) => Promise<void>
+  /** Autentica por email/senha contra a API. Lança em caso de falha. */
+  login: (email: string, password: string) => Promise<void>
   /** Troca o papel selecionado sem mexer no estado de autenticação. */
   selectRole: (role: Role) => void
   logout: () => Promise<void>
@@ -55,25 +57,6 @@ const logger = {
   error: (...args: unknown[]) => {
     if (__DEV__) console.error('[AuthProvider]', ...args)
   },
-}
-
-/** Rótulos mock (email/nome) por papel. */
-const MOCK_USER_BY_ROLE: Record<Role, { email: string; name: string }> = {
-  tutor: { email: 'tutor@petagil.app', name: 'Tutor(a) PetÁgil' },
-  vet: { email: 'vet@petagil.app', name: 'Dr(a). Veterinário(a)' },
-  passeador: { email: 'passeador@petagil.app', name: 'Passeador(a) PetÁgil' },
-}
-
-/** Cria um usuário fake para o papel escolhido. */
-function makeMockUser(role: Role): User {
-  const id = `mock-${role}`
-  return {
-    sub: id,
-    id,
-    email: MOCK_USER_BY_ROLE[role].email,
-    name: MOCK_USER_BY_ROLE[role].name,
-    role,
-  }
 }
 
 function isRole(value: string | null): value is Role {
@@ -144,18 +127,39 @@ export function AuthProvider({ children }: AuthProviderProps) {
   }, [safeSetState])
 
   /**
-   * Login mockado: cria user fake, persiste user + papel e autentica.
-   * SEMPRE seta o papel → o estado "autenticado sem papel" não deve ocorrer.
+   * Ponte com o httpClient: em falha de auth irrecuperável (401 após refresh), o
+   * httpClient já limpou a sessão — aqui só resetamos o estado para deslogado.
+   */
+  useEffect(() => {
+    setOnAuthFailure(() => {
+      safeSetState({
+        isAuthenticated: false,
+        user: null,
+        selectedRole: null,
+        isLoading: false,
+        error: null,
+      })
+    })
+    return () => setOnAuthFailure(null)
+  }, [safeSetState])
+
+  /**
+   * Login real: autentica na API, persiste tokens + user, e fixa o papel a
+   * partir do `user.role` do servidor. Relança o erro para a tela tratar.
    */
   const login = useCallback(
-    async (role: Role): Promise<void> => {
+    async (email: string, password: string): Promise<void> => {
       safeSetState({ isLoading: true, error: null })
       try {
-        const user = makeMockUser(role)
+        const { tokens, user } = await loginRequest(email, password)
         await Promise.all([
+          secureStorage.setTokens(tokens),
           secureStorage.setUser(JSON.stringify(user)),
-          secureStorage.setSelectedRole(role),
         ])
+        const role: Role | null = isRole(user.role ?? null) ? (user.role as Role) : null
+        if (role) {
+          await secureStorage.setSelectedRole(role)
+        }
         safeSetState({
           isAuthenticated: true,
           user,
@@ -163,13 +167,11 @@ export function AuthProvider({ children }: AuthProviderProps) {
           isLoading: false,
           error: null,
         })
-        logger.log('mock login as', role)
+        logger.log('login ok:', user.email)
       } catch (error) {
         logger.error('login failed:', error)
-        safeSetState({
-          error: 'Não foi possível entrar. Tente novamente.',
-          isLoading: false,
-        })
+        safeSetState({ isLoading: false })
+        throw error instanceof Error ? error : new Error('login failed')
       }
     },
     [safeSetState]
@@ -184,10 +186,11 @@ export function AuthProvider({ children }: AuthProviderProps) {
     [safeSetState]
   )
 
-  /** Logout mockado: limpa sessão (tokens/user/papel) e reseta o estado. */
+  /** Logout: avisa o servidor (best-effort), limpa a sessão e reseta o estado. */
   const logout = useCallback(async (): Promise<void> => {
     safeSetState({ isLoading: true })
     try {
+      await logoutRequest()
       await secureStorage.clearSession()
     } catch (error) {
       logger.error('logout clear failed:', error)
