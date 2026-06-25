@@ -56,3 +56,5 @@ export { IconWorkflow } from './IconWorkflow';
 export { IconEnvelope } from './IconEnvelope';
 export { IconGoogle } from './IconGoogle';
 export { IconPaw } from './IconPaw';
+export { IconEye } from './IconEye';
+export { IconEyeSlash } from './IconEyeSlash';

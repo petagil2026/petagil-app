@@ -81,7 +81,7 @@ describe('LoginScreen (frontend-only)', () => {
     expect(mockNavigate).not.toHaveBeenCalled();
   });
 
-  it('AC4: caminho feliz chama o seam 1x com credenciais e navega para RoleSelect', async () => {
+  it('AC4: caminho feliz chama o seam 1x com as credenciais (sem navegar pela tela)', async () => {
     const onSubmit = jest.fn().mockResolvedValue(undefined);
     renderLogin({ onSubmit });
 
@@ -91,8 +91,9 @@ describe('LoginScreen (frontend-only)', () => {
 
     await waitFor(() => expect(onSubmit).toHaveBeenCalledTimes(1));
     expect(onSubmit).toHaveBeenCalledWith({ email: 'tutor@petagil.com', password: 'senha123' });
-    await waitFor(() => expect(mockNavigate).toHaveBeenCalledWith('RoleSelect'));
-    // Tela é frontend-only: nenhuma chamada de rede deve ocorrer (sem httpClient/fetch).
+    // A navegação é dirigida pelo AuthProvider/RootNavigator ao autenticar, não pela tela.
+    expect(mockNavigate).not.toHaveBeenCalled();
+    // O seam é injetado (spy) — nenhuma chamada de rede direta deve ocorrer aqui.
     expect(global.fetch).not.toHaveBeenCalled();
   });
 
@@ -117,7 +118,8 @@ describe('LoginScreen (frontend-only)', () => {
     await act(async () => {
       resolveSubmit();
     });
-    await waitFor(() => expect(mockNavigate).toHaveBeenCalledWith('RoleSelect'));
+    // Concluído: o botão volta ao estado normal (título "Entrar" reaparece).
+    await waitFor(() => expect(screen.getByText('Entrar')).toBeTruthy());
   });
 
   it('AC9 (teclado): "done" na senha dispara o submit', async () => {

@@ -13,12 +13,15 @@
  * //   tech-spec "Backend Integration Handoff"). Usar @/services/api/httpClient — sem fetch direto.
  * // TODO(backend): trocar navigation.navigate('RoleSelect') pelo fluxo autenticado real.
  */
-import React, { forwardRef, useRef, useState } from 'react'
+import React, { forwardRef, useEffect, useRef, useState } from 'react'
 import {
   View,
   Text,
   TextInput,
   TouchableOpacity,
+  Image,
+  Animated,
+  Easing,
   StyleSheet,
   type TextInputProps,
 } from 'react-native'
@@ -32,7 +35,7 @@ import { t } from '@lingui/core/macro'
 import { useLingui } from '@lingui/react'
 import { useTheme } from '@/theme'
 import { GradientButton, useToast } from '@/components/ui'
-import { IconEnvelope, IconLock, IconGoogle, IconPaw } from '@/assets/icons'
+import { IconEnvelope, IconLock, IconGoogle, IconEye, IconEyeSlash } from '@/assets/icons'
 import type { AuthStackScreenProps } from '@/navigation/types'
 
 /** Contrato do seam de submit — substituído pela auth real na etapa de backend. */
@@ -61,12 +64,36 @@ export function LoginScreen({ onSubmit = defaultSubmit }: LoginScreenProps) {
 
   const passwordRef = useRef<TextInput>(null)
 
+  // Animação de flutuar (sobe/desce) da logo — loop suave e infinito.
+  const logoFloat = useRef(new Animated.Value(0)).current
+  useEffect(() => {
+    const animation = Animated.loop(
+      Animated.sequence([
+        Animated.timing(logoFloat, {
+          toValue: -12,
+          duration: 2200,
+          easing: Easing.inOut(Easing.ease),
+          useNativeDriver: true,
+        }),
+        Animated.timing(logoFloat, {
+          toValue: 0,
+          duration: 2200,
+          easing: Easing.inOut(Easing.ease),
+          useNativeDriver: true,
+        }),
+      ])
+    )
+    animation.start()
+    return () => animation.stop()
+  }, [logoFloat])
+
   const [email, setEmail] = useState('')
   const [password, setPassword] = useState('')
   const [emailError, setEmailError] = useState<string | undefined>()
   const [passwordError, setPasswordError] = useState<string | undefined>()
   const [formError, setFormError] = useState<string | undefined>()
   const [isSubmitting, setIsSubmitting] = useState(false)
+  const [showPassword, setShowPassword] = useState(false)
 
   const validateEmail = (value: string): string | undefined =>
     EMAIL_REGEX.test(value.trim()) ? undefined : t`Digite um e-mail válido`
@@ -99,8 +126,7 @@ export function LoginScreen({ onSubmit = defaultSubmit }: LoginScreenProps) {
     setIsSubmitting(true)
     try {
       await onSubmit({ email: email.trim(), password })
-      // TODO(backend): trocar o destino pelo fluxo autenticado real.
-      navigation.navigate('RoleSelect')
+      // Sucesso: o AuthProvider seta isAuthenticated e o RootNavigator troca para o app.
     } catch {
       setFormError(t`Não foi possível entrar. Tente novamente.`)
     } finally {
@@ -113,8 +139,8 @@ export function LoginScreen({ onSubmit = defaultSubmit }: LoginScreenProps) {
   }
 
   const handleRegisterPress = () => {
-    // TODO(backend): definir destino do cadastro (tela de registro fora do escopo do MVP atual).
-    toast.info(t`Cadastro em breve`)
+    // Cadastro começa pela escolha de perfil (RoleSelect → Cadastro).
+    navigation.navigate('RoleSelect')
   }
 
   const submitDisabled = !email.trim() || !password || isSubmitting
@@ -135,26 +161,33 @@ export function LoginScreen({ onSubmit = defaultSubmit }: LoginScreenProps) {
           end={{ x: 0.4, y: 1 }}
           style={[styles.header, { paddingTop: insets.top + theme.spacing['3xl'] }]}
         >
-          <View
-            style={[
-              styles.logo,
-              {
-                borderRadius: theme.borderRadius.logo,
-                backgroundColor: theme.colors.grey[0] + '38', // branco 22%
-                borderColor: theme.colors.grey[0] + '66', // branco 40%
-              },
-            ]}
-          >
-            <IconPaw size={58} color={theme.colors.grey[0]} />
-          </View>
-          <Text style={[theme.textStyles.h1600, { color: theme.colors.grey[0] }, styles.title]}>
-            <Trans>PetÁgil</Trans>
-          </Text>
-          <Text
-            style={[theme.textStyles.lg400, { color: theme.colors.grey[0] + 'E6' }, styles.tagline]}
-          >
-            <Trans>Cuidar do seu pet ficou simples</Trans>
-          </Text>
+          {/* Logo + tagline flutuam juntos (mesmo translateY animado). */}
+          <Animated.View style={[styles.logoGroup, { transform: [{ translateY: logoFloat }] }]}>
+            <View
+              style={[
+                styles.logoPlate,
+                {
+                  backgroundColor: theme.colors.grey[0],
+                  borderRadius: theme.borderRadius.logo,
+                  shadowColor: theme.colors.brandBlue[10],
+                },
+              ]}
+            >
+              <Image
+                // eslint-disable-next-line @typescript-eslint/no-require-imports -- asset estático (padrão RN/Metro)
+                source={require('../../../assets/petagil-logo.png')}
+                style={styles.logo}
+                resizeMode="contain"
+                accessibilityRole="image"
+                accessibilityLabel={t`PetÁgil`}
+              />
+            </View>
+            <Text
+              style={[theme.textStyles.lg400, { color: theme.colors.grey[0] + 'E6' }, styles.tagline]}
+            >
+              <Trans>Cuidar do seu pet ficou simples</Trans>
+            </Text>
+          </Animated.View>
         </LinearGradient>
 
         {/* Sheet branca sobreposta ao header */}
@@ -201,12 +234,27 @@ export function LoginScreen({ onSubmit = defaultSubmit }: LoginScreenProps) {
             error={passwordError}
             placeholder={t`Sua senha`}
             accessibilityLabel={t`Senha`}
-            secureTextEntry
+            secureTextEntry={!showPassword}
             autoCapitalize="none"
             autoComplete="password"
             textContentType="password"
             returnKeyType="done"
             onSubmitEditing={() => void handleLogin()}
+            trailing={
+              <TouchableOpacity
+                testID="login-password-toggle"
+                onPress={() => setShowPassword(v => !v)}
+                accessibilityRole="button"
+                accessibilityLabel={showPassword ? t`Ocultar senha` : t`Mostrar senha`}
+                hitSlop={8}
+              >
+                {showPassword ? (
+                  <IconEyeSlash size={20} color={theme.colors.grey[500]} />
+                ) : (
+                  <IconEye size={20} color={theme.colors.grey[500]} />
+                )}
+              </TouchableOpacity>
+            }
           />
 
           {/* Erro de form fica colado ao CTA (não conta como "slot" do space-between). */}
@@ -283,10 +331,12 @@ export function LoginScreen({ onSubmit = defaultSubmit }: LoginScreenProps) {
 interface LoginFieldProps extends Omit<TextInputProps, 'style'> {
   icon: React.ReactNode
   error?: string
+  /** Slot opcional à direita do input (ex.: botão de mostrar/ocultar senha). */
+  trailing?: React.ReactNode
 }
 
 const LoginField = forwardRef<TextInput, LoginFieldProps>(function LoginField(
-  { icon, error, accessibilityLabel, ...inputProps },
+  { icon, error, trailing, accessibilityLabel, ...inputProps },
   ref
 ) {
   const theme = useTheme()
@@ -316,6 +366,7 @@ const LoginField = forwardRef<TextInput, LoginFieldProps>(function LoginField(
           accessibilityLabel={accessibilityLabel}
           {...inputProps}
         />
+        {trailing}
       </View>
       {error && (
         <Text
@@ -340,18 +391,25 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     paddingBottom: 88,
   },
-  logo: {
-    width: 104,
-    height: 104,
-    borderWidth: 1,
+  logoGroup: {
+    alignItems: 'center',
+  },
+  logoPlate: {
+    padding: 34,
     alignItems: 'center',
     justifyContent: 'center',
+    // Sombra suave para destacar a placa sobre o gradiente azul do header
+    shadowOpacity: 0.18,
+    shadowRadius: 16,
+    shadowOffset: { width: 0, height: 8 },
+    elevation: 6,
   },
-  title: {
-    marginTop: 16,
+  logo: {
+    width: 150,
+    height: 145,
   },
   tagline: {
-    marginTop: 4,
+    marginTop: 8,
   },
   sheet: {
     flex: 1,

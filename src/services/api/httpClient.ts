@@ -257,7 +257,15 @@ export async function httpClient<T>(endpoint: string, options: HttpClientOptions
       throw error
     }
 
-    if (error instanceof DOMException && error.name === 'AbortError') {
+    // AbortError (timeout via AbortController). NÃO usar `instanceof DOMException`:
+    // no Hermes (React Native) `DOMException` não é um global e o `instanceof`
+    // lança ReferenceError, mascarando o erro real. Checamos pelo `name` (funciona
+    // tanto p/ DOMException quanto p/ Error, em RN e no ambiente de teste).
+    if (
+      typeof error === 'object' &&
+      error !== null &&
+      (error as { name?: string }).name === 'AbortError'
+    ) {
       throw new TimeoutError('Tempo limite excedido', 408)
     }
 

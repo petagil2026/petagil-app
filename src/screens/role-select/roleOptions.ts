@@ -35,7 +35,7 @@ export const ROLE_OPTIONS: RoleOption[] = [
   {
     id: 'passeador',
     title: 'Sou passeador(a)',
-    description: 'Oferecer passeios nos meus horários livres',
+    description: 'Oferecer passeios nos meus\nhorários livres',
     emoji: '🦮',
     tileGradient: ['#CDEFD9', '#8FD9A8'],
   },
