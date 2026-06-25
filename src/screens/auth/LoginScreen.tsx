@@ -145,13 +145,13 @@ export function LoginScreen({ onSubmit = defaultSubmit }: LoginScreenProps) {
               },
             ]}
           >
-            <IconPaw size={50} color={theme.colors.grey[0]} />
+            <IconPaw size={58} color={theme.colors.grey[0]} />
           </View>
-          <Text style={[theme.textStyles.h2600, { color: theme.colors.grey[0] }, styles.title]}>
+          <Text style={[theme.textStyles.h1600, { color: theme.colors.grey[0] }, styles.title]}>
             <Trans>PetÁgil</Trans>
           </Text>
           <Text
-            style={[theme.textStyles.sm400, { color: theme.colors.grey[0] + 'E6' }, styles.tagline]}
+            style={[theme.textStyles.lg400, { color: theme.colors.grey[0] + 'E6' }, styles.tagline]}
           >
             <Trans>Cuidar do seu pet ficou simples</Trans>
           </Text>
@@ -171,6 +171,8 @@ export function LoginScreen({ onSubmit = defaultSubmit }: LoginScreenProps) {
             },
           ]}
         >
+          {/* Elementos distribuídos uniformemente (space-between) para preencher a
+              sheet sem vão branco — visual do Figma (node 411-20). */}
           <LoginField
             testID="login-email"
             icon={<IconEnvelope size={20} color={theme.colors.grey[500]} />}
@@ -207,23 +209,26 @@ export function LoginScreen({ onSubmit = defaultSubmit }: LoginScreenProps) {
             onSubmitEditing={() => void handleLogin()}
           />
 
-          {formError && (
-            <Text
-              style={[theme.textStyles.sm400, styles.formError, { color: theme.colors.error[6] }]}
-              accessibilityLiveRegion="polite"
-            >
-              {formError}
-            </Text>
-          )}
+          {/* Erro de form fica colado ao CTA (não conta como "slot" do space-between). */}
+          <View style={styles.submitGroup}>
+            {formError && (
+              <Text
+                style={[theme.textStyles.sm400, styles.formError, { color: theme.colors.error[6] }]}
+                accessibilityLiveRegion="polite"
+              >
+                {formError}
+              </Text>
+            )}
 
-          <GradientButton
-            testID="login-submit"
-            title={t`Entrar`}
-            onPress={() => void handleLogin()}
-            loading={isSubmitting}
-            disabled={submitDisabled}
-            style={styles.submit}
-          />
+            <GradientButton
+              testID="login-submit"
+              title={t`Entrar`}
+              onPress={() => void handleLogin()}
+              loading={isSubmitting}
+              disabled={submitDisabled}
+              style={styles.submitButton}
+            />
+          </View>
 
           <TouchableOpacity
             testID="login-google"
@@ -254,10 +259,10 @@ export function LoginScreen({ onSubmit = defaultSubmit }: LoginScreenProps) {
             accessibilityLabel={t`Cadastre-se`}
             style={styles.registerRow}
           >
-            <Text style={[theme.textStyles.sm400, { color: theme.colors.grey[600] }]}>
+            <Text style={[theme.textStyles.lg400, { color: theme.colors.grey[600] }]}>
               <Trans>
                 Não tem conta?{' '}
-                <Text style={[theme.textStyles.sm600, { color: theme.colors.brandBlue[6] }]}>
+                <Text style={[theme.textStyles.lg600, { color: theme.colors.brandBlue[6] }]}>
                   Cadastre-se
                 </Text>
               </Trans>
@@ -333,11 +338,11 @@ const styles = StyleSheet.create({
   },
   header: {
     alignItems: 'center',
-    paddingBottom: 56,
+    paddingBottom: 88,
   },
   logo: {
-    width: 92,
-    height: 92,
+    width: 104,
+    height: 104,
     borderWidth: 1,
     alignItems: 'center',
     justifyContent: 'center',
@@ -351,7 +356,12 @@ const styles = StyleSheet.create({
   sheet: {
     flex: 1,
     paddingTop: 32,
-    gap: 16,
+    // Fluxo natural com gaps parelhos; componentes maiores preenchem a sheet
+    // sem precisar esticar os vazios (evita o visual "botões muito separados").
+    gap: 20,
+  },
+  submitGroup: {
+    gap: 8,
   },
   fieldContainer: {
     width: '100%',
@@ -359,7 +369,7 @@ const styles = StyleSheet.create({
   fieldRow: {
     flexDirection: 'row',
     alignItems: 'center',
-    height: 48,
+    height: 58,
     borderWidth: 1,
     gap: 10,
   },
@@ -374,14 +384,14 @@ const styles = StyleSheet.create({
   formError: {
     textAlign: 'center',
   },
-  submit: {
-    marginTop: 8,
+  submitButton: {
+    height: 58,
   },
   googleButton: {
     flexDirection: 'row',
     alignItems: 'center',
     justifyContent: 'center',
-    height: 52,
+    height: 58,
     borderWidth: 1,
     gap: 10,
   },

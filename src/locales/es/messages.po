@@ -20,7 +20,7 @@ msgstr "Abrir menú"
 msgid "Algo deu errado"
 msgstr "Algo salió mal"
 
-#: src/screens/auth/LoginScreen.tsx:254
+#: src/screens/auth/LoginScreen.tsx:262
 msgid "Cadastre-se"
 msgstr ""
 
@@ -38,8 +38,8 @@ msgstr "Cancelar"
 msgid "Confirmar exclusão"
 msgstr "Confirmar eliminación"
 
-#: src/screens/auth/LoginScreen.tsx:233
-#: src/screens/auth/LoginScreen.tsx:245
+#: src/screens/auth/LoginScreen.tsx:241
+#: src/screens/auth/LoginScreen.tsx:253
 msgid "Continuar com Google"
 msgstr ""
 
@@ -55,11 +55,11 @@ msgstr ""
 msgid "Digite um e-mail válido"
 msgstr ""
 
-#: src/screens/auth/LoginScreen.tsx:182
+#: src/screens/auth/LoginScreen.tsx:184
 msgid "E-mail"
 msgstr ""
 
-#: src/screens/auth/LoginScreen.tsx:221
+#: src/screens/auth/LoginScreen.tsx:230
 msgid "Entrar"
 msgstr ""
 
@@ -98,7 +98,7 @@ msgstr ""
 msgid "Não foi possível entrar. Tente novamente."
 msgstr ""
 
-#: src/screens/auth/LoginScreen.tsx:258
+#: src/screens/auth/LoginScreen.tsx:266
 msgid "Não tem conta? <0>Cadastre-se</0>"
 msgstr ""
 
@@ -136,11 +136,11 @@ msgstr "Guardando..."
 msgid "Salvar"
 msgstr "Guardar"
 
-#: src/screens/auth/LoginScreen.tsx:201
+#: src/screens/auth/LoginScreen.tsx:203
 msgid "Senha"
 msgstr ""
 
-#: src/screens/auth/LoginScreen.tsx:181
+#: src/screens/auth/LoginScreen.tsx:183
 msgid "seu@email.com"
 msgstr ""
 
@@ -148,7 +148,7 @@ msgstr ""
 msgid "Sim, quero excluir"
 msgstr "Sí, quiero eliminar"
 
-#: src/screens/auth/LoginScreen.tsx:200
+#: src/screens/auth/LoginScreen.tsx:202
 msgid "Sua senha"
 msgstr ""
 
