@@ -4,9 +4,9 @@
  */
 
 /**
- * Papel do usuário no PetÁgil: tutor (dono do pet) ou veterinário.
+ * Papel do usuário no PetÁgil: tutor (dono do pet), veterinário ou passeador.
  */
-export type Role = 'tutor' | 'vet'
+export type Role = 'tutor' | 'vet' | 'passeador'
 
 /**
  * User type aligned with Cognito ID token claims

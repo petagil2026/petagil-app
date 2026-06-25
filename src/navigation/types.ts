@@ -1,13 +1,15 @@
 import type { NavigatorScreenParams } from '@react-navigation/native';
 import type { NativeStackScreenProps } from '@react-navigation/native-stack';
 import type { BottomTabScreenProps } from '@react-navigation/bottom-tabs';
+import type { Role } from '@/types/auth';
 
 // ============================================================================
-// Auth Stack — seleção de papel + login placeholder
+// Auth Stack — seleção de papel + cadastro + login placeholder
 // ============================================================================
 
 export type AuthStackParamList = {
   RoleSelect: undefined;
+  Cadastro: { role: Role };
   Login: undefined;
 };
 
