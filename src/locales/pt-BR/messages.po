@@ -20,6 +20,14 @@ msgstr "Abrir menu"
 msgid "Algo deu errado"
 msgstr "Algo deu errado"
 
+#: src/screens/auth/LoginScreen.tsx:259
+msgid "Cadastre-se"
+msgstr "Cadastre-se"
+
+#: src/screens/auth/LoginScreen.tsx:117
+msgid "Cadastro em breve"
+msgstr "Cadastro em breve"
+
 #: src/components/ui/DeleteModal.tsx:112
 #: src/components/ui/DeleteModal.tsx:116
 #: src/components/ui/ItemActionsMenu.tsx:99
@@ -29,6 +37,31 @@ msgstr "Cancelar"
 #: src/components/ui/DeleteModal.tsx:131
 msgid "Confirmar exclusão"
 msgstr "Confirmar exclusão"
+
+#: src/screens/auth/LoginScreen.tsx:238
+#: src/screens/auth/LoginScreen.tsx:250
+msgid "Continuar com Google"
+msgstr "Continuar com Google"
+
+#: src/screens/auth/LoginScreen.tsx:156
+msgid "Cuidar do seu pet ficou simples"
+msgstr "Cuidar do seu pet ficou simples"
+
+#: src/screens/auth/LoginScreen.tsx:93
+msgid "Digite sua senha"
+msgstr "Digite sua senha"
+
+#: src/screens/auth/LoginScreen.tsx:72
+msgid "Digite um e-mail válido"
+msgstr "Digite um e-mail válido"
+
+#: src/screens/auth/LoginScreen.tsx:184
+msgid "E-mail"
+msgstr "E-mail"
+
+#: src/screens/auth/LoginScreen.tsx:225
+msgid "Entrar"
+msgstr "Entrar"
 
 #: src/components/ui/DeleteModal.tsx:142
 msgid "Excluindo..."
@@ -49,6 +82,10 @@ msgstr "Excluir {entityName}"
 msgid "Fechar"
 msgstr "Fechar"
 
+#: src/screens/auth/LoginScreen.tsx:112
+msgid "Login com Google em breve"
+msgstr "Login com Google em breve"
+
 #: src/components/ui/ScreenStateWrapper.tsx:60
 msgid ""
 "Não foi possível carregar os dados.\n"
@@ -57,6 +94,14 @@ msgstr ""
 "Não foi possível carregar os dados.\n"
 "Verifique sua conexão e tente novamente."
 
+#: src/screens/auth/LoginScreen.tsx:105
+msgid "Não foi possível entrar. Tente novamente."
+msgstr "Não foi possível entrar. Tente novamente."
+
+#: src/screens/auth/LoginScreen.tsx:263
+msgid "Não tem conta? <0>Cadastre-se</0>"
+msgstr "Não tem conta? <0>Cadastre-se</0>"
+
 #: src/components/ui/RenameModal.tsx:131
 msgid "Novo nome"
 msgstr "Novo nome"
@@ -64,6 +109,10 @@ msgstr "Novo nome"
 #: src/components/ui/ItemActionsMenu.tsx:48
 msgid "Opções"
 msgstr "Opções"
+
+#: src/screens/auth/LoginScreen.tsx:151
+msgid "PetÁgil"
+msgstr "PetÁgil"
 
 #: src/components/ErrorBoundary.tsx:35
 msgid "Reiniciar"
@@ -87,9 +136,21 @@ msgstr "Salvando..."
 msgid "Salvar"
 msgstr "Salvar"
 
+#: src/screens/auth/LoginScreen.tsx:203
+msgid "Senha"
+msgstr "Senha"
+
+#: src/screens/auth/LoginScreen.tsx:183
+msgid "seu@email.com"
+msgstr "seu@email.com"
+
 #: src/components/ui/DeleteModal.tsx:142
 msgid "Sim, quero excluir"
 msgstr "Sim, quero excluir"
+
+#: src/screens/auth/LoginScreen.tsx:202
+msgid "Sua senha"
+msgstr "Sua senha"
 
 #: src/components/ui/DeleteModal.tsx:99
 msgid "Tem certeza que deseja excluir"

@@ -53,3 +53,6 @@ export { IconPin } from './IconPin';
 export { IconShareNetwork } from './IconShareNetwork';
 export { IconBarChart } from './IconBarChart';
 export { IconWorkflow } from './IconWorkflow';
+export { IconEnvelope } from './IconEnvelope';
+export { IconGoogle } from './IconGoogle';
+export { IconPaw } from './IconPaw';

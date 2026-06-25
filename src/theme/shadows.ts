@@ -49,4 +49,17 @@ export const shadows = {
     shadowRadius: 0,
     elevation: 0,
   },
+
+  // Glow azul do botão "Entrar" da tela de Login (sombra colorida da marca).
+  primaryGlow: Platform.select({
+    ios: {
+      shadowColor: '#1E5F92',
+      shadowOffset: { width: 0, height: 6 },
+      shadowOpacity: 0.35,
+      shadowRadius: 12,
+    },
+    android: {
+      elevation: 8,
+    },
+  }),
 } as const;

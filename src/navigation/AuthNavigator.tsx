@@ -10,6 +10,7 @@ export function AuthNavigator() {
 
   return (
     <Stack.Navigator
+      initialRouteName="Login"
       screenOptions={{
         headerShown: false,
         contentStyle: { backgroundColor: theme.semantic.bg.layout },

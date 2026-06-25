@@ -90,13 +90,15 @@ jest.mock('expo-secure-store', () => ({
   WHEN_UNLOCKED_THIS_DEVICE_ONLY: 'WHEN_UNLOCKED_THIS_DEVICE_ONLY',
 }))
 
-// Mock @react-native-async-storage/async-storage
+// Mock @react-native-async-storage/async-storage — funções comuns (não jest.fn) pra
+// sobreviver ao `resetMocks:true` do jest.config, que apaga implementações de jest.fn.
+// (ThemeProvider chama getItem().then() no mount; sem isso quebra em testes de tela.)
 jest.mock('@react-native-async-storage/async-storage', () => ({
   __esModule: true,
   default: {
-    getItem: jest.fn().mockResolvedValue(null),
-    setItem: jest.fn().mockResolvedValue(undefined),
-    removeItem: jest.fn().mockResolvedValue(undefined),
+    getItem: () => Promise.resolve(null),
+    setItem: () => Promise.resolve(undefined),
+    removeItem: () => Promise.resolve(undefined),
   },
 }))
 
@@ -110,7 +112,7 @@ jest.mock('react-native', () => {
   return {
     Platform: {
       OS: 'ios',
-      select: <T,>(spec: { ios?: T; android?: T; default?: T }): T | undefined =>
+      select: <T>(spec: { ios?: T; android?: T; default?: T }): T | undefined =>
         spec.ios ?? spec.default,
     },
     AppState: {
@@ -131,7 +133,21 @@ jest.mock('react-native', () => {
     ScrollView: passthrough('ScrollView'),
     FlatList: passthrough('FlatList'),
     SectionList: passthrough('SectionList'),
-    TouchableOpacity: ({ children, onPress, onLongPress, disabled, accessibilityLabel, accessibilityRole, ...rest }: { [k: string]: unknown; children?: unknown; onPress?: () => void; onLongPress?: () => void; disabled?: boolean }) =>
+    TouchableOpacity: ({
+      children,
+      onPress,
+      onLongPress,
+      disabled,
+      accessibilityLabel,
+      accessibilityRole,
+      ...rest
+    }: {
+      [k: string]: unknown
+      children?: unknown
+      onPress?: () => void
+      onLongPress?: () => void
+      disabled?: boolean
+    }) =>
       React.createElement(
         'TouchableOpacity',
         {
@@ -142,14 +158,28 @@ jest.mock('react-native', () => {
           accessibilityRole,
           ...rest,
         },
-        children,
+        children
       ),
     TouchableWithoutFeedback: passthrough('TouchableWithoutFeedback'),
     TouchableHighlight: passthrough('TouchableHighlight'),
-    Pressable: ({ children, onPress, ...rest }: { [k: string]: unknown; children?: unknown; onPress?: () => void }) =>
-      React.createElement('Pressable', { onPress, ...rest }, children),
-    Modal: ({ children, visible, ...rest }: { children?: unknown; visible?: boolean; [k: string]: unknown }) =>
-      visible ? React.createElement('Modal', rest, children) : null,
+    Pressable: ({
+      children,
+      onPress,
+      ...rest
+    }: {
+      [k: string]: unknown
+      children?: unknown
+      onPress?: () => void
+    }) => React.createElement('Pressable', { onPress, ...rest }, children),
+    Modal: ({
+      children,
+      visible,
+      ...rest
+    }: {
+      children?: unknown
+      visible?: boolean
+      [k: string]: unknown
+    }) => (visible ? React.createElement('Modal', rest, children) : null),
     ActivityIndicator: passthrough('ActivityIndicator'),
     Switch: passthrough('Switch'),
     RefreshControl: passthrough('RefreshControl'),
@@ -169,6 +199,7 @@ jest.mock('react-native', () => {
       get: () => ({ width: 375, height: 812 }),
     },
     Keyboard: { dismiss: jest.fn() },
+    useColorScheme: () => 'light',
     BackHandler: { addEventListener: jest.fn(() => ({ remove: jest.fn() })) },
     Easing: { out: () => () => 0, in: () => () => 0, inOut: () => () => 0, ease: () => 0 },
   }
@@ -199,6 +230,98 @@ jest.mock('react-native-svg', () => {
     Use: View,
     Pattern: View,
     Filter: View,
+  }
+})
+
+// Mock react-native-gesture-handler (TurboModuleRegistry.getEnforcing indisponível no Jest)
+jest.mock('react-native-gesture-handler', () => {
+  const React = require('react')
+  const View = ({ children, ...rest }: { children?: unknown; [k: string]: unknown }) =>
+    React.createElement('View', rest, children)
+  return {
+    GestureHandlerRootView: View,
+    PanGestureHandler: View,
+    TapGestureHandler: View,
+    GestureDetector: View,
+    ScrollView: View,
+    State: {},
+    Directions: {},
+    Gesture: { Pan: () => ({ onUpdate: () => ({ onEnd: () => ({}) }) }) },
+  }
+})
+
+// Mock react-native-reanimated — implementação mínima síncrona pro ambiente Jest
+jest.mock('react-native-reanimated', () => {
+  const React = require('react')
+  const View = ({ children, ...rest }: { children?: unknown; [k: string]: unknown }) =>
+    React.createElement('AnimatedView', rest, children)
+  const identity = (v: unknown) => v
+  return {
+    __esModule: true,
+    default: {
+      View,
+      Text: View,
+      ScrollView: View,
+      createAnimatedComponent: (c: unknown) => c,
+    },
+    View,
+    Text: View,
+    ScrollView: View,
+    useSharedValue: (v: unknown) => ({ value: v }),
+    useDerivedValue: (fn: () => unknown) => ({ value: fn() }),
+    useAnimatedStyle: () => ({}),
+    useAnimatedRef: () => ({ current: null }),
+    useAnimatedScrollHandler: () => () => {},
+    useAnimatedReaction: () => {},
+    withTiming: identity,
+    withSpring: identity,
+    withDelay: (_d: number, v: unknown) => v,
+    withRepeat: identity,
+    withSequence: (...args: unknown[]) => args[0],
+    cancelAnimation: () => {},
+    interpolate: (v: number) => v,
+    interpolateColor: () => '#000',
+    runOnJS: (fn: unknown) => fn,
+    runOnUI: (fn: unknown) => fn,
+    Extrapolate: { CLAMP: 'clamp', EXTEND: 'extend', IDENTITY: 'identity' },
+    Extrapolation: { CLAMP: 'clamp', EXTEND: 'extend', IDENTITY: 'identity' },
+    Easing: {
+      linear: () => 0,
+      ease: () => 0,
+      in: () => () => 0,
+      out: () => () => 0,
+      inOut: () => () => 0,
+      bezier: () => ({ factory: () => 0 }),
+    },
+  }
+})
+
+// Mock @gorhom/bottom-sheet
+jest.mock('@gorhom/bottom-sheet', () => {
+  const React = require('react')
+  const View = ({ children }: { children?: unknown }) => React.createElement('View', null, children)
+  return {
+    __esModule: true,
+    default: View,
+    BottomSheetView: View,
+    BottomSheetBackdrop: View,
+    BottomSheetModal: View,
+    BottomSheetModalProvider: View,
+    useBottomSheetTimingConfigs: () => ({}),
+  }
+})
+
+// Mock react-native-keyboard-controller (KeyboardAwareScrollView + hooks usados nas telas/UI)
+jest.mock('react-native-keyboard-controller', () => {
+  const React = require('react')
+  const passthrough =
+    (tag: string) =>
+    ({ children, ...rest }: { children?: unknown; [k: string]: unknown }) =>
+      React.createElement(tag, rest, children)
+  return {
+    KeyboardProvider: passthrough('KeyboardProvider'),
+    KeyboardAwareScrollView: passthrough('KeyboardAwareScrollView'),
+    useReanimatedKeyboardAnimation: () => ({ height: { value: 0 }, progress: { value: 0 } }),
   }
 })
 

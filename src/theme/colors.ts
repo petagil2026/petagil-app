@@ -240,4 +240,8 @@ export const gradients = {
   cyan: { start: '#1E5F92', end: '#4A92CD' },
   pink: { start: '#2E7CB8', end: '#8AC2E8' },
   purple: { start: '#123A5A', end: '#2E7CB8' },
+  // Tela de Login (brand-themed): header azul-claro→azul e botão "Entrar" azul→azul-profundo.
+  // Reusa hex já existentes na paleta brandBlue (sem inventar cor nova).
+  header: { start: colors.brandBlue[2], end: colors.brandBlue[6] }, // #A7D3F0 → #2E7CB8
+  primaryButton: { start: colors.brandBlue[6], end: colors.brandBlue[7] }, // #2E7CB8 → #1E5F92
 } as const;
