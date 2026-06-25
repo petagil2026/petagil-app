@@ -1,0 +1,48 @@
+# Build box Android — compila o APK dev-client num ambiente Linux, evitando o
+# limite de caminho do Windows (MAX_PATH 260) que quebra o build nativo C++ de
+# libs como react-native-keyboard-controller sob New Architecture.
+#
+# Este container SÓ produz o app-debug.apk. O emulador e o Metro continuam no
+# Windows: você instala o APK no emulador e roda `npx expo start --dev-client`.
+#
+# Toolchain casada com o projeto (RN 0.81.5 / Expo SDK 54):
+#   JDK 17 · SDK 36 · build-tools 36.0.0 · NDK 27.1.12297006 · cmake 3.22.1 · Node 20
+FROM eclipse-temurin:17-jdk-jammy
+
+ENV DEBIAN_FRONTEND=noninteractive
+
+# --- Node 20 + utilitários de build ---
+RUN apt-get update && apt-get install -y --no-install-recommends \
+      curl unzip git ca-certificates python3 \
+ && curl -fsSL https://deb.nodesource.com/setup_20.x | bash - \
+ && apt-get install -y --no-install-recommends nodejs \
+ && rm -rf /var/lib/apt/lists/*
+
+# --- Android SDK (command-line tools) ---
+ENV ANDROID_SDK_ROOT=/opt/android-sdk
+ENV ANDROID_HOME=$ANDROID_SDK_ROOT
+ENV PATH=$PATH:$ANDROID_SDK_ROOT/cmdline-tools/latest/bin:$ANDROID_SDK_ROOT/platform-tools
+
+ARG CMDLINE_TOOLS_VERSION=11076708
+RUN mkdir -p $ANDROID_SDK_ROOT/cmdline-tools \
+ && curl -fsSL -o /tmp/cmdline-tools.zip \
+      https://dl.google.com/android/repository/commandlinetools-linux-${CMDLINE_TOOLS_VERSION}_latest.zip \
+ && unzip -q /tmp/cmdline-tools.zip -d /tmp/cmdline-tools \
+ && mv /tmp/cmdline-tools/cmdline-tools $ANDROID_SDK_ROOT/cmdline-tools/latest \
+ && rm -rf /tmp/cmdline-tools.zip /tmp/cmdline-tools
+
+# --- Pacotes do SDK exigidos pelo projeto ---
+RUN yes | sdkmanager --licenses >/dev/null \
+ && sdkmanager \
+      "platform-tools" \
+      "platforms;android-36" \
+      "build-tools;36.0.0" \
+      "ndk;27.1.12297006" \
+      "cmake;3.22.1" >/dev/null
+
+WORKDIR /app
+
+COPY docker/build-apk.sh /usr/local/bin/build-apk.sh
+RUN chmod +x /usr/local/bin/build-apk.sh
+
+ENTRYPOINT ["/usr/local/bin/build-apk.sh"]

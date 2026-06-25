@@ -1,0 +1,41 @@
+# Build box Android em Docker (Linux) para contornar o limite de caminho do
+# Windows (MAX_PATH 260) no build nativo C++ sob New Architecture.
+#
+# Uso:
+#   docker compose build
+#   docker compose run --rm android-build
+#   adb install -r build-output/app-debug.apk      (emulador no Windows)
+#   npx expo start --dev-client
+#
+# ABI: por padrão x86_64 (emulador). Para device físico ARM:
+#   REACT_NATIVE_ARCH=arm64-v8a docker compose run --rm android-build
+
+services:
+  android-build:
+    build:
+      context: .
+      dockerfile: docker/Dockerfile.android
+    image: hashtag-android-build:latest
+    environment:
+      REACT_NATIVE_ARCH: "${REACT_NATIVE_ARCH:-x86_64}"
+    volumes:
+      # Código-fonte (editável no Windows; o build lê daqui).
+      - .:/app
+      # APK final sai aqui, no Windows (caminho curto, sem MAX_PATH).
+      - ./build-output:/output
+      # Artefatos pesados em volumes Linux (ext4 da VM) — NÃO no NTFS:
+      # evita reintroduzir o limite de caminho e acelera rebuilds.
+      - android_node_modules:/app/node_modules
+      - android_gradle_user:/root/.gradle
+      - android_gradle_project:/app/android/.gradle
+      - android_build_root:/app/android/build
+      - android_app_build:/app/android/app/build
+      - android_app_cxx:/app/android/app/.cxx
+
+volumes:
+  android_node_modules:
+  android_gradle_user:
+  android_gradle_project:
+  android_build_root:
+  android_app_build:
+  android_app_cxx:

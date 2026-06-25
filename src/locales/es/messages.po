@@ -1,0 +1,105 @@
+msgid ""
+msgstr ""
+"Language: es\n"
+"Plural-Forms: nplurals=2; plural=(n != 1);\n"
+"Project-Id-Version: \n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: \n"
+"PO-Revision-Date: \n"
+"Last-Translator: \n"
+"Language-Team: \n"
+"Content-Type: \n"
+"Content-Transfer-Encoding: \n"
+
+#: src/components/layout/MobileHeader.tsx:39
+msgid "Abrir menu"
+msgstr "Abrir menú"
+
+#: src/components/ErrorBoundary.tsx:32
+#: src/components/ui/ScreenStateWrapper.tsx:57
+msgid "Algo deu errado"
+msgstr "Algo salió mal"
+
+#: src/components/ui/DeleteModal.tsx:112
+#: src/components/ui/DeleteModal.tsx:116
+#: src/components/ui/ItemActionsMenu.tsx:99
+msgid "Cancelar"
+msgstr "Cancelar"
+
+#: src/components/ui/DeleteModal.tsx:131
+msgid "Confirmar exclusão"
+msgstr "Confirmar eliminación"
+
+#: src/components/ui/DeleteModal.tsx:142
+msgid "Excluindo..."
+msgstr "Eliminando..."
+
+#: src/components/ui/DeleteModal.tsx:43
+#: src/components/ui/ItemActionsMenu.tsx:87
+msgid "Excluir"
+msgstr "Eliminar"
+
+#: src/components/ui/DeleteModal.tsx:43
+msgid "Excluir {entityName}"
+msgstr "Eliminar {entityName}"
+
+#: src/components/ui/BottomSheet.tsx:165
+#: src/components/ui/DeleteModal.tsx:83
+#: src/components/ui/RenameModal.tsx:99
+msgid "Fechar"
+msgstr "Cerrar"
+
+#: src/components/ui/ScreenStateWrapper.tsx:60
+msgid ""
+"Não foi possível carregar os dados.\n"
+"Verifique sua conexão e tente novamente."
+msgstr ""
+"No fue posible cargar los datos.\n"
+"Verifica tu conexión e inténtalo de nuevo."
+
+#: src/components/ui/RenameModal.tsx:131
+msgid "Novo nome"
+msgstr "Nuevo nombre"
+
+#: src/components/ui/ItemActionsMenu.tsx:48
+msgid "Opções"
+msgstr "Opciones"
+
+#: src/components/ErrorBoundary.tsx:35
+msgid "Reiniciar"
+msgstr "Reiniciar"
+
+#: src/components/ui/ItemActionsMenu.tsx:68
+#: src/components/ui/RenameModal.tsx:66
+msgid "Renomear"
+msgstr "Renombrar"
+
+#: src/components/ui/RenameModal.tsx:66
+msgid "Renomear {entityName}"
+msgstr "Renombrar {entityName}"
+
+#: src/components/ui/RenameModal.tsx:157
+msgid "Salvando..."
+msgstr "Guardando..."
+
+#: src/components/ui/RenameModal.tsx:148
+#: src/components/ui/RenameModal.tsx:157
+msgid "Salvar"
+msgstr "Guardar"
+
+#: src/components/ui/DeleteModal.tsx:142
+msgid "Sim, quero excluir"
+msgstr "Sí, quiero eliminar"
+
+#: src/components/ui/DeleteModal.tsx:99
+msgid "Tem certeza que deseja excluir"
+msgstr "¿Estás seguro de que deseas eliminar"
+
+#: src/components/ui/ScreenStateWrapper.tsx:68
+#: src/components/ui/ScreenStateWrapper.tsx:70
+msgid "Tentar novamente"
+msgstr "Intentar de nuevo"
+
+#: src/components/ErrorBoundary.tsx:33
+msgid "Tente reiniciar o aplicativo."
+msgstr "Intenta reiniciar la aplicación."

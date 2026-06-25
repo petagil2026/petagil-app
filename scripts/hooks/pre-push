@@ -1,0 +1,11 @@
+#!/bin/sh
+cd "$(git rev-parse --show-toplevel)"
+
+echo "Checking i18n translations..."
+npm run --silent i18n:check
+STATUS=$?
+if [ $STATUS -ne 0 ]; then
+  echo ""
+  echo "❌ Push aborted due to missing i18n translations."
+  exit $STATUS
+fi
