@@ -2,6 +2,7 @@
  * UI Components exports
  */
 export * from './Button';
+export * from './GradientButton';
 export * from './Input';
 export * from './Avatar';
 export * from './SearchInput';

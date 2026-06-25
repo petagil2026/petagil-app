@@ -19,6 +19,11 @@ export const borderRadius = {
   md: 8,
   lg: 16,
   full: 9999,
+  // Raios específicos da tela de Login (mapeados do Figma; sem número mágico solto).
+  input: 15, // campos de email/senha
+  button: 17, // botão "Entrar"/"Continuar com Google"
+  logo: 28, // logo glassmorphism do header
+  sheet: 30, // canto superior da sheet branca
 } as const;
 
 // Layout dimensions
