@@ -20,13 +20,13 @@ msgstr "Abrir menú"
 msgid "Algo deu errado"
 msgstr "Algo salió mal"
 
-#: src/screens/auth/LoginScreen.tsx:262
+#: src/screens/auth/LoginScreen.tsx:259
 msgid "Cadastre-se"
-msgstr ""
+msgstr "Regístrate"
 
 #: src/screens/auth/LoginScreen.tsx:117
 msgid "Cadastro em breve"
-msgstr ""
+msgstr "Registro próximamente"
 
 #: src/components/ui/DeleteModal.tsx:112
 #: src/components/ui/DeleteModal.tsx:116
@@ -38,30 +38,30 @@ msgstr "Cancelar"
 msgid "Confirmar exclusão"
 msgstr "Confirmar eliminación"
 
-#: src/screens/auth/LoginScreen.tsx:241
-#: src/screens/auth/LoginScreen.tsx:253
+#: src/screens/auth/LoginScreen.tsx:238
+#: src/screens/auth/LoginScreen.tsx:250
 msgid "Continuar com Google"
-msgstr ""
+msgstr "Continuar con Google"
 
 #: src/screens/auth/LoginScreen.tsx:156
 msgid "Cuidar do seu pet ficou simples"
-msgstr ""
+msgstr "Cuidar de tu mascota nunca fue tan simple"
 
 #: src/screens/auth/LoginScreen.tsx:93
 msgid "Digite sua senha"
-msgstr ""
+msgstr "Ingresa tu contraseña"
 
 #: src/screens/auth/LoginScreen.tsx:72
 msgid "Digite um e-mail válido"
-msgstr ""
+msgstr "Ingresa un correo electrónico válido"
 
 #: src/screens/auth/LoginScreen.tsx:184
 msgid "E-mail"
-msgstr ""
+msgstr "Correo electrónico"
 
-#: src/screens/auth/LoginScreen.tsx:230
+#: src/screens/auth/LoginScreen.tsx:225
 msgid "Entrar"
-msgstr ""
+msgstr "Entrar"
 
 #: src/components/ui/DeleteModal.tsx:142
 msgid "Excluindo..."
@@ -84,7 +84,7 @@ msgstr "Cerrar"
 
 #: src/screens/auth/LoginScreen.tsx:112
 msgid "Login com Google em breve"
-msgstr ""
+msgstr "Inicio de sesión con Google próximamente"
 
 #: src/components/ui/ScreenStateWrapper.tsx:60
 msgid ""
@@ -96,11 +96,11 @@ msgstr ""
 
 #: src/screens/auth/LoginScreen.tsx:105
 msgid "Não foi possível entrar. Tente novamente."
-msgstr ""
+msgstr "No fue posible iniciar sesión. Inténtalo de nuevo."
 
-#: src/screens/auth/LoginScreen.tsx:266
+#: src/screens/auth/LoginScreen.tsx:263
 msgid "Não tem conta? <0>Cadastre-se</0>"
-msgstr ""
+msgstr "¿No tienes cuenta? <0>Regístrate</0>"
 
 #: src/components/ui/RenameModal.tsx:131
 msgid "Novo nome"
@@ -112,7 +112,7 @@ msgstr "Opciones"
 
 #: src/screens/auth/LoginScreen.tsx:151
 msgid "PetÁgil"
-msgstr ""
+msgstr "PetÁgil"
 
 #: src/components/ErrorBoundary.tsx:35
 msgid "Reiniciar"
@@ -138,11 +138,11 @@ msgstr "Guardar"
 
 #: src/screens/auth/LoginScreen.tsx:203
 msgid "Senha"
-msgstr ""
+msgstr "Contraseña"
 
 #: src/screens/auth/LoginScreen.tsx:183
 msgid "seu@email.com"
-msgstr ""
+msgstr "tu@correo.com"
 
 #: src/components/ui/DeleteModal.tsx:142
 msgid "Sim, quero excluir"
@@ -150,7 +150,7 @@ msgstr "Sí, quiero eliminar"
 
 #: src/screens/auth/LoginScreen.tsx:202
 msgid "Sua senha"
-msgstr ""
+msgstr "Tu contraseña"
 
 #: src/components/ui/DeleteModal.tsx:99
 msgid "Tem certeza que deseja excluir"

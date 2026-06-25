@@ -20,7 +20,7 @@ msgstr "Abrir menu"
 msgid "Algo deu errado"
 msgstr "Algo deu errado"
 
-#: src/screens/auth/LoginScreen.tsx:262
+#: src/screens/auth/LoginScreen.tsx:259
 msgid "Cadastre-se"
 msgstr "Cadastre-se"
 
@@ -38,8 +38,8 @@ msgstr "Cancelar"
 msgid "Confirmar exclusão"
 msgstr "Confirmar exclusão"
 
-#: src/screens/auth/LoginScreen.tsx:241
-#: src/screens/auth/LoginScreen.tsx:253
+#: src/screens/auth/LoginScreen.tsx:238
+#: src/screens/auth/LoginScreen.tsx:250
 msgid "Continuar com Google"
 msgstr "Continuar com Google"
 
@@ -59,7 +59,7 @@ msgstr "Digite um e-mail válido"
 msgid "E-mail"
 msgstr "E-mail"
 
-#: src/screens/auth/LoginScreen.tsx:230
+#: src/screens/auth/LoginScreen.tsx:225
 msgid "Entrar"
 msgstr "Entrar"
 
@@ -98,7 +98,7 @@ msgstr ""
 msgid "Não foi possível entrar. Tente novamente."
 msgstr "Não foi possível entrar. Tente novamente."
 
-#: src/screens/auth/LoginScreen.tsx:266
+#: src/screens/auth/LoginScreen.tsx:263
 msgid "Não tem conta? <0>Cadastre-se</0>"
 msgstr "Não tem conta? <0>Cadastre-se</0>"
 
