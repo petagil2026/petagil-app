@@ -22,7 +22,7 @@ import {
   AvaliacoesScreen,
   PerfilScreen as VetPerfil,
 } from '@/screens/vet';
-import { RoleSelectScreen } from '@/screens';
+import { RoleSelectScreen, PlaceholderScreen } from '@/screens';
 import {
   IconStar,
   IconSearch,
@@ -147,6 +147,11 @@ export function MainNavigator() {
   // AC6b: autenticado porém sem papel → fallback de RoleSelect (nunca tabs com papel nulo)
   if (!selectedRole) {
     return <RoleSelectScreen />;
+  }
+
+  // Passeador ainda não tem shell de tabs próprio — placeholder até a spec dedicada.
+  if (selectedRole === 'passeador') {
+    return <PlaceholderScreen title="Passeador(a)" subtitle="Em construção" />;
   }
 
   return selectedRole === 'vet' ? <VetTabNavigator /> : <TutorTabNavigator />;

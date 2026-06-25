@@ -14,6 +14,8 @@ const linking: LinkingOptions<RootStackParamList> = {
       Auth: {
         screens: {
           RoleSelect: 'role-select',
+          // Cadastro não é exposto como deep link: exige o param `role`, definido
+          // apenas via navegação interna a partir da RoleSelect (evita crash com params undefined).
           Login: 'login',
         },
       },

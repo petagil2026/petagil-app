@@ -15,6 +15,8 @@ import {
   Rubik_700Bold,
 } from '@expo-google-fonts/rubik'
 import { Montserrat_400Regular, Montserrat_600SemiBold } from '@expo-google-fonts/montserrat'
+import { Baloo2_700Bold, Baloo2_800ExtraBold } from '@expo-google-fonts/baloo-2'
+import { Nunito_600SemiBold } from '@expo-google-fonts/nunito'
 import { QueryClient, QueryClientProvider, onlineManager } from '@tanstack/react-query'
 import { I18nProvider, useLingui } from '@lingui/react'
 import { useEffect, useState } from 'react'
@@ -100,6 +102,9 @@ export default function App() {
     Rubik_700Bold,
     Montserrat_400Regular,
     Montserrat_600SemiBold,
+    Baloo2_700Bold,
+    Baloo2_800ExtraBold,
+    Nunito_600SemiBold,
   })
   const [i18nReady, setI18nReady] = useState(false)
 

@@ -57,20 +57,27 @@ const logger = {
   },
 }
 
+/** Rótulos mock (email/nome) por papel. */
+const MOCK_USER_BY_ROLE: Record<Role, { email: string; name: string }> = {
+  tutor: { email: 'tutor@petagil.app', name: 'Tutor(a) PetÁgil' },
+  vet: { email: 'vet@petagil.app', name: 'Dr(a). Veterinário(a)' },
+  passeador: { email: 'passeador@petagil.app', name: 'Passeador(a) PetÁgil' },
+}
+
 /** Cria um usuário fake para o papel escolhido. */
 function makeMockUser(role: Role): User {
   const id = `mock-${role}`
   return {
     sub: id,
     id,
-    email: role === 'vet' ? 'vet@petagil.app' : 'tutor@petagil.app',
-    name: role === 'vet' ? 'Dr(a). Veterinário(a)' : 'Tutor(a) PetÁgil',
+    email: MOCK_USER_BY_ROLE[role].email,
+    name: MOCK_USER_BY_ROLE[role].name,
     role,
   }
 }
 
 function isRole(value: string | null): value is Role {
-  return value === 'tutor' || value === 'vet'
+  return value === 'tutor' || value === 'vet' || value === 'passeador'
 }
 
 export function AuthProvider({ children }: AuthProviderProps) {
