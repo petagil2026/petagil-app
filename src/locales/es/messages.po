@@ -39,7 +39,7 @@ msgstr "🏥 En la clínica"
 msgid "0 avaliações"
 msgstr "0 evaluaciones"
 
-#: src/screens/auth/CreateAccountScreen.tsx:93
+#: src/screens/auth/CreateAccountScreen.tsx:103
 msgid "A senha precisa de ao menos 8 caracteres"
 msgstr "La contraseña debe tener al menos 8 caracteres"
 
@@ -84,7 +84,7 @@ msgstr "año"
 msgid "anos"
 msgstr "años"
 
-#: src/screens/auth/CreateAccountScreen.tsx:260
+#: src/screens/auth/CreateAccountScreen.tsx:274
 msgid "Ao continuar você aceita os Termos de Uso"
 msgstr "Al continuar aceptas los Términos de Uso"
 
@@ -130,13 +130,13 @@ msgstr "Cancelar"
 msgid "Carteira anexada ✓"
 msgstr "Credencial adjuntada ✓"
 
-#: src/screens/auth/CreateAccountScreen.tsx:188
-#: src/screens/auth/CreateAccountScreen.tsx:189
+#: src/screens/auth/CreateAccountScreen.tsx:202
+#: src/screens/auth/CreateAccountScreen.tsx:203
 msgid "Celular (WhatsApp)"
 msgstr "Celular (WhatsApp)"
 
-#: src/screens/auth/CreateAccountScreen.tsx:208
-#: src/screens/auth/CreateAccountScreen.tsx:209
+#: src/screens/auth/CreateAccountScreen.tsx:222
+#: src/screens/auth/CreateAccountScreen.tsx:223
 msgid "Cidade"
 msgstr "Ciudad"
 
@@ -157,7 +157,7 @@ msgstr "Consultas"
 msgid "Continuar com Google"
 msgstr "Continuar con Google"
 
-#: src/screens/auth/CreateAccountScreen.tsx:130
+#: src/screens/auth/CreateAccountScreen.tsx:146
 msgid "Crie sua conta"
 msgstr "Crea tu cuenta"
 
@@ -173,11 +173,11 @@ msgstr "Cuidar de tu mascota nunca fue tan simple"
 msgid "Digite sua senha"
 msgstr "Ingresa tu contraseña"
 
-#: src/screens/auth/CreateAccountScreen.tsx:91
+#: src/screens/auth/CreateAccountScreen.tsx:101
 msgid "Digite um celular válido com DDD"
 msgstr "Ingresa un celular válido con DDD"
 
-#: src/screens/auth/CreateAccountScreen.tsx:90
+#: src/screens/auth/CreateAccountScreen.tsx:100
 #: src/screens/auth/LoginScreen.tsx:99
 msgid "Digite um e-mail válido"
 msgstr "Ingresa un correo electrónico válido"
@@ -186,8 +186,8 @@ msgstr "Ingresa un correo electrónico válido"
 msgid "Duração da consulta"
 msgstr "Duración de la consulta"
 
-#: src/screens/auth/CreateAccountScreen.tsx:166
-#: src/screens/auth/CreateAccountScreen.tsx:167
+#: src/screens/auth/CreateAccountScreen.tsx:180
+#: src/screens/auth/CreateAccountScreen.tsx:181
 #: src/screens/auth/LoginScreen.tsx:221
 msgid "E-mail"
 msgstr "Correo electrónico"
@@ -298,11 +298,11 @@ msgstr "Indica el nombre de la clínica"
 msgid "Informe o número do CRMV"
 msgstr "Indica el número del CRMV"
 
-#: src/screens/auth/CreateAccountScreen.tsx:89
+#: src/screens/auth/CreateAccountScreen.tsx:99
 msgid "Informe seu nome completo"
 msgstr "Indica tu nombre completo"
 
-#: src/screens/auth/CreateAccountScreen.tsx:92
+#: src/screens/auth/CreateAccountScreen.tsx:102
 msgid "Informe sua cidade"
 msgstr "Indica tu ciudad"
 
@@ -310,7 +310,7 @@ msgstr "Indica tu ciudad"
 msgid "Lembretes & notificações"
 msgstr "Recordatorios y notificaciones"
 
-#: src/screens/auth/CreateAccountScreen.tsx:132
+#: src/screens/auth/CreateAccountScreen.tsx:147
 msgid "Leva menos de 1 minuto 🐾"
 msgstr "Toma menos de 1 minuto 🐾"
 
@@ -323,7 +323,7 @@ msgstr "Inicio de sesión con Google próximamente"
 msgid "Meus horários"
 msgstr "Mis horarios"
 
-#: src/screens/auth/CreateAccountScreen.tsx:239
+#: src/screens/auth/CreateAccountScreen.tsx:253
 #: src/screens/auth/LoginScreen.tsx:252
 msgid "Mostrar senha"
 msgstr "Mostrar contraseña"
@@ -365,8 +365,8 @@ msgstr "¿No tienes cuenta? <0>Regístrate</0>"
 msgid "Nº"
 msgstr "Nº"
 
-#: src/screens/auth/CreateAccountScreen.tsx:146
-#: src/screens/auth/CreateAccountScreen.tsx:147
+#: src/screens/auth/CreateAccountScreen.tsx:160
+#: src/screens/auth/CreateAccountScreen.tsx:161
 msgid "Nome completo"
 msgstr "Nombre completo"
 
@@ -387,7 +387,7 @@ msgstr "Nuevo nombre"
 msgid "Número do CRMV"
 msgstr "Número del CRMV"
 
-#: src/screens/auth/CreateAccountScreen.tsx:239
+#: src/screens/auth/CreateAccountScreen.tsx:253
 #: src/screens/auth/LoginScreen.tsx:252
 msgid "Ocultar senha"
 msgstr "Ocultar contraseña"
@@ -428,7 +428,7 @@ msgstr "Necesitamos acceso a tus fotos para adjuntar la imagen."
 msgid "Profissional"
 msgstr "Profesional"
 
-#: src/screens/auth/CreateAccountScreen.tsx:253
+#: src/screens/auth/CreateAccountScreen.tsx:267
 msgid "Próximo →"
 msgstr "Siguiente →"
 
@@ -480,8 +480,8 @@ msgstr "Guardar disponibilidad"
 msgid "Selecione ao menos uma especialidade"
 msgstr "Selecciona al menos una especialidad"
 
-#: src/screens/auth/CreateAccountScreen.tsx:226
-#: src/screens/auth/CreateAccountScreen.tsx:227
+#: src/screens/auth/CreateAccountScreen.tsx:240
+#: src/screens/auth/CreateAccountScreen.tsx:241
 #: src/screens/auth/LoginScreen.tsx:240
 msgid "Senha"
 msgstr "Contraseña"
