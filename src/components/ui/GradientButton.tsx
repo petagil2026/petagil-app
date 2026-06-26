@@ -12,6 +12,7 @@ import {
   ActivityIndicator,
   type StyleProp,
   type ViewStyle,
+  type TextStyle,
 } from 'react-native'
 import { LinearGradient } from 'expo-linear-gradient'
 import { useTheme } from '@/theme'
@@ -24,6 +25,9 @@ interface GradientButtonProps {
   accessibilityLabel?: string
   testID?: string
   style?: StyleProp<ViewStyle>
+  /** Estilo opcional do texto do título (ex.: fonte da marca Baloo 2). Aplicado por
+   * último, podendo sobrescrever fontFamily/fontSize/lineHeight/color do default. */
+  titleStyle?: StyleProp<TextStyle>
 }
 
 export function GradientButton({
@@ -34,6 +38,7 @@ export function GradientButton({
   accessibilityLabel,
   testID,
   style,
+  titleStyle,
 }: GradientButtonProps) {
   const theme = useTheme()
   const isDisabled = disabled || loading
@@ -64,7 +69,9 @@ export function GradientButton({
         {loading ? (
           <ActivityIndicator size="small" color={theme.colors.grey[0]} />
         ) : (
-          <Text style={[theme.textStyles.lg600, { color: theme.colors.grey[0] }]}>{title}</Text>
+          <Text style={[theme.textStyles.lg600, { color: theme.colors.grey[0] }, titleStyle]}>
+            {title}
+          </Text>
         )}
       </LinearGradient>
     </TouchableOpacity>
