@@ -161,7 +161,14 @@ export async function httpClient<T>(endpoint: string, options: HttpClientOptions
       console.log('[httpClient] Request:', {
         method: fetchOptions.method || 'GET',
         url,
-        body: fetchOptions.body ? JSON.parse(fetchOptions.body as string) : undefined,
+        // body pode ser FormData (multipart/upload) — NÃO dá pra JSON.parse, e
+        // fazê-lo lançaria SyntaxError que cairia no catch como NetworkError.
+        body:
+          typeof fetchOptions.body === 'string'
+            ? JSON.parse(fetchOptions.body)
+            : fetchOptions.body
+              ? '[multipart/form-data]'
+              : undefined,
       })
     }
 
@@ -230,7 +237,9 @@ export async function httpClient<T>(endpoint: string, options: HttpClientOptions
             .filter((d: string | undefined): d is string => !!d)
             .join(' — ')
         }
-      } catch { /* body não é JSON */ }
+      } catch {
+        /* body não é JSON */
+      }
       throw new ApiError(detail || `HTTP ${response.status}`, response.status)
     }
 

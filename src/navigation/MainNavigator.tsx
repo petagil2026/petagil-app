@@ -4,40 +4,50 @@
  * vet (4 tabs). Se (por algum motivo) estiver autenticado sem papel, cai num
  * fallback de RoleSelect — nunca monta tabs com papel nulo (AC6b).
  */
-import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
-import type { BottomTabNavigationOptions } from '@react-navigation/bottom-tabs';
-import { useAuth } from '@/app/providers';
-import { useTheme } from '@/theme';
-import type { TutorTabParamList, VetTabParamList } from './types';
+import { createBottomTabNavigator } from '@react-navigation/bottom-tabs'
+import type { BottomTabNavigationOptions } from '@react-navigation/bottom-tabs'
+import { createNativeStackNavigator } from '@react-navigation/native-stack'
+import { useAuth } from '@/app/providers'
+import { useTheme } from '@/theme'
+import type { TutorTabParamList, VetTabParamList, VetProfileStackParamList } from './types'
+import { VetTabBar } from './VetTabBar'
 import {
   HomeScreen as TutorHome,
   BuscaScreen,
   ConsultasScreen,
   PetsScreen,
   PerfilScreen as TutorPerfil,
-} from '@/screens/tutor';
+} from '@/screens/tutor'
 import {
   HomeScreen as VetHome,
   AgendaScreen,
   AvaliacoesScreen,
   PerfilScreen as VetPerfil,
-} from '@/screens/vet';
-import { RoleSelectScreen, PlaceholderScreen } from '@/screens';
-import {
-  IconStar,
-  IconSearch,
-  IconFileText,
-  IconPin,
-  IconUser,
-  IconHistory,
-  IconBarChart,
-} from '@/assets/icons';
+  EditarPerfilScreen,
+  MeusHorariosScreen,
+  FolgasScreen,
+} from '@/screens/vet'
+import { RoleSelectScreen, PlaceholderScreen } from '@/screens'
+import { IconStar, IconSearch, IconFileText, IconPin, IconUser } from '@/assets/icons'
 
-const TutorTab = createBottomTabNavigator<TutorTabParamList>();
-const VetTab = createBottomTabNavigator<VetTabParamList>();
+const TutorTab = createBottomTabNavigator<TutorTabParamList>()
+const VetTab = createBottomTabNavigator<VetTabParamList>()
+const VetProfileStack = createNativeStackNavigator<VetProfileStackParamList>()
+
+/** Aba "Perfil" do vet como stack: perfil + edição (a tab bar fica visível). */
+function VetProfileStackNavigator() {
+  return (
+    <VetProfileStack.Navigator screenOptions={{ headerShown: false }}>
+      <VetProfileStack.Screen name="PerfilMain" component={VetPerfil} />
+      <VetProfileStack.Screen name="EditarPerfil" component={EditarPerfilScreen} />
+      <VetProfileStack.Screen name="MeusHorarios" component={MeusHorariosScreen} />
+      <VetProfileStack.Screen name="FolgasBloqueios" component={FolgasScreen} />
+    </VetProfileStack.Navigator>
+  )
+}
 
 function useTabScreenOptions(): BottomTabNavigationOptions {
-  const theme = useTheme();
+  const theme = useTheme()
   return {
     headerShown: false,
     tabBarActiveTintColor: theme.colors.brandBlue[7],
@@ -50,11 +60,11 @@ function useTabScreenOptions(): BottomTabNavigationOptions {
       fontFamily: theme.fontFamily.sans('500'),
       fontSize: 11,
     },
-  };
+  }
 }
 
 function TutorTabNavigator() {
-  const screenOptions = useTabScreenOptions();
+  const screenOptions = useTabScreenOptions()
   return (
     <TutorTab.Navigator screenOptions={screenOptions}>
       <TutorTab.Screen
@@ -98,61 +108,43 @@ function TutorTabNavigator() {
         }}
       />
     </TutorTab.Navigator>
-  );
+  )
 }
 
 function VetTabNavigator() {
-  const screenOptions = useTabScreenOptions();
   return (
-    <VetTab.Navigator screenOptions={screenOptions}>
-      <VetTab.Screen
-        name="Home"
-        component={VetHome}
-        options={{
-          title: 'Início',
-          tabBarIcon: ({ color, size }) => <IconStar size={size} color={color} />,
-        }}
-      />
-      <VetTab.Screen
-        name="Agenda"
-        component={AgendaScreen}
-        options={{
-          title: 'Agenda',
-          tabBarIcon: ({ color, size }) => <IconHistory size={size} color={color} />,
-        }}
-      />
+    <VetTab.Navigator
+      screenOptions={{ headerShown: false }}
+      tabBar={props => <VetTabBar {...props} />}
+    >
+      <VetTab.Screen name="Home" component={VetHome} options={{ title: 'Início' }} />
+      <VetTab.Screen name="Agenda" component={AgendaScreen} options={{ title: 'Agenda' }} />
       <VetTab.Screen
         name="Avaliacoes"
         component={AvaliacoesScreen}
-        options={{
-          title: 'Avaliações',
-          tabBarIcon: ({ color, size }) => <IconBarChart size={size} color={color} />,
-        }}
+        options={{ title: 'Avaliações' }}
       />
       <VetTab.Screen
         name="Perfil"
-        component={VetPerfil}
-        options={{
-          title: 'Perfil',
-          tabBarIcon: ({ color, size }) => <IconUser size={size} color={color} />,
-        }}
+        component={VetProfileStackNavigator}
+        options={{ title: 'Perfil' }}
       />
     </VetTab.Navigator>
-  );
+  )
 }
 
 export function MainNavigator() {
-  const { selectedRole } = useAuth();
+  const { selectedRole } = useAuth()
 
   // AC6b: autenticado porém sem papel → fallback de RoleSelect (nunca tabs com papel nulo)
   if (!selectedRole) {
-    return <RoleSelectScreen />;
+    return <RoleSelectScreen />
   }
 
   // Passeador ainda não tem shell de tabs próprio — placeholder até a spec dedicada.
   if (selectedRole === 'passeador') {
-    return <PlaceholderScreen title="Passeador(a)" subtitle="Em construção" />;
+    return <PlaceholderScreen title="Passeador(a)" subtitle="Em construção" />
   }
 
-  return selectedRole === 'vet' ? <VetTabNavigator /> : <TutorTabNavigator />;
+  return selectedRole === 'vet' ? <VetTabNavigator /> : <TutorTabNavigator />
 }

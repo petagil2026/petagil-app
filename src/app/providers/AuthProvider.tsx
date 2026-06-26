@@ -18,7 +18,8 @@ import {
   type ReactNode,
 } from 'react'
 
-import { loginRequest, logoutRequest, setOnAuthFailure } from '@/services/api'
+import { loginRequest, logoutRequest, registerRequest, setOnAuthFailure } from '@/services/api'
+import type { RegisterInput } from '@/services/api'
 import { secureStorage } from '@/services/storage'
 import type { Role, User } from '@/types/auth'
 
@@ -30,6 +31,18 @@ export interface AuthContextType {
   selectedRole: Role | null
   /** Autentica por email/senha contra a API. Lança em caso de falha. */
   login: (email: string, password: string) => Promise<void>
+  /**
+   * Cria a conta ("Crie sua conta") e guarda os TOKENS (já autentica as chamadas
+   * HTTP), mas NÃO marca `isAuthenticated` ainda — o onboarding pode ter uma etapa
+   * seguinte (ex.: perfil do veterinário) que vive no AuthNavigator e seria perdida
+   * se o RootNavigator trocasse para o app. Retorna o `user` criado.
+   */
+  register: (input: RegisterInput) => Promise<User>
+  /**
+   * Finaliza o onboarding: persiste o `user` e marca `isAuthenticated` — o
+   * RootNavigator troca para o app. Chame após a última etapa do cadastro.
+   */
+  completeOnboarding: (user: User) => void
   /** Troca o papel selecionado sem mexer no estado de autenticação. */
   selectRole: (role: Role) => void
   logout: () => Promise<void>
@@ -177,6 +190,52 @@ export function AuthProvider({ children }: AuthProviderProps) {
     [safeSetState]
   )
 
+  /**
+   * Cadastro de conta (etapa 1). Persiste apenas os TOKENS (para as chamadas
+   * seguintes irem autenticadas) e guarda o `user` em memória + o papel. NÃO
+   * persiste o user nem marca `isAuthenticated` — isso fica para `completeOnboarding`,
+   * de modo que um app reaberto no meio do fluxo volte ao login (onboarding incompleto).
+   *
+   * NÃO mexe em `isLoading`: esse flag controla o gate do RootNavigator
+   * (Splash vs Auth vs Main). Ligá-lo aqui desmontaria o AuthNavigator (mostrando
+   * a Splash) e, ao voltar, ele remontaria no `initialRoute` Login — perdendo o
+   * `navigate('VetProfile')`. O loading do botão é local (`isSubmitting` na tela).
+   */
+  const register = useCallback(
+    async (input: RegisterInput): Promise<User> => {
+      safeSetState({ error: null })
+      try {
+        const { tokens, user } = await registerRequest(input)
+        await secureStorage.setTokens(tokens)
+        const role: Role | null = isRole(user.role ?? null)
+          ? (user.role as Role)
+          : isRole(input.role)
+            ? input.role
+            : null
+        if (role) {
+          await secureStorage.setSelectedRole(role)
+        }
+        safeSetState({ user, selectedRole: role, error: null })
+        logger.log('register ok:', user.email)
+        return user
+      } catch (error) {
+        logger.error('register failed:', error)
+        throw error instanceof Error ? error : new Error('register failed')
+      }
+    },
+    [safeSetState]
+  )
+
+  /** Finaliza o onboarding: persiste o user e autentica (RootNavigator -> app). */
+  const completeOnboarding = useCallback(
+    (user: User): void => {
+      void secureStorage.setUser(JSON.stringify(user))
+      safeSetState({ isAuthenticated: true, user })
+      logger.log('onboarding completo:', user.email)
+    },
+    [safeSetState]
+  )
+
   /** Troca apenas o papel selecionado (persistindo), sem alterar a autenticação. */
   const selectRole = useCallback(
     (role: Role): void => {
@@ -213,11 +272,13 @@ export function AuthProvider({ children }: AuthProviderProps) {
       error: state.error,
       selectedRole: state.selectedRole,
       login,
+      register,
+      completeOnboarding,
       selectRole,
       logout,
       clearError,
     }),
-    [state, login, selectRole, logout, clearError]
+    [state, login, register, completeOnboarding, selectRole, logout, clearError]
   )
 
   return <AuthContext.Provider value={contextValue}>{children}</AuthContext.Provider>

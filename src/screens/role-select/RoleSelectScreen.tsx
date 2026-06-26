@@ -7,36 +7,62 @@
  * card selecionado em gradiente amarelo + borda azul, botão em gradiente azul.
  * Cores/medidas são valores exatos do mock (não passam pelos tokens do tema).
  */
-import { useState } from 'react';
-import { View, Text, StyleSheet, Pressable } from 'react-native';
-import { LinearGradient } from 'expo-linear-gradient';
-import { useNavigation } from '@react-navigation/native';
-import type { NativeStackNavigationProp } from '@react-navigation/native-stack';
-import { ScreenContainer } from '@/components/ui';
-import { IconCheck } from '@/assets/icons';
-import { useAuth } from '@/app/providers';
-import type { Role } from '@/types/auth';
-import type { AuthStackParamList } from '@/navigation/types';
-import { ROLE_OPTIONS } from './roleOptions';
+import { useContext, useState } from 'react'
+import { View, Text, StyleSheet, Pressable, ActivityIndicator } from 'react-native'
+import { LinearGradient } from 'expo-linear-gradient'
+import { useNavigation, NavigationRouteContext } from '@react-navigation/native'
+import type { NativeStackNavigationProp } from '@react-navigation/native-stack'
+import { ScreenContainer, useToast } from '@/components/ui'
+import { IconCheck } from '@/assets/icons'
+import { useAuth } from '@/app/providers'
+import type { Role } from '@/types/auth'
+import type { AccountDraft, AuthStackParamList } from '@/navigation/types'
+import { ROLE_OPTIONS } from './roleOptions'
 
-type Navigation = NativeStackNavigationProp<AuthStackParamList, 'RoleSelect'>;
+type Navigation = NativeStackNavigationProp<AuthStackParamList, 'RoleSelect'>
 
 // Direção dos gradientes (135° ≈ canto superior-esquerdo → inferior-direito)
-const GRADIENT_START = { x: 0, y: 0 };
-const GRADIENT_END = { x: 1, y: 1 };
+const GRADIENT_START = { x: 0, y: 0 }
+const GRADIENT_END = { x: 1, y: 1 }
 
-const CARD_SELECTED_BG: [string, string] = ['#FFF9DD', '#FFF3B0'];
-const BUTTON_BG: [string, string] = ['#2E7CB8', '#1E5F92'];
+const CARD_SELECTED_BG: [string, string] = ['#FFF9DD', '#FFF3B0']
+const BUTTON_BG: [string, string] = ['#2E7CB8', '#1E5F92']
 
 export function RoleSelectScreen() {
-  const navigation = useNavigation<Navigation>();
-  const { selectedRole } = useAuth();
+  const navigation = useNavigation<Navigation>()
+  // Lê params via contexto (retorna undefined quando renderado fora de um screen —
+  // ex.: fallback do MainNavigator), evitando o throw de `useRoute`.
+  const route = useContext(NavigationRouteContext)
+  const account = (route?.params as { account?: AccountDraft } | undefined)?.account
+  const { selectedRole, register, completeOnboarding, selectRole } = useAuth()
+  const toast = useToast()
   // Pré-seleciona o papel já escolhido (sessão restaurada), com fallback para tutor.
-  const [selected, setSelected] = useState<Role>(selectedRole ?? 'tutor');
+  const [selected, setSelected] = useState<Role>(selectedRole ?? 'tutor')
+  const [isSubmitting, setIsSubmitting] = useState(false)
 
-  const handleContinue = () => {
-    navigation.navigate('Cadastro', { role: selected });
-  };
+  // Com rascunho de conta (fluxo de cadastro): cria a conta agora — o register
+  // precisa do papel. Veterinário segue para o perfil profissional; os demais já
+  // entram no app. Sem rascunho (fallback já autenticado): apenas fixa o papel.
+  const handleContinue = async () => {
+    if (isSubmitting) return
+    if (!account) {
+      selectRole(selected)
+      return
+    }
+    setIsSubmitting(true)
+    try {
+      const user = await register({ ...account, role: selected })
+      if (selected === 'vet') {
+        navigation.navigate('VetProfile')
+      } else {
+        completeOnboarding(user)
+      }
+    } catch (error) {
+      toast.error(error instanceof Error ? error.message : 'Não foi possível criar sua conta.')
+    } finally {
+      setIsSubmitting(false)
+    }
+  }
 
   return (
     <ScreenContainer>
@@ -48,7 +74,7 @@ export function RoleSelectScreen() {
 
         <View style={styles.cards} accessibilityRole="radiogroup">
           {ROLE_OPTIONS.map(option => {
-            const isSelected = selected === option.id;
+            const isSelected = selected === option.id
             return (
               <Pressable
                 key={option.id}
@@ -72,33 +98,43 @@ export function RoleSelectScreen() {
                   </View>
                 )}
               </Pressable>
-            );
+            )
           })}
         </View>
 
         <View style={styles.buttonShadow}>
-          <Pressable accessibilityRole="button" accessibilityLabel="Continuar" onPress={handleContinue}>
+          <Pressable
+            accessibilityRole="button"
+            accessibilityLabel="Continuar"
+            accessibilityState={{ disabled: isSubmitting }}
+            disabled={isSubmitting}
+            onPress={handleContinue}
+          >
             <LinearGradient
               colors={BUTTON_BG}
               start={GRADIENT_START}
               end={GRADIENT_END}
-              style={styles.button}
+              style={[styles.button, isSubmitting && styles.buttonDisabled]}
             >
-              <Text style={styles.buttonText}>Continuar</Text>
+              {isSubmitting ? (
+                <ActivityIndicator color="#FFFFFF" />
+              ) : (
+                <Text style={styles.buttonText}>Continuar</Text>
+              )}
             </LinearGradient>
           </Pressable>
         </View>
       </View>
     </ScreenContainer>
-  );
+  )
 }
 
 function CardContent({
   option,
   isSelected,
 }: {
-  option: (typeof ROLE_OPTIONS)[number];
-  isSelected: boolean;
+  option: (typeof ROLE_OPTIONS)[number]
+  isSelected: boolean
 }) {
   return (
     <>
@@ -119,7 +155,9 @@ function CardContent({
 
       <View style={styles.textBlock}>
         <Text style={styles.cardTitle}>{option.title}</Text>
-        <Text style={[styles.cardDesc, isSelected ? styles.cardDescSelected : styles.cardDescDefault]}>
+        <Text
+          style={[styles.cardDesc, isSelected ? styles.cardDescSelected : styles.cardDescDefault]}
+        >
           {option.description}
         </Text>
       </View>
@@ -132,7 +170,7 @@ function CardContent({
         <View style={styles.radioOff} />
       )}
     </>
-  );
+  )
 }
 
 function Emoji({ char }: { char: string }) {
@@ -140,7 +178,7 @@ function Emoji({ char }: { char: string }) {
     <Text style={styles.emoji} accessibilityElementsHidden importantForAccessibility="no">
       {char}
     </Text>
-  );
+  )
 }
 
 const styles = StyleSheet.create({
@@ -254,9 +292,12 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     justifyContent: 'center',
   },
+  buttonDisabled: {
+    opacity: 0.6,
+  },
   buttonText: {
     fontFamily: 'Baloo2_700Bold',
     fontSize: 18,
     color: '#FFFFFF',
   },
-});
+})

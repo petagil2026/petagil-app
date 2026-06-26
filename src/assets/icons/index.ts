@@ -58,3 +58,6 @@ export { IconGoogle } from './IconGoogle';
 export { IconPaw } from './IconPaw';
 export { IconEye } from './IconEye';
 export { IconEyeSlash } from './IconEyeSlash';
+export { IconPhone } from './IconPhone';
+export { IconHome } from './IconHome';
+export { IconCalendar } from './IconCalendar';

@@ -29,11 +29,11 @@ _This file contains critical rules and patterns that AI agents must follow when 
 
 **PetÁgil** é um marketplace de duas pontas (estilo Doctoralia) que conecta **tutores de pets** ↔ **veterinários**, focado em **agendamento de consultas de rotina** (vacina/vermífugo/check-up). Estratégia: cidades pequenas + nicho de veterinária **silvestre/exótica**. Monetização: assinatura do vet com 1 mês grátis (sem comissão).
 
-- **Papéis** (`Role` = `tutor` | `vet`) definem toda a navegação e features.
+- **Papéis** (`Role` = `tutor` | `vet` | `passeador`) definem toda a navegação e features.
 - **Tutor:** cadastra pet(s), busca vets por proximidade/especialidade, agenda, recebe lembretes.
 - **Vet:** cadastro com verificação de CRMV (semi-automática), perfil público, agenda (confirma/recusa/remarca), avaliações.
 - **Fora do MVP:** pagamento in-app, telemedicina, prontuário completo, CRMV 100% automatizado, ranking pago.
-- Estado atual do código: **fundação/esqueleto** — auth mockado, telas placeholder, features stub. Specs futuras preenchem a lógica real.
+- Estado atual do código: **fundação + fluxo de onboarding implementado** (Login → "Crie sua conta" → seleção de papel → cadastro do veterinário). Auth real contra a API (register/login). Demais features ainda em placeholder/stub; specs futuras preenchem o resto.
 - Brief completo: `petagil-app/docs/product-brief-PetAgil-2026-06-24.md`.
 
 ## Technology Stack & Versions
@@ -49,6 +49,7 @@ _This file contains critical rules and patterns that AI agents must follow when 
 - Servidor/cache: `@tanstack/react-query` `^5.90`
 - i18n: `@lingui/*` `^5.9` (macros via Babel)
 - Storage: `expo-secure-store` (sensível) + `@react-native-async-storage/async-storage` `2.2.0` (preferências)
+- Mídia: `expo-image-picker` `~17.0` (foto do profissional / anexo do CRMV — **módulo nativo**, exige rebuild do dev client; não funciona só com Metro)
 - Erros/monitoring: `@sentry/react-native` `~7.2`
 - UI: `react-native-reanimated` `~4.1` · `react-native-gesture-handler` · `@gorhom/bottom-sheet` `^5` · `react-native-svg` `15.12.1`
 - Fontes: Rubik (UI) + Montserrat (`@expo-google-fonts/*`)
@@ -71,12 +72,18 @@ _This file contains critical rules and patterns that AI agents must follow when 
 
 **Arquitetura feature-based (MVVM):**
 - Features em `src/features/<feature>/` seguem `model/` (tipos, api, transformers) · `viewModel/` (hooks, queries, mutations) · `view/` (componentes). Os stubs atuais fixam essa convenção — manter ao preencher.
+- **Referência preenchida:** `src/features/vet/` — `model/` (`types.ts` espelha o contrato do backend; `api.ts` com `createVetProfile`/`uploadImage`/`updateMyName`) e `viewModel/useVetOnboarding.ts` (mutation React Query que orquestra uploads → cria perfil → atualiza nome). Telas de onboarding ficam em `src/screens/auth/` (consomem a feature).
 - Telas em `src/screens/` organizadas por papel: `tutor/`, `vet/`, `auth/`, `role-select/`. Navegação por papel: `RootNavigator` → `AuthNavigator` | `MainNavigator` (tabs do papel).
 
 **Auth & sessão:**
 - `useAuth()` (de `@/app/providers`) é a fonte de verdade de autenticação/papel. NUNCA ler sessão direto do storage em telas — usar o provider.
-- Auth está **mockado** hoje (`login(role)` cria user fake). Ao implementar auth real, manter a mesma interface `AuthContextType` para não quebrar consumidores.
+- Auth é **real** contra a API: `login(email, password)` e `register(input)`. Ao estender, manter a interface `AuthContextType` para não quebrar consumidores.
+- **Onboarding em 2 etapas:** `register(input)` cria a conta e guarda só os TOKENS (chamadas seguintes já vão autenticadas), mas **não** marca `isAuthenticated` — assim o `RootNavigator` não troca para o app e a próxima etapa (perfil do vet) sobrevive no `AuthNavigator`. `completeOnboarding(user)` finaliza (persiste o user + autentica). Etapas intermediárias incompletas voltam ao login ao reabrir o app (user só é persistido no fim).
 - `selectedRole` SEMPRE acompanha autenticação — não criar estado "autenticado sem papel".
+
+**Fluxo de onboarding (AuthNavigator):**
+- `Login → CreateAccount ("Crie sua conta") → RoleSelect (seleção de papel) → VetProfile (cadastro do vet)`. O `register` ocorre na **seleção de papel** (precisa do `role`); o rascunho da conta (`AccountDraft`: name/email/phone/city/password) trafega por param de navegação (só em memória). Tutor/passeador entram no app direto após o register; veterinário segue para `VetProfile` e só então conclui.
+- Ler params de tela renderizada fora de um navigator (ex.: fallback `RoleSelect` no `MainNavigator`) via `useContext(NavigationRouteContext)` — `useRoute()` lança nesse caso.
 
 **Tema / Design System (OBRIGATÓRIO):**
 - Cores, spacing, tipografia, raios e sombras vêm SEMPRE de `useTheme()`. NUNCA hardcodar cores hex, tamanhos de fonte ou paddings mágicos — usar `theme.colors`, `theme.semantic.*`, `theme.spacing`, `theme.borderRadius`, `theme.textStyles`.
@@ -85,10 +92,12 @@ _This file contains critical rules and patterns that AI agents must follow when 
 - Tokens de tema relevantes: `gradients.{header,primaryButton}`, `borderRadius.{input,button,logo,sheet}` (raios específicos de telas de marca), `shadows.primaryGlow`. Ao mapear designs, preferir esses tokens a hex/números soltos.
 - **Exceção brand-themed (mode-independent):** telas de marca pré-login (ex.: `LoginScreen`) mantêm SEMPRE o visual claro — usam tokens fixos da paleta (`colors.grey[0]`, `colors.brandBlue[*]`), NÃO `semantic.*` (que invertem no dark). Documentar a exceção no JSDoc da tela.
 - `StyleSheet.create` para estilos estáticos; passar cores do tema inline via array de styles. Para superfícies translúcidas, concatenar alpha-hex ao token (ex.: `theme.colors.grey[0] + '38'`), em vez de cravar `rgba(...)`.
+- **Medidas do Claude Design (HTML) → escala do DS:** o HTML/mock do Claude Design é referência de **layout, cores, espaçamento e proporção**, mas seus `font-size` em px são de um "telefone" de ~316px de largura e ficam pequenos demais em telas reais (~360–412dp). NÃO copiar os px crus — **adaptar para a escala do design system** (corpo ~14, secundário ~12–13, título de seção ~16, números/nome ~20–23, badges ~11–12, rótulos de tab ~11), preferindo `theme.textStyles`; em telas brand-themed com Baloo 2/Nunito, usar pesos comparáveis nesses tamanhos. (Ex.: `PerfilScreen` do vet foi escalada assim.)
 
 **Camada de rede (React Query + httpClient):**
 - Toda chamada HTTP passa pelo `api` (`@/services/api/httpClient`) — get/post/put/patch/delete. Ele já injeta Bearer, `Accept-Language`, timeout (30s) e faz refresh de 401 + retry uma vez.
 - NÃO chamar `fetch` direto nas features. NÃO montar URL com base manual — passar só o endpoint relativo (a base `/api` é concatenada).
+- **Upload (multipart):** usar `httpClient(endpoint, { method: 'POST', body: formData })` com `FormData` (arquivo no formato RN `{ uri, name, type }`) — **NÃO** setar `Content-Type` (o RN monta o boundary). Ex.: `POST /uploads/image` → `{ url }` (Supabase Storage). O `httpClient` já é seguro p/ `FormData` (não tenta `JSON.parse` no body).
 - Erros tipados: tratar `ApiError`/`AuthenticationError`/`NetworkError`/`TimeoutError` (de `@/services/api/errors`).
 - Server state via **React Query**: `useQuery`/`useMutation`. Padronizar `queryKey` com factory (ex.: `userProfileKeys`). `QueryClient` é singleton em `App.tsx` (não recriar).
 
@@ -180,4 +189,4 @@ _This file contains critical rules and patterns that AI agents must follow when 
 - Atualizar quando a stack tecnológica mudar (em especial ao subir o Expo SDK).
 - Revisar periodicamente e remover regras que se tornarem óbvias.
 
-Last Updated: 2026-06-25
+Last Updated: 2026-06-25 (fluxo de onboarding: CreateAccount → RoleSelect → VetProfile; feature `vet/`; upload Supabase; `expo-image-picker`)
