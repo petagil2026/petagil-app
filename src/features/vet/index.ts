@@ -1,3 +1,5 @@
-// Feature: vet — stub da fundação.
-// Convenção feature-based (model/view/viewModel) a ser preenchida em specs futuras.
-export {};
+// Feature: vet — cadastro/perfil do veterinário.
+// Arquitetura feature-based: model (tipos + rede) · viewModel (hooks/mutations).
+export * from './model'
+export * from './viewModel'
+export * from './view'

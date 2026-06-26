@@ -139,8 +139,8 @@ export function LoginScreen({ onSubmit = defaultSubmit }: LoginScreenProps) {
   }
 
   const handleRegisterPress = () => {
-    // Cadastro começa pela escolha de perfil (RoleSelect → Cadastro).
-    navigation.navigate('RoleSelect')
+    // Cadastro começa pela criação de conta (CreateAccount → RoleSelect → perfil).
+    navigation.navigate('CreateAccount')
   }
 
   const submitDisabled = !email.trim() || !password || isSubmitting
@@ -183,7 +183,11 @@ export function LoginScreen({ onSubmit = defaultSubmit }: LoginScreenProps) {
               />
             </View>
             <Text
-              style={[theme.textStyles.lg400, { color: theme.colors.grey[0] + 'E6' }, styles.tagline]}
+              style={[
+                theme.textStyles.lg400,
+                { color: theme.colors.grey[0] + 'E6' },
+                styles.tagline,
+              ]}
             >
               <Trans>Cuidar do seu pet ficou simples</Trans>
             </Text>

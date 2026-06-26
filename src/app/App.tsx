@@ -16,7 +16,7 @@ import {
 } from '@expo-google-fonts/rubik'
 import { Montserrat_400Regular, Montserrat_600SemiBold } from '@expo-google-fonts/montserrat'
 import { Baloo2_700Bold, Baloo2_800ExtraBold } from '@expo-google-fonts/baloo-2'
-import { Nunito_600SemiBold } from '@expo-google-fonts/nunito'
+import { Nunito_600SemiBold, Nunito_700Bold, Nunito_800ExtraBold } from '@expo-google-fonts/nunito'
 import { QueryClient, QueryClientProvider, onlineManager } from '@tanstack/react-query'
 import { I18nProvider, useLingui } from '@lingui/react'
 import { useEffect, useState } from 'react'
@@ -105,6 +105,8 @@ export default function App() {
     Baloo2_700Bold,
     Baloo2_800ExtraBold,
     Nunito_600SemiBold,
+    Nunito_700Bold,
+    Nunito_800ExtraBold,
   })
   const [i18nReady, setI18nReady] = useState(false)
 
@@ -132,24 +134,24 @@ export default function App() {
   return (
     <GestureHandlerRootView style={styles.root}>
       <KeyboardProvider>
-      <SafeAreaProvider>
-        <I18nProvider i18n={i18n}>
-          <ErrorBoundary>
-            <ThemeProvider>
-              <ThemedBackground>
-                <ToastProvider>
-                  <AuthProvider>
-                    <QueryClientProvider client={queryClient}>
-                      <OfflineBanner />
-                      <AppContent />
-                    </QueryClientProvider>
-                  </AuthProvider>
-                </ToastProvider>
-              </ThemedBackground>
-            </ThemeProvider>
-          </ErrorBoundary>
-        </I18nProvider>
-      </SafeAreaProvider>
+        <SafeAreaProvider>
+          <I18nProvider i18n={i18n}>
+            <ErrorBoundary>
+              <ThemeProvider>
+                <ThemedBackground>
+                  <ToastProvider>
+                    <AuthProvider>
+                      <QueryClientProvider client={queryClient}>
+                        <OfflineBanner />
+                        <AppContent />
+                      </QueryClientProvider>
+                    </AuthProvider>
+                  </ToastProvider>
+                </ThemedBackground>
+              </ThemeProvider>
+            </ErrorBoundary>
+          </I18nProvider>
+        </SafeAreaProvider>
       </KeyboardProvider>
     </GestureHandlerRootView>
   )

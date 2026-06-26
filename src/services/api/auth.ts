@@ -50,13 +50,20 @@ export async function loginRequest(email: string, password: string): Promise<Aut
   return toAuthResult(res.data)
 }
 
-/** Cria conta + autentica. (Disponível para o futuro fluxo de cadastro real.) */
-export async function registerRequest(input: {
+/** Dados aceitos no cadastro de conta ("Crie sua conta"). */
+export interface RegisterInput {
   name: string
   email: string
   password: string
   role: 'tutor' | 'vet' | 'passeador'
-}): Promise<AuthResult> {
+  /** Celular/WhatsApp (opcional no backend; o formulário sempre envia). */
+  phone?: string
+  /** Cidade (opcional no backend; o formulário sempre envia). */
+  city?: string
+}
+
+/** Cria conta + autentica. Retorna tokens + user (já com o papel do servidor). */
+export async function registerRequest(input: RegisterInput): Promise<AuthResult> {
   const res = await api.post<ApiResponse<AuthData>>('/auth/register/', input, { skipAuth: true })
   if (!res.success || !res.data) {
     throw new Error(res.error ?? 'Falha no cadastro')

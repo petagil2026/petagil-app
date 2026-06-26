@@ -1,5 +1,6 @@
-import { PlaceholderScreen } from '../PlaceholderScreen';
+import { PlaceholderScreen } from '../PlaceholderScreen'
 
+/** Aba "Agenda" do vet — lista de agendamentos (a construir). */
 export function AgendaScreen() {
-  return <PlaceholderScreen title="Agenda" subtitle="Em construção" />;
+  return <PlaceholderScreen title="Agenda" subtitle="Seus agendamentos aparecerão aqui" />
 }

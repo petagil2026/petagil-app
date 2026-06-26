@@ -156,10 +156,9 @@ describe('LoginScreen (frontend-only)', () => {
     expect(onSubmit).not.toHaveBeenCalled();
   });
 
-  it('AC7: "Cadastre-se" é inerte (stub) e não navega', async () => {
+  it('AC7: "Cadastre-se" inicia o cadastro (navega para CreateAccount)', () => {
     renderLogin();
     fireEvent.press(screen.getByTestId('login-register-link'));
-    expect(await screen.findByText('Cadastro em breve')).toBeTruthy();
-    expect(mockNavigate).not.toHaveBeenCalled();
+    expect(mockNavigate).toHaveBeenCalledWith('CreateAccount');
   });
 });

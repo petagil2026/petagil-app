@@ -11,22 +11,114 @@ msgstr ""
 "Content-Type: \n"
 "Content-Transfer-Encoding: \n"
 
+#: src/screens/vet/MeusHorariosScreen.tsx:218
+msgid "— até —"
+msgstr ""
+
+#: src/screens/vet/MeusHorariosScreen.tsx:265
+msgid "{slotsPerDay} horários/dia"
+msgstr ""
+
+#: src/screens/vet/FolgasScreen.tsx:141
+msgid "+ Bloquear um dia"
+msgstr ""
+
+#: src/screens/vet/FolgasScreen.tsx:156
+msgid "+ Bloquear um horário"
+msgstr ""
+
+#: src/features/vet/view/VetProfileForm.tsx:302
+msgid "🏠 A domicílio"
+msgstr ""
+
+#: src/features/vet/view/VetProfileForm.tsx:294
+msgid "🏥 Na clínica"
+msgstr ""
+
+#: src/screens/vet/PerfilScreen.tsx:212
+msgid "0 avaliações"
+msgstr ""
+
+#: src/screens/auth/CreateAccountScreen.tsx:93
+msgid "A senha precisa de ao menos 8 caracteres"
+msgstr ""
+
 #: src/components/layout/MobileHeader.tsx:39
 msgid "Abrir menu"
 msgstr "Abrir menú"
+
+#: src/features/vet/view/VetProfileForm.tsx:231
+msgid "Adicionar foto do profissional"
+msgstr ""
+
+#: src/screens/vet/PerfilScreen.tsx:392
+msgid "Ajuda & suporte"
+msgstr ""
 
 #: src/components/ErrorBoundary.tsx:32
 #: src/components/ui/ScreenStateWrapper.tsx:57
 msgid "Algo deu errado"
 msgstr "Algo salió mal"
 
-#: src/screens/auth/LoginScreen.tsx:259
+#: src/features/vet/view/VetProfileForm.tsx:231
+msgid "Alterar foto"
+msgstr ""
+
+#: src/features/vet/view/VetProfileForm.tsx:216
+msgid "Alterar foto do profissional"
+msgstr ""
+
+#: src/features/vet/view/VetProfileForm.tsx:338
+msgid "Anexar carteira do CRMV"
+msgstr ""
+
+#: src/features/vet/view/VetProfileForm.tsx:347
+msgid "Anexar carteira do CRMV (opcional)"
+msgstr ""
+
+#: src/screens/vet/PerfilScreen.tsx:213
+msgid "ano"
+msgstr ""
+
+#: src/screens/vet/PerfilScreen.tsx:213
+msgid "anos"
+msgstr ""
+
+#: src/screens/auth/CreateAccountScreen.tsx:260
+msgid "Ao continuar você aceita os Termos de Uso"
+msgstr ""
+
+#: src/features/vet/view/VetProfileForm.tsx:356
+msgid "Após o envio, seu registro é conferido no Siscad Web (CFMV) e aprovado em até 24h."
+msgstr ""
+
+#: src/screens/vet/MeusHorariosScreen.tsx:205
+msgid "até"
+msgstr ""
+
+#: src/features/vet/view/VetProfileForm.tsx:205
+msgid "Atualize seus dados e sua foto"
+msgstr ""
+
+#: src/screens/vet/MeusHorariosScreen.tsx:266
+msgid "automaticamente"
+msgstr ""
+
+#: src/screens/vet/PerfilScreen.tsx:328
+msgid "Avaliações dos tutores"
+msgstr ""
+
+#: src/screens/vet/FolgasScreen.tsx:138
+msgid "Bloquear um dia"
+msgstr ""
+
+#: src/screens/vet/FolgasScreen.tsx:147
+msgid "Bloquear um horário"
+msgstr ""
+
+#: src/screens/auth/LoginScreen.tsx:311
 msgid "Cadastre-se"
 msgstr "Regístrate"
-
-#: src/screens/auth/LoginScreen.tsx:117
-msgid "Cadastro em breve"
-msgstr "Registro próximamente"
 
 #: src/components/ui/DeleteModal.tsx:112
 #: src/components/ui/DeleteModal.tsx:116
@@ -34,34 +126,133 @@ msgstr "Registro próximamente"
 msgid "Cancelar"
 msgstr "Cancelar"
 
+#: src/features/vet/view/VetProfileForm.tsx:347
+msgid "Carteira anexada ✓"
+msgstr ""
+
+#: src/screens/auth/CreateAccountScreen.tsx:188
+#: src/screens/auth/CreateAccountScreen.tsx:189
+msgid "Celular (WhatsApp)"
+msgstr ""
+
+#: src/screens/auth/CreateAccountScreen.tsx:208
+#: src/screens/auth/CreateAccountScreen.tsx:209
+msgid "Cidade"
+msgstr ""
+
+#: src/features/vet/view/SelectSheet.tsx:100
+msgid "Confirmar"
+msgstr ""
+
 #: src/components/ui/DeleteModal.tsx:131
 msgid "Confirmar exclusão"
 msgstr "Confirmar eliminación"
 
-#: src/screens/auth/LoginScreen.tsx:238
-#: src/screens/auth/LoginScreen.tsx:250
+#: src/screens/vet/PerfilScreen.tsx:211
+msgid "Consultas"
+msgstr ""
+
+#: src/screens/auth/LoginScreen.tsx:290
+#: src/screens/auth/LoginScreen.tsx:302
 msgid "Continuar com Google"
 msgstr "Continuar con Google"
 
-#: src/screens/auth/LoginScreen.tsx:156
+#: src/screens/auth/CreateAccountScreen.tsx:130
+msgid "Crie sua conta"
+msgstr ""
+
+#: src/features/vet/view/VetProfileForm.tsx:249
+msgid "CRMV"
+msgstr ""
+
+#: src/screens/auth/LoginScreen.tsx:192
 msgid "Cuidar do seu pet ficou simples"
 msgstr "Cuidar de tu mascota nunca fue tan simple"
 
-#: src/screens/auth/LoginScreen.tsx:93
+#: src/screens/auth/LoginScreen.tsx:120
 msgid "Digite sua senha"
 msgstr "Ingresa tu contraseña"
 
-#: src/screens/auth/LoginScreen.tsx:72
+#: src/screens/auth/CreateAccountScreen.tsx:91
+msgid "Digite um celular válido com DDD"
+msgstr ""
+
+#: src/screens/auth/CreateAccountScreen.tsx:90
+#: src/screens/auth/LoginScreen.tsx:99
 msgid "Digite um e-mail válido"
 msgstr "Ingresa un correo electrónico válido"
 
-#: src/screens/auth/LoginScreen.tsx:184
+#: src/screens/vet/MeusHorariosScreen.tsx:226
+msgid "Duração da consulta"
+msgstr ""
+
+#: src/screens/auth/CreateAccountScreen.tsx:166
+#: src/screens/auth/CreateAccountScreen.tsx:167
+#: src/screens/auth/LoginScreen.tsx:221
 msgid "E-mail"
 msgstr "Correo electrónico"
 
-#: src/screens/auth/LoginScreen.tsx:225
+#: src/screens/vet/MeusHorariosScreen.tsx:199
+msgid "Editar horário de início"
+msgstr ""
+
+#: src/screens/vet/MeusHorariosScreen.tsx:210
+msgid "Editar horário de término"
+msgstr ""
+
+#: src/features/vet/view/VetProfileForm.tsx:201
+msgid "Editar perfil"
+msgstr ""
+
+#: src/screens/vet/PerfilScreen.tsx:275
+msgid "Editar perfil e foto"
+msgstr ""
+
+#: src/screens/vet/FolgasScreen.tsx:74
+#: src/screens/vet/MeusHorariosScreen.tsx:273
+#: src/screens/vet/PerfilScreen.tsx:107
+msgid "Em breve"
+msgstr ""
+
+#: src/features/vet/view/VetProfileForm.tsx:329
+msgid "Endereço"
+msgstr ""
+
+#: src/features/vet/view/VetProfileForm.tsx:328
+msgid "Endereço · rua, nº, bairro"
+msgstr ""
+
+#: src/screens/auth/LoginScreen.tsx:277
 msgid "Entrar"
 msgstr "Entrar"
+
+#: src/features/vet/view/VetProfileForm.tsx:363
+msgid "Enviar para verificação"
+msgstr ""
+
+#: src/features/vet/view/VetProfileForm.tsx:148
+msgid "Escolha ao menos um local de atendimento"
+msgstr ""
+
+#: src/screens/vet/MeusHorariosScreen.tsx:145
+msgid "Escolha os dias que você atende"
+msgstr ""
+
+#: src/features/vet/view/VetProfileForm.tsx:268
+#: src/features/vet/view/VetProfileForm.tsx:271
+#: src/features/vet/view/VetProfileForm.tsx:385
+#: src/screens/vet/PerfilScreen.tsx:217
+msgid "Especialidades"
+msgstr ""
+
+#: src/screens/vet/FolgasScreen.tsx:98
+msgid "Esses períodos não recebem agendamentos"
+msgstr ""
+
+#: src/features/vet/view/VetProfileForm.tsx:260
+#: src/features/vet/view/VetProfileForm.tsx:374
+msgid "Estado (UF) do CRMV"
+msgstr ""
 
 #: src/components/ui/DeleteModal.tsx:142
 msgid "Excluindo..."
@@ -82,9 +273,64 @@ msgstr "Eliminar {entityName}"
 msgid "Fechar"
 msgstr "Cerrar"
 
-#: src/screens/auth/LoginScreen.tsx:112
+#: src/screens/vet/FolgasScreen.tsx:97
+#: src/screens/vet/PerfilScreen.tsx:311
+msgid "Folgas & bloqueios"
+msgstr ""
+
+#: src/screens/vet/MeusHorariosScreen.tsx:265
+msgid "Gera"
+msgstr ""
+
+#: src/screens/vet/MeusHorariosScreen.tsx:281
+msgid "Horário de início"
+msgstr ""
+
+#: src/screens/vet/MeusHorariosScreen.tsx:281
+msgid "Horário de término"
+msgstr ""
+
+#: src/features/vet/view/VetProfileForm.tsx:150
+msgid "Informe o nome da clínica"
+msgstr ""
+
+#: src/features/vet/view/VetProfileForm.tsx:145
+msgid "Informe o número do CRMV"
+msgstr ""
+
+#: src/screens/auth/CreateAccountScreen.tsx:89
+msgid "Informe seu nome completo"
+msgstr ""
+
+#: src/screens/auth/CreateAccountScreen.tsx:92
+msgid "Informe sua cidade"
+msgstr ""
+
+#: src/screens/vet/PerfilScreen.tsx:371
+msgid "Lembretes & notificações"
+msgstr ""
+
+#: src/screens/auth/CreateAccountScreen.tsx:132
+msgid "Leva menos de 1 minuto 🐾"
+msgstr ""
+
+#: src/screens/auth/LoginScreen.tsx:138
 msgid "Login com Google em breve"
 msgstr "Inicio de sesión con Google próximamente"
+
+#: src/screens/vet/MeusHorariosScreen.tsx:144
+#: src/screens/vet/PerfilScreen.tsx:292
+msgid "Meus horários"
+msgstr ""
+
+#: src/screens/auth/CreateAccountScreen.tsx:239
+#: src/screens/auth/LoginScreen.tsx:252
+msgid "Mostrar senha"
+msgstr ""
+
+#: src/screens/vet/PerfilScreen.tsx:213
+msgid "Na PetÁgil"
+msgstr ""
 
 #: src/components/ui/ScreenStateWrapper.tsx:60
 msgid ""
@@ -94,29 +340,110 @@ msgstr ""
 "No fue posible cargar los datos.\n"
 "Verifica tu conexión e inténtalo de nuevo."
 
-#: src/screens/auth/LoginScreen.tsx:105
+#: src/screens/vet/EditarPerfilScreen.tsx:47
+#: src/screens/vet/PerfilScreen.tsx:121
+msgid "Não foi possível carregar seu perfil. Tente novamente."
+msgstr ""
+
+#: src/screens/auth/LoginScreen.tsx:131
 msgid "Não foi possível entrar. Tente novamente."
 msgstr "No fue posible iniciar sesión. Inténtalo de nuevo."
 
-#: src/screens/auth/LoginScreen.tsx:263
+#: src/screens/auth/VetCadastroScreen.tsx:41
+msgid "Não foi possível enviar seu perfil."
+msgstr ""
+
+#: src/screens/vet/EditarPerfilScreen.tsx:80
+msgid "Não foi possível salvar as alterações."
+msgstr ""
+
+#: src/screens/auth/LoginScreen.tsx:315
 msgid "Não tem conta? <0>Cadastre-se</0>"
 msgstr "¿No tienes cuenta? <0>Regístrate</0>"
+
+#: src/features/vet/view/VetProfileForm.tsx:242
+msgid "Nº"
+msgstr ""
+
+#: src/screens/auth/CreateAccountScreen.tsx:146
+#: src/screens/auth/CreateAccountScreen.tsx:147
+msgid "Nome completo"
+msgstr ""
+
+#: src/features/vet/view/VetProfileForm.tsx:321
+#: src/features/vet/view/VetProfileForm.tsx:322
+msgid "Nome da clínica"
+msgstr ""
+
+#: src/screens/vet/PerfilScreen.tsx:198
+msgid "Novo"
+msgstr ""
 
 #: src/components/ui/RenameModal.tsx:131
 msgid "Novo nome"
 msgstr "Nuevo nombre"
 
+#: src/features/vet/view/VetProfileForm.tsx:250
+msgid "Número do CRMV"
+msgstr ""
+
+#: src/screens/auth/CreateAccountScreen.tsx:239
+#: src/screens/auth/LoginScreen.tsx:252
+msgid "Ocultar senha"
+msgstr ""
+
+#: src/features/vet/view/VetProfileForm.tsx:285
+msgid "Onde você atende?"
+msgstr ""
+
 #: src/components/ui/ItemActionsMenu.tsx:48
 msgid "Opções"
 msgstr "Opciones"
 
-#: src/screens/auth/LoginScreen.tsx:151
+#: src/screens/vet/EditarPerfilScreen.tsx:75
+msgid "Perfil atualizado!"
+msgstr ""
+
+#: src/screens/auth/VetCadastroScreen.tsx:36
+msgid "Perfil enviado! Avisaremos quando o CRMV for aprovado."
+msgstr ""
+
+#: src/screens/vet/MeusHorariosScreen.tsx:185
+msgid "Períodos de atendimento"
+msgstr ""
+
+#: src/screens/auth/LoginScreen.tsx:182
 msgid "PetÁgil"
 msgstr "PetÁgil"
+
+#: src/screens/vet/PerfilScreen.tsx:347
+msgid "Plano & pagamento"
+msgstr ""
+
+#: src/features/vet/view/VetProfileForm.tsx:126
+msgid "Precisamos de acesso às suas fotos para anexar a imagem."
+msgstr ""
+
+#: src/screens/vet/PerfilScreen.tsx:348
+msgid "Profissional"
+msgstr ""
+
+#: src/screens/auth/CreateAccountScreen.tsx:253
+msgid "Próximo →"
+msgstr ""
+
+#: src/screens/vet/PerfilScreen.tsx:259
+#: src/screens/vet/PerfilScreen.tsx:265
+msgid "Recebendo agendamentos"
+msgstr ""
 
 #: src/components/ErrorBoundary.tsx:35
 msgid "Reiniciar"
 msgstr "Reiniciar"
+
+#: src/screens/vet/FolgasScreen.tsx:126
+msgid "Remover"
+msgstr ""
 
 #: src/components/ui/ItemActionsMenu.tsx:68
 #: src/components/ui/RenameModal.tsx:66
@@ -127,6 +454,11 @@ msgstr "Renombrar"
 msgid "Renomear {entityName}"
 msgstr "Renombrar {entityName}"
 
+#: src/screens/vet/PerfilScreen.tsx:416
+#: src/screens/vet/PerfilScreen.tsx:433
+msgid "Sair da conta"
+msgstr ""
+
 #: src/components/ui/RenameModal.tsx:157
 msgid "Salvando..."
 msgstr "Guardando..."
@@ -136,11 +468,33 @@ msgstr "Guardando..."
 msgid "Salvar"
 msgstr "Guardar"
 
-#: src/screens/auth/LoginScreen.tsx:203
+#: src/features/vet/view/VetProfileForm.tsx:363
+msgid "Salvar alterações"
+msgstr ""
+
+#: src/screens/vet/MeusHorariosScreen.tsx:272
+msgid "Salvar disponibilidade"
+msgstr ""
+
+#: src/features/vet/view/VetProfileForm.tsx:147
+msgid "Selecione ao menos uma especialidade"
+msgstr ""
+
+#: src/screens/auth/CreateAccountScreen.tsx:226
+#: src/screens/auth/CreateAccountScreen.tsx:227
+#: src/screens/auth/LoginScreen.tsx:240
 msgid "Senha"
 msgstr "Contraseña"
 
-#: src/screens/auth/LoginScreen.tsx:183
+#: src/screens/auth/VetCadastroScreen.tsx:29
+msgid "Sessão expirada. Faça login novamente."
+msgstr ""
+
+#: src/features/vet/view/VetProfileForm.tsx:201
+msgid "Seu perfil profissional"
+msgstr ""
+
+#: src/screens/auth/LoginScreen.tsx:220
 msgid "seu@email.com"
 msgstr "tu@correo.com"
 
@@ -148,7 +502,15 @@ msgstr "tu@correo.com"
 msgid "Sim, quero excluir"
 msgstr "Sí, quiero eliminar"
 
-#: src/screens/auth/LoginScreen.tsx:202
+#: src/features/vet/view/VetProfileForm.tsx:278
+msgid "Sobre você"
+msgstr ""
+
+#: src/features/vet/view/VetProfileForm.tsx:277
+msgid "Sobre você · breve bio"
+msgstr ""
+
+#: src/screens/auth/LoginScreen.tsx:239
 msgid "Sua senha"
 msgstr "Tu contraseña"
 
@@ -164,3 +526,30 @@ msgstr "Intentar de nuevo"
 #: src/components/ErrorBoundary.tsx:33
 msgid "Tente reiniciar o aplicativo."
 msgstr "Intenta reiniciar la aplicación."
+
+#: src/screens/vet/FolgasScreen.tsx:163
+msgid "Tutores com consulta num período bloqueado são avisados para remarcar."
+msgstr ""
+
+#: src/features/vet/view/VetProfileForm.tsx:234
+msgid "Tutores confiam mais em quem eles veem 💙"
+msgstr ""
+
+#: src/features/vet/view/VetProfileForm.tsx:146
+#: src/features/vet/view/VetProfileForm.tsx:257
+msgid "UF"
+msgstr ""
+
+#: src/features/vet/view/VetProfileForm.tsx:206
+msgid "Validamos seu CRMV para gerar confiança"
+msgstr ""
+
+#: src/screens/vet/PerfilScreen.tsx:127
+msgid "Veterinário(a)"
+msgstr ""
+
+#: src/features/vet/view/VetProfileForm.tsx:193
+#: src/screens/vet/FolgasScreen.tsx:91
+#: src/screens/vet/MeusHorariosScreen.tsx:138
+msgid "Voltar"
+msgstr ""
