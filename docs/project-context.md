@@ -73,7 +73,13 @@ _This file contains critical rules and patterns that AI agents must follow when 
 **Arquitetura feature-based (MVVM):**
 - Features em `src/features/<feature>/` seguem `model/` (tipos, api, transformers) · `viewModel/` (hooks, queries, mutations) · `view/` (componentes). Os stubs atuais fixam essa convenção — manter ao preencher.
 - **Referência preenchida:** `src/features/vet/` — `model/` (`types.ts` espelha o contrato do backend; `api.ts` com `createVetProfile`/`uploadImage`/`updateMyName`) e `viewModel/useVetOnboarding.ts` (mutation React Query que orquestra uploads → cria perfil → atualiza nome). Telas de onboarding ficam em `src/screens/auth/` (consomem a feature).
+- **Feature `pets`** (`src/features/pets/`): `model/` (`types.ts`/`constants.ts`/`api.ts` — `createPet`/`listPets`/`uploadImage` p/ pasta `pet-photos`; `SPECIES_OPTIONS`) e `viewModel/` (`useMyPets` query, `useCreatePet` mutation upload→POST, `useHasPetFlag` flag local). `uploadImage`/`PickedImage` são **replicados** de `vet` de propósito — as features ficam desacopladas (não importar entre si). A tela `PetCadastroScreen` vive em `src/screens/tutor/` (não em `view/`, pois é renderizada pelo gate do shell).
 - Telas em `src/screens/` organizadas por papel: `tutor/`, `vet/`, `auth/`, `role-select/`. Navegação por papel: `RootNavigator` → `AuthNavigator` | `MainNavigator` (tabs do papel).
+
+**Gate de pets (obrigatoriedade ≥1 pet por tutor):**
+- Todo tutor deve ter ≥1 pet. A regra é enforçada na **entrada do shell do tutor**: `MainNavigator` renderiza `TutorRoot` (não `TutorTabNavigator` direto), que decide entre cadastro de pet e tabs.
+- **Fast-path por flag:** `useHasPetFlag(userId)` lê `petagil-has-pet:<userId>` em **AsyncStorage** (não-sensível; keyed por usuário p/ não vazar entre contas no mesmo device). Flag setado → tabs imediatas SEM rede (offline-OK). Sem flag → consulta `GET /pets` (gate): vazio → `PetCadastroScreen`; ≥1 → seta o flag e entra; carregando → Splash/spinner; erro → retry (não libera as tabs). `useMyPets` usa `staleTime: Infinity` + `enabled` só quando o flag é `unknown` (evita refetch churn).
+- O gate roda em **todo ponto de entrada sem evidência local** (registro, login, reabertura) → a regra fica garantida sem punir tutores recorrentes com latência/lockout. `TutorRoot` isola os hooks de query no topo (o `MainNavigator` tem early-returns e não pode chamar hooks). `PetCadastroScreen` recebe `onDone` (seta o flag), consome o back físico do Android e NÃO chama `completeOnboarding` (o tutor já está autenticado).
 
 **Auth & sessão:**
 - `useAuth()` (de `@/app/providers`) é a fonte de verdade de autenticação/papel. NUNCA ler sessão direto do storage em telas — usar o provider.
@@ -189,4 +195,4 @@ _This file contains critical rules and patterns that AI agents must follow when 
 - Atualizar quando a stack tecnológica mudar (em especial ao subir o Expo SDK).
 - Revisar periodicamente e remover regras que se tornarem óbvias.
 
-Last Updated: 2026-06-25 (fluxo de onboarding: CreateAccount → RoleSelect → VetProfile; feature `vet/`; upload Supabase; `expo-image-picker`)
+Last Updated: 2026-06-26 (feature `pets/` + gate de pets no shell do tutor: `TutorRoot` no `MainNavigator`, flag `petagil-has-pet:<userId>` em AsyncStorage, `PetCadastroScreen` em `screens/tutor/`)
