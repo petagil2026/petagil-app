@@ -58,6 +58,7 @@ export function EditarPerfilScreen() {
       initialPhotoUrl={profile.photoUrl}
       initialHasCrmvDoc={!!profile.crmvDocUrl}
       initial={{
+        cnpj: profile.cnpj ?? undefined,
         crmvNumber: profile.crmvNumber,
         crmvUf: profile.crmvUf,
         specialties: profile.specialties,

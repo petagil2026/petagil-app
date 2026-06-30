@@ -1,3 +1,5 @@
 export * from './useVetOnboarding'
 export * from './useMyVetProfile'
 export * from './useUpdateVetProfile'
+export * from './useVetAvailability'
+export * from './useVetTimeOff'

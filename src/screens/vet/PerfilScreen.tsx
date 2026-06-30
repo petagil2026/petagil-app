@@ -1,12 +1,12 @@
 /**
- * PerfilScreen (vet) — "Perfil do veterinário". Visual fiel ao design (Claude
- * Design HTML): header em gradiente com foto + CRMV + reputação, faixa de stats,
- * especialidades em chips, card da clínica, toggle "Recebendo agendamentos",
+ * PerfilScreen (clínica / papel `vet`) — "Perfil da clínica". Visual fiel ao design
+ * (Claude Design HTML): header em gradiente com logo + CRMV + reputação, faixa de
+ * stats, especialidades em chips, card da clínica, toggle "Recebendo agendamentos",
  * menu de gestão (card único com divisórias) e "Sair da conta".
  *
- * Dados reais vêm de `GET /profiles/vet/me` + `useAuth()` (nome). Métricas de
- * reputação (consultas, nº de avaliações, nota) ainda NÃO têm backend → exibidas
- * como estado real de um vet recém-criado (0 / "—"); ver TODO(backend).
+ * Dados reais vêm de `GET /profiles/vet/me` (nome da clínica em `clinicName`).
+ * Métricas de reputação (consultas, nº de avaliações, nota) ainda NÃO têm backend →
+ * exibidas como estado real de uma clínica recém-criada (0 / "—"); ver TODO(backend).
  *
  * Brand-themed / mode-independent: paleta + fontes fixas da marca (Baloo 2 / Nunito,
  * como na RoleSelect), não `semantic.*` nem `textStyles`.
@@ -32,15 +32,8 @@ import { useLingui } from '@lingui/react'
 import { useToast } from '@/components/ui'
 import { useAuth } from '@/app/providers'
 import { useMyVetProfile } from '@/features/vet'
+import { brandText } from '@/theme'
 import type { VetProfileStackParamList } from '@/navigation/types'
-
-const F = {
-  baloo800: 'Baloo2_800ExtraBold',
-  baloo700: 'Baloo2_700Bold',
-  nun600: 'Nunito_600SemiBold',
-  nun700: 'Nunito_700Bold',
-  nun800: 'Nunito_800ExtraBold',
-}
 
 const C = {
   screenBg: '#EAF4FB',
@@ -74,16 +67,6 @@ const cardShadow = {
   shadowRadius: 10,
   shadowOffset: { width: 0, height: 6 },
   elevation: 3,
-}
-
-/**
- * Prefixo fixo "Dr(a)." no nome (sem gênero no backend). Não duplica se o nome
- * já vier com Dr./Dra./Dr(a).
- */
-function withHonorific(name: string): string {
-  const trimmed = name.trim()
-  if (!trimmed || /^dr\(?a?\)?\.?\s/i.test(trimmed)) return trimmed
-  return `Dr(a). ${trimmed}`
 }
 
 function yearsSince(iso?: string | null): number {
@@ -124,7 +107,9 @@ export function PerfilScreen() {
     )
   }
 
-  const name = user?.name?.trim() ? withHonorific(user.name) : t`Veterinário(a)`
+  // Nome de exibição = nome da clínica (sem honorífico). Fallback para o nome da
+  // conta e, por fim, rótulo genérico.
+  const name = profile.clinicName?.trim() || user?.name?.trim() || t`Clínica`
   const subtitle = [profile.specialties[0], profile.crmvUf].filter(Boolean).join(' · ')
   const approved = profile.verification === 'APPROVED'
 
@@ -150,23 +135,26 @@ export function PerfilScreen() {
                 <Image source={{ uri: profile.photoUrl }} style={styles.avatarImage} />
               ) : (
                 <Svg
-                  width={30}
-                  height={30}
+                  width={36}
+                  height={36}
                   viewBox="0 0 24 24"
                   fill="none"
                   stroke="#7CA9CC"
                   strokeWidth={1.6}
                 >
-                  <Circle cx={12} cy={9} r={3.4} />
-                  <Path d="M5 20c0-3.6 3-6.5 7-6.5s7 2.9 7 6.5" strokeLinecap="round" />
+                  <Path
+                    d="M3 21V8l9-5 9 5v13M3 21h18M9 21v-6h6v6"
+                    strokeLinecap="round"
+                    strokeLinejoin="round"
+                  />
                 </Svg>
               )}
             </View>
             {approved ? (
               <View style={styles.verifiedBadge}>
                 <Svg
-                  width={13}
-                  height={13}
+                  width={15}
+                  height={15}
                   viewBox="0 0 24 24"
                   fill="none"
                   stroke={C.blue}
@@ -204,7 +192,7 @@ export function PerfilScreen() {
 
       <ScrollView
         showsVerticalScrollIndicator={false}
-        contentContainerStyle={[styles.scroll, { paddingBottom: insets.bottom + 96 }]}
+        contentContainerStyle={[styles.scroll, { paddingBottom: insets.bottom + 110 }]}
       >
         {/* Stats */}
         <View style={styles.statsRow}>
@@ -272,12 +260,12 @@ export function PerfilScreen() {
         {/* Menu de gestão (card único) */}
         <View style={[styles.menuCard, cardShadow]}>
           <MenuRow
-            label={t`Editar perfil e foto`}
+            label={t`Editar perfil e logo`}
             onPress={() => navigation.navigate('EditarPerfil')}
             icon={
               <Svg
-                width={17}
-                height={17}
+                width={20}
+                height={20}
                 viewBox="0 0 24 24"
                 fill="none"
                 stroke={C.blue}
@@ -293,8 +281,8 @@ export function PerfilScreen() {
             onPress={() => navigation.navigate('MeusHorarios')}
             icon={
               <Svg
-                width={17}
-                height={17}
+                width={20}
+                height={20}
                 viewBox="0 0 24 24"
                 fill="none"
                 stroke={C.blue}
@@ -312,8 +300,8 @@ export function PerfilScreen() {
             onPress={() => navigation.navigate('FolgasBloqueios')}
             icon={
               <Svg
-                width={17}
-                height={17}
+                width={20}
+                height={20}
                 viewBox="0 0 24 24"
                 fill="none"
                 stroke={C.blue}
@@ -329,8 +317,8 @@ export function PerfilScreen() {
             onPress={soon}
             icon={
               <Svg
-                width={17}
-                height={17}
+                width={20}
+                height={20}
                 viewBox="0 0 24 24"
                 fill="none"
                 stroke={C.blue}
@@ -351,8 +339,8 @@ export function PerfilScreen() {
             tileColor={C.tileYellow}
             icon={
               <Svg
-                width={17}
-                height={17}
+                width={20}
+                height={20}
                 viewBox="0 0 24 24"
                 fill="none"
                 stroke={C.iconYellow}
@@ -372,8 +360,8 @@ export function PerfilScreen() {
             toggle={{ value: notifs, onChange: () => setNotifs(v => !v) }}
             icon={
               <Svg
-                width={17}
-                height={17}
+                width={20}
+                height={20}
                 viewBox="0 0 24 24"
                 fill="none"
                 stroke={C.blue}
@@ -394,8 +382,8 @@ export function PerfilScreen() {
             last
             icon={
               <Svg
-                width={17}
-                height={17}
+                width={20}
+                height={20}
                 viewBox="0 0 24 24"
                 fill="none"
                 stroke={C.blue}
@@ -417,8 +405,8 @@ export function PerfilScreen() {
           style={styles.logoutBtn}
         >
           <Svg
-            width={16}
-            height={16}
+            width={19}
+            height={19}
             viewBox="0 0 24 24"
             fill="none"
             stroke={C.danger}
@@ -520,30 +508,30 @@ function MenuRow({
 const styles = StyleSheet.create({
   root: { flex: 1, backgroundColor: C.screenBg },
   center: { flex: 1, alignItems: 'center', justifyContent: 'center', backgroundColor: C.screenBg },
-  errorText: { fontFamily: F.nun600, fontSize: 14, color: C.clinicSub, textAlign: 'center' },
+  errorText: { ...brandText.subtitle, color: C.clinicSub, textAlign: 'center' },
 
   header: {
-    paddingHorizontal: 22,
-    paddingBottom: 26,
-    borderBottomLeftRadius: 30,
-    borderBottomRightRadius: 30,
+    paddingHorizontal: 24,
+    paddingBottom: 30,
+    borderBottomLeftRadius: 34,
+    borderBottomRightRadius: 34,
     overflow: 'hidden',
   },
   headerBlob: {
     position: 'absolute',
-    top: -30,
-    right: -20,
-    width: 120,
-    height: 120,
-    borderRadius: 60,
+    top: -34,
+    right: -24,
+    width: 140,
+    height: 140,
+    borderRadius: 70,
     backgroundColor: 'rgba(255,255,255,0.13)',
   },
-  headerRow: { flexDirection: 'row', alignItems: 'center', gap: 14 },
-  avatarWrap: { width: 72, height: 72 },
+  headerRow: { flexDirection: 'row', alignItems: 'center', gap: 16 },
+  avatarWrap: { width: 84, height: 84 },
   avatar: {
-    width: 72,
-    height: 72,
-    borderRadius: 36,
+    width: 84,
+    height: 84,
+    borderRadius: 42,
     borderWidth: 3,
     borderColor: '#FFFFFF',
     backgroundColor: '#D3E8F7',
@@ -556,9 +544,9 @@ const styles = StyleSheet.create({
     position: 'absolute',
     bottom: -2,
     right: -2,
-    width: 26,
-    height: 26,
-    borderRadius: 13,
+    width: 30,
+    height: 30,
+    borderRadius: 15,
     backgroundColor: '#FFFFFF',
     borderWidth: 2,
     borderColor: '#FFFFFF',
@@ -566,72 +554,71 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
   },
   headerInfo: { flex: 1 },
-  name: { fontFamily: F.baloo800, fontSize: 23, color: '#FFFFFF' },
+  name: { ...brandText.title, color: '#FFFFFF' },
   headerSub: {
-    fontFamily: F.nun600,
-    fontSize: 14,
+    ...brandText.subtitle,
     color: 'rgba(255,255,255,0.9)',
-    marginVertical: 3,
+    marginVertical: 4,
   },
-  badgesRow: { flexDirection: 'row', gap: 6, marginTop: 4 },
+  badgesRow: { flexDirection: 'row', gap: 7, marginTop: 5 },
   crmvBadge: {
     backgroundColor: '#FFFFFF',
-    borderRadius: 7,
-    paddingHorizontal: 8,
-    paddingVertical: 3,
+    borderRadius: 9,
+    paddingHorizontal: 10,
+    paddingVertical: 4,
   },
-  crmvBadgeText: { fontFamily: F.nun800, fontSize: 12, color: C.crmvGreen },
+  crmvBadgeText: { ...brandText.badgeStrong, color: C.crmvGreen },
   ratingBadge: {
     flexDirection: 'row',
     alignItems: 'center',
-    gap: 3,
+    gap: 4,
     backgroundColor: 'rgba(255,255,255,0.2)',
-    borderRadius: 7,
-    paddingHorizontal: 8,
-    paddingVertical: 3,
+    borderRadius: 9,
+    paddingHorizontal: 10,
+    paddingVertical: 4,
   },
-  ratingStar: { color: '#FFE07A', fontSize: 12 },
-  ratingText: { fontFamily: F.nun800, fontSize: 12, color: '#FFFFFF' },
+  ratingStar: { color: '#FFE07A', fontSize: 14 },
+  ratingText: { ...brandText.badgeStrong, color: '#FFFFFF' },
 
-  scroll: { paddingHorizontal: 18 },
-  statsRow: { flexDirection: 'row', gap: 9, marginVertical: 14 },
+  scroll: { paddingHorizontal: 20 },
+  statsRow: { flexDirection: 'row', gap: 11, marginVertical: 16 },
   statCard: {
     flex: 1,
     backgroundColor: '#FFFFFF',
-    borderRadius: 16,
-    paddingVertical: 12,
-    paddingHorizontal: 8,
+    borderRadius: 19,
+    paddingVertical: 15,
+    paddingHorizontal: 10,
     alignItems: 'center',
   },
-  statValue: { fontFamily: F.baloo800, fontSize: 22, color: C.blueDark },
-  statLabel: { fontFamily: F.nun700, fontSize: 11.5, color: C.statLabel, marginTop: 2 },
+  statValue: { ...brandText.statValue, color: C.blueDark },
+  statLabel: { ...brandText.statLabel, color: C.statLabel, marginTop: 3 },
 
-  sectionTitle: { fontFamily: F.baloo800, fontSize: 16, color: C.ink, marginBottom: 10 },
-  chips: { flexDirection: 'row', flexWrap: 'wrap', gap: 8, marginBottom: 16 },
-  chip: { borderRadius: 13, paddingHorizontal: 13, paddingVertical: 8 },
+  sectionTitle: { ...brandText.heading, color: C.ink, marginBottom: 12 },
+  chips: { flexDirection: 'row', flexWrap: 'wrap', gap: 10, marginBottom: 18 },
+  chip: { borderRadius: 16, paddingHorizontal: 16, paddingVertical: 10 },
   chipOutline: { backgroundColor: '#FFFFFF', borderWidth: 1, borderColor: C.chipOutline },
-  chipText: { fontFamily: F.nun700, fontSize: 14 },
+  chipText: { ...brandText.label },
 
   clinicCard: {
     flexDirection: 'row',
     alignItems: 'center',
-    gap: 11,
+    gap: 13,
     backgroundColor: '#FFFFFF',
-    borderRadius: 16,
-    padding: 13,
-    marginBottom: 14,
+    borderRadius: 19,
+    padding: 16,
+    marginBottom: 16,
   },
   clinicTile: {
-    width: 42,
-    height: 42,
-    borderRadius: 13,
+    width: 50,
+    height: 50,
+    borderRadius: 16,
     alignItems: 'center',
     justifyContent: 'center',
   },
-  clinicEmoji: { fontSize: 20 },
+  clinicEmoji: { fontSize: 24 },
   clinicInfo: { flex: 1 },
-  clinicName: { fontFamily: F.baloo800, fontSize: 16, color: C.ink },
-  clinicAddress: { fontFamily: F.nun600, fontSize: 13, color: C.clinicSub },
+  clinicName: { ...brandText.heading, color: C.ink },
+  clinicAddress: { ...brandText.secondary, color: C.clinicSub },
 
   acceptCard: {
     flexDirection: 'row',
@@ -639,69 +626,69 @@ const styles = StyleSheet.create({
     justifyContent: 'space-between',
     borderWidth: 1,
     borderColor: C.greenBorder,
-    borderRadius: 16,
-    paddingHorizontal: 15,
-    paddingVertical: 13,
-    marginBottom: 18,
+    borderRadius: 19,
+    paddingHorizontal: 18,
+    paddingVertical: 16,
+    marginBottom: 22,
   },
-  acceptLeft: { flexDirection: 'row', alignItems: 'center', gap: 9 },
+  acceptLeft: { flexDirection: 'row', alignItems: 'center', gap: 11 },
   acceptDotRing: {
-    width: 15,
-    height: 15,
+    width: 18,
+    height: 18,
     borderRadius: 999,
     backgroundColor: 'rgba(82,196,26,0.2)',
     alignItems: 'center',
     justifyContent: 'center',
   },
-  acceptDot: { width: 9, height: 9, borderRadius: 999, backgroundColor: C.green },
-  acceptText: { fontFamily: F.nun700, fontSize: 14.5, color: C.greenInk },
-  switch: { width: 40, height: 23, borderRadius: 999, justifyContent: 'center' },
+  acceptDot: { width: 11, height: 11, borderRadius: 999, backgroundColor: C.green },
+  acceptText: { ...brandText.label, color: C.greenInk },
+  switch: { width: 48, height: 28, borderRadius: 999, justifyContent: 'center' },
   switchKnob: {
     position: 'absolute',
-    width: 18,
-    height: 18,
+    width: 22,
+    height: 22,
     borderRadius: 999,
     backgroundColor: '#FFFFFF',
   },
-  knobOn: { right: 2.5 },
-  knobOff: { left: 2.5 },
+  knobOn: { right: 3 },
+  knobOff: { left: 3 },
 
-  menuCard: { backgroundColor: '#FFFFFF', borderRadius: 18, overflow: 'hidden', marginBottom: 14 },
+  menuCard: { backgroundColor: '#FFFFFF', borderRadius: 22, overflow: 'hidden', marginBottom: 16 },
   menuRow: {
     flexDirection: 'row',
     alignItems: 'center',
-    gap: 12,
-    paddingHorizontal: 15,
-    paddingVertical: 14,
+    gap: 14,
+    paddingHorizontal: 18,
+    paddingVertical: 16,
   },
   menuRowBorder: { borderBottomWidth: 1, borderBottomColor: C.divider },
   menuTile: {
-    width: 34,
-    height: 34,
-    borderRadius: 11,
+    width: 40,
+    height: 40,
+    borderRadius: 13,
     alignItems: 'center',
     justifyContent: 'center',
   },
-  menuLabel: { flex: 1, fontFamily: F.nun700, fontSize: 15, color: C.ink },
+  menuLabel: { flex: 1, ...brandText.rowLabel, color: C.ink },
   menuBadge: {
     backgroundColor: C.badgeBg,
-    borderRadius: 6,
-    paddingHorizontal: 7,
-    paddingVertical: 2,
+    borderRadius: 7,
+    paddingHorizontal: 8,
+    paddingVertical: 3,
   },
-  menuBadgeText: { fontFamily: F.nun800, fontSize: 11, color: C.badgeInk },
-  chevron: { color: C.chevron, fontSize: 22 },
+  menuBadgeText: { ...brandText.badge, color: C.badgeInk },
+  chevron: { color: C.chevron, fontSize: 26 },
 
   logoutBtn: {
     flexDirection: 'row',
     alignItems: 'center',
     justifyContent: 'center',
-    gap: 7,
+    gap: 8,
     backgroundColor: '#FFFFFF',
     borderWidth: 1.5,
     borderColor: C.dangerBorder,
-    borderRadius: 16,
-    paddingVertical: 13,
+    borderRadius: 19,
+    paddingVertical: 16,
   },
-  logoutText: { fontFamily: F.baloo700, fontSize: 15, color: C.danger },
+  logoutText: { ...brandText.actionLabel, color: C.danger },
 })

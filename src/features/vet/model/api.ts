@@ -6,7 +6,17 @@
 import { api, httpClient } from '@/services/api'
 import type { ApiResponse, User } from '@/types/auth'
 
-import type { CreateVetProfilePayload, PickedImage, UploadFolder, VetProfile } from './types'
+import type {
+  CreateVetProfilePayload,
+  CreateVetTimeOffPayload,
+  PickedImage,
+  SlotsResponse,
+  UploadFolder,
+  UpsertVetAvailabilityPayload,
+  VetAvailability,
+  VetProfile,
+  VetTimeOff,
+} from './types'
 
 /** Mimetype provável a partir da extensão do arquivo/uri. */
 function guessMimeType(nameOrUri: string): string {
@@ -70,6 +80,68 @@ export async function updateVetProfile(
     throw new Error(res.error ?? 'Falha ao atualizar o perfil profissional')
   }
   return res.data
+}
+
+// ── Disponibilidade & folgas ─────────────────────────────────────────────────
+
+/** Carrega minha disponibilidade recorrente (`GET /profiles/vet/me/availability`). */
+export async function getMyAvailability(): Promise<VetAvailability> {
+  const res = await api.get<ApiResponse<VetAvailability>>('/profiles/vet/me/availability/')
+  if (!res.success || !res.data) {
+    throw new Error(res.error ?? 'Falha ao carregar a disponibilidade')
+  }
+  return res.data
+}
+
+/** Substitui minha disponibilidade (`PUT /profiles/vet/me/availability`). */
+export async function saveMyAvailability(
+  payload: UpsertVetAvailabilityPayload
+): Promise<VetAvailability> {
+  const res = await api.put<ApiResponse<VetAvailability>>('/profiles/vet/me/availability/', payload)
+  if (!res.success || !res.data) {
+    throw new Error(res.error ?? 'Falha ao salvar a disponibilidade')
+  }
+  return res.data
+}
+
+/** Gera os slots livres para um intervalo (`GET /me/availability/slots?from&to`). */
+export async function getSlots(from: string, to: string): Promise<SlotsResponse> {
+  const qs = `from=${encodeURIComponent(from)}&to=${encodeURIComponent(to)}`
+  const res = await api.get<ApiResponse<SlotsResponse>>(
+    `/profiles/vet/me/availability/slots/?${qs}`
+  )
+  if (!res.success || !res.data) {
+    throw new Error(res.error ?? 'Falha ao carregar os horários')
+  }
+  return res.data
+}
+
+/** Lista minhas folgas/bloqueios (`GET /profiles/vet/me/timeoff`). */
+export async function listTimeOff(): Promise<VetTimeOff[]> {
+  const res = await api.get<ApiResponse<VetTimeOff[]>>('/profiles/vet/me/timeoff/')
+  if (!res.success || !res.data) {
+    throw new Error(res.error ?? 'Falha ao carregar as folgas')
+  }
+  return res.data
+}
+
+/** Cria uma folga/bloqueio (`POST /profiles/vet/me/timeoff`). */
+export async function createTimeOff(payload: CreateVetTimeOffPayload): Promise<VetTimeOff> {
+  const res = await api.post<ApiResponse<VetTimeOff>>('/profiles/vet/me/timeoff/', payload)
+  if (!res.success || !res.data) {
+    throw new Error(res.error ?? 'Falha ao criar a folga')
+  }
+  return res.data
+}
+
+/** Remove uma folga/bloqueio (`DELETE /profiles/vet/me/timeoff/{id}`). */
+export async function deleteTimeOff(id: string): Promise<void> {
+  const res = await api.delete<ApiResponse<{ ok: true }>>(
+    `/profiles/vet/me/timeoff/${encodeURIComponent(id)}/`
+  )
+  if (!res.success) {
+    throw new Error(res.error ?? 'Falha ao remover a folga')
+  }
 }
 
 /** Atualiza o nome do usuário autenticado (`PATCH /users/me`). */

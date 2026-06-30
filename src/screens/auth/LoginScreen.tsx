@@ -139,8 +139,8 @@ export function LoginScreen({ onSubmit = defaultSubmit }: LoginScreenProps) {
   }
 
   const handleRegisterPress = () => {
-    // Cadastro começa pela criação de conta (CreateAccount → RoleSelect → perfil).
-    navigation.navigate('CreateAccount')
+    // Cadastro começa pela escolha de papel (RoleSelect → Cadastro do papel).
+    navigation.navigate('RoleSelect')
   }
 
   const submitDisabled = !email.trim() || !password || isSubmitting

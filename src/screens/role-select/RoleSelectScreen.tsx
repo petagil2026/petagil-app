@@ -1,22 +1,27 @@
 /**
  * RoleSelectScreen — escolha de papel (tutor / veterinário / passeador).
- * Etapa ANTES do cadastro: o usuário seleciona um papel e toca em "Continuar",
- * que navega para a tela de Cadastro daquele papel (passando `role` por param).
+ * É a BIFURCAÇÃO inicial do onboarding (decisão de fluxo 2026-06-29): o usuário
+ * seleciona um papel e toca em "Continuar", que navega para o formulário de
+ * cadastro daquele papel — é lá que o `register` acontece, no submit.
+ *
+ * Reaproveitada como fallback no MainNavigator (já autenticado, sem papel): nesse
+ * caso apenas fixa o papel (`selectRole`), sem navegar para cadastro. As duas
+ * situações se distinguem por `isAuthenticated` (não há mais rascunho de conta).
  *
  * Visual fiel ao design do Figma (node 450:2): tiles de ícone com gradiente,
  * card selecionado em gradiente amarelo + borda azul, botão em gradiente azul.
  * Cores/medidas são valores exatos do mock (não passam pelos tokens do tema).
  */
-import { useContext, useState } from 'react'
-import { View, Text, StyleSheet, Pressable, ActivityIndicator } from 'react-native'
+import { useState } from 'react'
+import { View, Text, StyleSheet, Pressable } from 'react-native'
 import { LinearGradient } from 'expo-linear-gradient'
-import { useNavigation, NavigationRouteContext } from '@react-navigation/native'
+import { useNavigation } from '@react-navigation/native'
 import type { NativeStackNavigationProp } from '@react-navigation/native-stack'
-import { ScreenContainer, useToast } from '@/components/ui'
+import { ScreenContainer } from '@/components/ui'
 import { IconCheck } from '@/assets/icons'
 import { useAuth } from '@/app/providers'
 import type { Role } from '@/types/auth'
-import type { AccountDraft, AuthStackParamList } from '@/navigation/types'
+import type { AuthStackParamList } from '@/navigation/types'
 import { ROLE_OPTIONS } from './roleOptions'
 
 type Navigation = NativeStackNavigationProp<AuthStackParamList, 'RoleSelect'>
@@ -28,40 +33,27 @@ const GRADIENT_END = { x: 1, y: 1 }
 const CARD_SELECTED_BG: [string, string] = ['#FFF9DD', '#FFF3B0']
 const BUTTON_BG: [string, string] = ['#2E7CB8', '#1E5F92']
 
+// Cada papel leva ao seu próprio formulário de cadastro (onde ocorre o register).
+const CADASTRO_ROUTE: Record<Role, keyof AuthStackParamList> = {
+  tutor: 'CadastroTutor',
+  vet: 'CadastroVet',
+  passeador: 'CadastroPasseador',
+}
+
 export function RoleSelectScreen() {
   const navigation = useNavigation<Navigation>()
-  // Lê params via contexto (retorna undefined quando renderado fora de um screen —
-  // ex.: fallback do MainNavigator), evitando o throw de `useRoute`.
-  const route = useContext(NavigationRouteContext)
-  const account = (route?.params as { account?: AccountDraft } | undefined)?.account
-  const { selectedRole, register, completeOnboarding, selectRole } = useAuth()
-  const toast = useToast()
+  const { selectedRole, isAuthenticated, selectRole } = useAuth()
   // Pré-seleciona o papel já escolhido (sessão restaurada), com fallback para tutor.
   const [selected, setSelected] = useState<Role>(selectedRole ?? 'tutor')
-  const [isSubmitting, setIsSubmitting] = useState(false)
 
-  // Com rascunho de conta (fluxo de cadastro): cria a conta agora — o register
-  // precisa do papel. Veterinário segue para o perfil profissional; os demais já
-  // entram no app. Sem rascunho (fallback já autenticado): apenas fixa o papel.
-  const handleContinue = async () => {
-    if (isSubmitting) return
-    if (!account) {
+  // Onboarding (não autenticado): segue para o cadastro do papel escolhido.
+  // Fallback (já autenticado, sem papel): apenas fixa o papel.
+  const handleContinue = () => {
+    if (isAuthenticated) {
       selectRole(selected)
       return
     }
-    setIsSubmitting(true)
-    try {
-      const user = await register({ ...account, role: selected })
-      if (selected === 'vet') {
-        navigation.navigate('VetProfile')
-      } else {
-        completeOnboarding(user)
-      }
-    } catch (error) {
-      toast.error(error instanceof Error ? error.message : 'Não foi possível criar sua conta.')
-    } finally {
-      setIsSubmitting(false)
-    }
+    navigation.navigate(CADASTRO_ROUTE[selected])
   }
 
   return (
@@ -106,21 +98,15 @@ export function RoleSelectScreen() {
           <Pressable
             accessibilityRole="button"
             accessibilityLabel="Continuar"
-            accessibilityState={{ disabled: isSubmitting }}
-            disabled={isSubmitting}
             onPress={handleContinue}
           >
             <LinearGradient
               colors={BUTTON_BG}
               start={GRADIENT_START}
               end={GRADIENT_END}
-              style={[styles.button, isSubmitting && styles.buttonDisabled]}
+              style={styles.button}
             >
-              {isSubmitting ? (
-                <ActivityIndicator color="#FFFFFF" />
-              ) : (
-                <Text style={styles.buttonText}>Continuar</Text>
-              )}
+              <Text style={styles.buttonText}>Continuar</Text>
             </LinearGradient>
           </Pressable>
         </View>
@@ -291,9 +277,6 @@ const styles = StyleSheet.create({
     borderRadius: 20,
     alignItems: 'center',
     justifyContent: 'center',
-  },
-  buttonDisabled: {
-    opacity: 0.6,
   },
   buttonText: {
     fontFamily: 'Baloo2_700Bold',

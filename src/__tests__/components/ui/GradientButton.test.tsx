@@ -3,10 +3,10 @@ import { render, screen } from '@testing-library/react-native'
 import { ThemeProvider } from '@/theme'
 import { GradientButton } from '@/components/ui'
 
-// fontFamily do estilo default do título (textStyles.lg600 = Rubik 600).
-const DEFAULT_TITLE_FONT = 'Rubik_600SemiBold'
+// fontFamily do estilo default do título (textStyles.lg600 = Nunito 600).
+const DEFAULT_TITLE_FONT = 'Nunito_600SemiBold'
 
-// expo-linear-gradient mockado como nos testes de tela (CreateAccountScreen.test.tsx).
+// expo-linear-gradient mockado como nos testes de tela (CadastroTutorScreen.test.tsx).
 jest.mock('expo-linear-gradient', () => {
   const React = require('react')
   return {
@@ -55,7 +55,7 @@ describe('GradientButton — prop titleStyle', () => {
     expect(style.lineHeight).toBe(20)
   })
 
-  it('sem titleStyle mantém o default textStyles.lg600 (Rubik)', () => {
+  it('sem titleStyle mantém o default textStyles.lg600 (Nunito)', () => {
     renderButton()
     const style = flatten(screen.getByText('Próximo').props.style)
     expect(style.fontFamily).toBe(DEFAULT_TITLE_FONT)

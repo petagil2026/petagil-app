@@ -156,9 +156,9 @@ describe('LoginScreen (frontend-only)', () => {
     expect(onSubmit).not.toHaveBeenCalled();
   });
 
-  it('AC7: "Cadastre-se" inicia o cadastro (navega para CreateAccount)', () => {
+  it('AC7: "Cadastre-se" inicia o cadastro pela escolha de papel (navega para RoleSelect)', () => {
     renderLogin();
     fireEvent.press(screen.getByTestId('login-register-link'));
-    expect(mockNavigate).toHaveBeenCalledWith('CreateAccount');
+    expect(mockNavigate).toHaveBeenCalledWith('RoleSelect');
   });
 });

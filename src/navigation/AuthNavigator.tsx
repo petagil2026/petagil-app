@@ -1,6 +1,12 @@
 import { createNativeStackNavigator } from '@react-navigation/native-stack'
 import type { AuthStackParamList } from './types'
-import { LoginScreen, CreateAccountScreen, VetCadastroScreen, RoleSelectScreen } from '@/screens'
+import {
+  LoginScreen,
+  RoleSelectScreen,
+  CadastroTutorScreen,
+  VetCadastroScreen,
+  CadastroPasseadorScreen,
+} from '@/screens'
 import { useAuth } from '@/app/providers'
 import { useTheme } from '@/theme'
 
@@ -8,10 +14,12 @@ const Stack = createNativeStackNavigator<AuthStackParamList>()
 
 /**
  * Fluxo de onboarding:
- *   Login → "Crie sua conta" → Seleção de papel → (veterinário) Perfil profissional.
- * O `register` acontece na seleção de papel (precisa do papel); por isso a tela do
- * vet vive aqui no AuthNavigator — a autenticação só é finalizada ao concluir o
- * perfil (`completeOnboarding`), quando o RootNavigator troca para o MainNavigator.
+ *   Login → Seleção de papel → Cadastro{Tutor|Vet|Passeador}.
+ * O papel é a bifurcação inicial e o `register` acontece no submit de cada
+ * cadastro — por isso essas telas vivem aqui no AuthNavigator. A autenticação só
+ * é finalizada ao concluir o cadastro (`completeOnboarding`), quando o
+ * RootNavigator troca para o MainNavigator. O vet usa um form único (conta +
+ * dados da clínica).
  */
 export function AuthNavigator() {
   const theme = useTheme()
@@ -30,9 +38,10 @@ export function AuthNavigator() {
       <Stack.Screen name="Login">
         {() => <LoginScreen onSubmit={({ email, password }) => login(email, password)} />}
       </Stack.Screen>
-      <Stack.Screen name="CreateAccount" component={CreateAccountScreen} />
       <Stack.Screen name="RoleSelect" component={RoleSelectScreen} />
-      <Stack.Screen name="VetProfile" component={VetCadastroScreen} />
+      <Stack.Screen name="CadastroTutor" component={CadastroTutorScreen} />
+      <Stack.Screen name="CadastroVet" component={VetCadastroScreen} />
+      <Stack.Screen name="CadastroPasseador" component={CadastroPasseadorScreen} />
     </Stack.Navigator>
   )
 }

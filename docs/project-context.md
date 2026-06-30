@@ -27,14 +27,17 @@ _This file contains critical rules and patterns that AI agents must follow when 
 
 ## Product Context
 
-**PetÁgil** é um marketplace de duas pontas (estilo Doctoralia) que conecta **tutores de pets** ↔ **veterinários**, focado em **agendamento de consultas de rotina** (vacina/vermífugo/check-up). Estratégia: cidades pequenas + nicho de veterinária **silvestre/exótica**. Monetização: assinatura do vet com 1 mês grátis (sem comissão).
+**PetÁgil** é um marketplace **multi-lados** (estilo Doctoralia) que conecta **tutores de pets** ↔ **prestadores de serviços recorrentes**: **clínicas veterinárias** (consulta padrão; rotina vacina/vermífugo/check-up como motor de recorrência) e **passeadores** (dog walking). Estratégia: cidades pequenas + nicho de **clínicas que atendem silvestres/exóticos**. Monetização: assinatura dos prestadores (clínica e passeador) com 1 mês grátis (sem comissão); tutor sempre grátis.
 
-- **Papéis** (`Role` = `tutor` | `vet` | `passeador`) definem toda a navegação e features.
-- **Tutor:** cadastra pet(s), busca vets por proximidade/especialidade, agenda, recebe lembretes.
-- **Vet:** cadastro com verificação de CRMV (semi-automática), perfil público, agenda (confirma/recusa/remarca), avaliações.
-- **Fora do MVP:** pagamento in-app, telemedicina, prontuário completo, CRMV 100% automatizado, ranking pago.
-- Estado atual do código: **fundação + fluxo de onboarding implementado** (Login → "Crie sua conta" → seleção de papel → cadastro do veterinário). Auth real contra a API (register/login). Demais features ainda em placeholder/stub; specs futuras preenchem o resto.
-- Brief completo: `petagil-app/docs/product-brief-PetAgil-2026-06-24.md`.
+> **Decisão de mercado (2026-06-29):** o lado veterinário é a **clínica** (cadastro por CNPJ + CRMV do **responsável técnico**), não o vet autônomo — o agendamento no Brasil se dá direto com a clínica. ✅ **Pivô do cadastro/perfil FEITO (2026-06-29):** a escolha de papel ("Tenho uma clínica"), o cadastro/edição (`VetProfileForm`: CNPJ + CRMV do responsável técnico + logo da clínica, nome da clínica obrigatório) e a `PerfilScreen` (header com nome da clínica, "Editar perfil e logo") já refletem o modelo de **clínica**. Backend: `VetProfile.cnpj` (`@unique`, nullable p/ linhas pré-pivô) + DTO com validação de 14 dígitos. ⚠️ **Ainda PENDENTE:** introduzir a **consulta padrão** como serviço agendável base; e o relabel "veterinário(a)"→clínica nas saudações de `HomeScreen`/`AgendaScreen` do vet (ainda usam `withHonorific`/`Veterinário(a)`).
+
+- **Papéis** (`Role` = `tutor` | `vet` | `passeador`) definem toda a navegação e features. O papel `vet` representa a **clínica veterinária** (nome do papel no código mantido como `vet`).
+- **Tutor:** cadastra pet(s), busca clínicas/passeadores por proximidade/especialidade/serviço, agenda (consulta padrão ou passeio), recebe lembretes.
+- **Clínica (`vet`):** cadastro com verificação de CRMV semi-automática do responsável técnico (alvo: CNPJ + CRMV; admin valida), perfil público, **consulta padrão** como serviço agendável base, agenda (confirma/recusa/remarca), avaliações.
+- **Passeador:** lado de oferta como a clínica (assinatura, 1 mês grátis) — perfil público, agenda/disponibilidade, recebe/confirma/recusa solicitações de passeio, avaliações. Entra direto no app após o cadastro (sem etapa de verificação profissional no MVP).
+- **Fora do MVP:** pagamento in-app, telemedicina, prontuário completo, CRMV/CNPJ 100% automatizado, ranking pago, menu de tipos de consulta/serviço, gestão de clínica multiusuário (vários vets/unidades/recepcionista).
+- Estado atual do código: **fundação + fluxo de onboarding implementado** (Login → "Crie sua conta" → seleção de papel → cadastro da **clínica** — já no modelo clínica: CNPJ + CRMV do responsável técnico). Auth real contra a API (register/login). Demais features ainda em placeholder/stub; specs futuras preenchem o resto.
+- Brief completo: `petagil-app/docs/product-brief-PetAgil-2026-06-24.md` (atualizado 2026-06-29: passeador + clínica).
 
 ## Technology Stack & Versions
 
@@ -52,7 +55,7 @@ _This file contains critical rules and patterns that AI agents must follow when 
 - Mídia: `expo-image-picker` `~17.0` (foto do profissional / anexo do CRMV — **módulo nativo**, exige rebuild do dev client; não funciona só com Metro)
 - Erros/monitoring: `@sentry/react-native` `~7.2`
 - UI: `react-native-reanimated` `~4.1` · `react-native-gesture-handler` · `@gorhom/bottom-sheet` `^5` · `react-native-svg` `15.12.1`
-- Fontes: Rubik (UI) + Montserrat (`@expo-google-fonts/*`)
+- Fontes (TODO o app): **Nunito** (corpo/`fontFamily.sans`) + **Baloo 2** (títulos/`fontFamily.heading`), via `@expo-google-fonts/*`. (Rubik/Montserrat foram removidos — eram um desvio do port pro Figma; o design real é Baloo 2/Nunito.)
 
 **Regra de versão:** dependências nativas devem casar com o Expo SDK 54. Ao adicionar/atualizar libs nativas, usar `npx expo install` (não `npm install` direto) para resolver a versão compatível.
 
@@ -75,6 +78,12 @@ _This file contains critical rules and patterns that AI agents must follow when 
 - **Referência preenchida:** `src/features/vet/` — `model/` (`types.ts` espelha o contrato do backend; `api.ts` com `createVetProfile`/`uploadImage`/`updateMyName`) e `viewModel/useVetOnboarding.ts` (mutation React Query que orquestra uploads → cria perfil → atualiza nome). Telas de onboarding ficam em `src/screens/auth/` (consomem a feature).
 - Telas em `src/screens/` organizadas por papel: `tutor/`, `vet/`, `auth/`, `role-select/`. Navegação por papel: `RootNavigator` → `AuthNavigator` | `MainNavigator` (tabs do papel).
 
+**Disponibilidade & folgas do vet (feature `vet` + `profiles/vet` no backend):**
+
+- Backend (`petagil-api`): `VetAvailability` (1:1, regra recorrente + `VetAvailabilityPeriod`) e `VetTimeOff` (folgas) atrelados ao `VetProfile`. Endpoints: `GET`/`PUT /profiles/vet/me/availability`, `GET /profiles/vet/me/availability/slots?from&to` (slots gerados **sob demanda**, sem persistir), `GET`/`POST`/`DELETE /profiles/vet/me/timeoff[/:id]`. O cálculo de slots vive num util **neutro/reusável** em `src/common/scheduling/` (puro, sem Prisma/fuso) — a futura disponibilidade do passeador reusa.
+- App: `model` (`getMyAvailability`/`saveMyAvailability`/`getSlots`/`listTimeOff`/`createTimeOff`/`deleteTimeOff`), `viewModel` (`useVetAvailability`/`useSaveVetAvailability`/`useVetTimeOff`/`useCreateTimeOff`/`useDeleteTimeOff`). Telas `MeusHorariosScreen`/`FolgasScreen` consomem. `DateInput` (máscara DD/MM/AAAA em `@/components/ui`, sobre o `Input`) + `parseBrDateToISO`/`buildLocalInstantISO` (`@/utils`) para datas — **sem lib nativa** de máscara/date-picker.
+- **4 convenções canônicas:** (1) hora `"HH:MM"` **zero-padded** na API ⇄ minutos-do-dia (Int) no banco; (2) `weekdays` `0=Seg…6=Dom` (índice de uma data via `(getUTCDay()+6)%7`, **nunca** `getDay()`); (3) fuso fixo `America/Sao_Paulo` (−180, sem DST) resolvido **só no service** (o util de slots é timezone-free); (4) overlap de folga **aberto-fechado estrito** (`sStart < bEnd && sEnd > bStart`).
+
 **Auth & sessão:**
 - `useAuth()` (de `@/app/providers`) é a fonte de verdade de autenticação/papel. NUNCA ler sessão direto do storage em telas — usar o provider.
 - Auth é **real** contra a API: `login(email, password)` e `register(input)`. Ao estender, manter a interface `AuthContextType` para não quebrar consumidores.
@@ -82,8 +91,9 @@ _This file contains critical rules and patterns that AI agents must follow when 
 - `selectedRole` SEMPRE acompanha autenticação — não criar estado "autenticado sem papel".
 
 **Fluxo de onboarding (AuthNavigator):**
-- `Login → CreateAccount ("Crie sua conta") → RoleSelect (seleção de papel) → VetProfile (cadastro do vet)`. O `register` ocorre na **seleção de papel** (precisa do `role`); o rascunho da conta (`AccountDraft`: name/email/phone/city/password) trafega por param de navegação (só em memória). Tutor/passeador entram no app direto após o register; veterinário segue para `VetProfile` e só então conclui.
-- Ler params de tela renderizada fora de um navigator (ex.: fallback `RoleSelect` no `MainNavigator`) via `useContext(NavigationRouteContext)` — `useRoute()` lança nesse caso.
+- `Login → RoleSelect (bifurcação por papel) → Cadastro{Tutor|Vet|Passeador}`. A escolha de papel é a **bifurcação inicial** e o `register` ocorre no **submit de cada cadastro** (o `role` já é conhecido). **Tutor/passeador:** nome/email/telefone/cidade/senha → `register` → `completeOnboarding` (entram no app). **Vet/clínica:** form ÚNICO (dados de acesso + dados da clínica/CRMV/logo) → `register` → `useVetOnboarding` (uploads + `POST /profiles/vet`) → `completeOnboarding`.
+- Campos comuns (nome/email/telefone/cidade/senha) são um **bloco de UI reutilizável** (`screens/auth/CommonAccountFields` + hook `useAccountForm`), não uma tela compartilhada. Tutor/passeador montam o scaffold brand-themed `AccountFormScreen`; o vet reusa o `CommonAccountFields` dentro do `VetProfileForm` via props `accountSlot`/`extraValidate` (valida conta + clínica juntas no submit).
+- `RoleSelect` distingue **onboarding** × **fallback** (já autenticado sem papel, renderizado no `MainNavigator`) por `isAuthenticated`: autenticado → só `selectRole`; não autenticado → navega para o cadastro do papel. Não há mais `AccountDraft` nem param de navegação (a indireção foi eliminada).
 
 **Tema / Design System (OBRIGATÓRIO):**
 - Cores, spacing, tipografia, raios e sombras vêm SEMPRE de `useTheme()`. NUNCA hardcodar cores hex, tamanhos de fonte ou paddings mágicos — usar `theme.colors`, `theme.semantic.*`, `theme.spacing`, `theme.borderRadius`, `theme.textStyles`.
@@ -92,7 +102,11 @@ _This file contains critical rules and patterns that AI agents must follow when 
 - Tokens de tema relevantes: `gradients.{header,primaryButton}`, `borderRadius.{input,button,logo,sheet}` (raios específicos de telas de marca), `shadows.primaryGlow`. Ao mapear designs, preferir esses tokens a hex/números soltos.
 - **Exceção brand-themed (mode-independent):** telas de marca pré-login (ex.: `LoginScreen`) mantêm SEMPRE o visual claro — usam tokens fixos da paleta (`colors.grey[0]`, `colors.brandBlue[*]`), NÃO `semantic.*` (que invertem no dark). Documentar a exceção no JSDoc da tela.
 - `StyleSheet.create` para estilos estáticos; passar cores do tema inline via array de styles. Para superfícies translúcidas, concatenar alpha-hex ao token (ex.: `theme.colors.grey[0] + '38'`), em vez de cravar `rgba(...)`.
-- **Medidas do Claude Design (HTML) → escala do DS:** o HTML/mock do Claude Design é referência de **layout, cores, espaçamento e proporção**, mas seus `font-size` em px são de um "telefone" de ~316px de largura e ficam pequenos demais em telas reais (~360–412dp). NÃO copiar os px crus — **adaptar para a escala do design system** (corpo ~14, secundário ~12–13, título de seção ~16, números/nome ~20–23, badges ~11–12, rótulos de tab ~11), preferindo `theme.textStyles`; em telas brand-themed com Baloo 2/Nunito, usar pesos comparáveis nesses tamanhos. (Ex.: `PerfilScreen` do vet foi escalada assim.)
+- **Tipografia das telas brand-themed = TOKENS, não px:** as telas de marca (Login, RoleSelect e TODO o app do vet) usam tokens de tipografia da marca em `@/theme` → **`brandText`** (e `brandFonts` p/ overrides de peso), definidos em `src/theme/brandTypography.ts`. NUNCA cravar `fontFamily`/`fontSize` solto nessas telas — espalhar o token: `title: { ...brandText.heading, color: ... }`. Disponível tb via `useTheme().brandText`. Como são mode-independent (fonte/tamanho fixos), o export é estático e pode ser usado direto em `StyleSheet.create`.
+  - Tokens (Baloo 2/Nunito, escala **device-real** — já maior que o mock 316px): `pageTitle` 28 · `title` 27 · `statValue` 26 · `heading` 19 (seção/card/nome) · `actionLabel`/`rowLabel`/`dayText` 18 · `label`/`subtitle` 17 · `body`/`secondary` 16 · `pill` 15 · `statLabel`/`badgeStrong` 14 · `badge`/`tabLabel` 13.
+  - Faltou um tamanho? **Adicionar um token** em `brandTypography.ts` — não reintroduzir px solto.
+- **Medidas do Claude Design (HTML/Figma) → tokens:** o mock é referência de **layout, cores, espaçamento e proporção**; seus `font-size` em px são de um "telefone" de ~316px e ficam pequenos em telas reais (~360–412dp). NÃO copiar os px crus de fonte — mapear pro token `brandText` correspondente. (Espaçamentos/tiles/raios também foram escalados ~+20% vs. o mock nessas telas; ao criar telas novas, partir da proporção das telas já existentes, não dos px do mock.)
+- **Uma fonte + uma escala no app inteiro:** `theme.textStyles`/`fontFamily` foram repontados para **Nunito** (`sans`) + **Baloo 2** (`heading`) — as MESMAS famílias do `brandText` — e os tokens `fontSize`/`lineHeight` subiram pra **escala device-real** (~+20% vs. a original do mock 316px). Logo, TODO o app (forms como `VetProfileForm`, tutor, componentes `@/components/ui`, onboarding) e as telas brand-themed do vet ficam na mesma fonte e na mesma escala maior. Os dois caminhos coexistem: `brandText` (tokens semânticos da marca) p/ telas brand-themed; `textStyles` (escala sm/base/lg/xl/h1–h5) p/ o resto. Não há mais Rubik/Montserrat nem escala "pequena".
 
 **Camada de rede (React Query + httpClient):**
 - Toda chamada HTTP passa pelo `api` (`@/services/api/httpClient`) — get/post/put/patch/delete. Ele já injeta Bearer, `Accept-Language`, timeout (30s) e faz refresh de 401 + retry uma vez.
@@ -189,4 +203,6 @@ _This file contains critical rules and patterns that AI agents must follow when 
 - Atualizar quando a stack tecnológica mudar (em especial ao subir o Expo SDK).
 - Revisar periodicamente e remover regras que se tornarem óbvias.
 
-Last Updated: 2026-06-25 (fluxo de onboarding: CreateAccount → RoleSelect → VetProfile; feature `vet/`; upload Supabase; `expo-image-picker`)
+Last Updated: 2026-06-29 (pivô vet→clínica IMPLEMENTADO no cadastro/perfil: RoleSelect "Tenho uma clínica", `VetProfileForm` com CNPJ + CRMV do responsável técnico + logo + nome da clínica obrigatório, `PerfilScreen` com identidade de clínica; backend `VetProfile.cnpj` `@unique` + migration `vet_to_clinic_cnpj` + DTO valida 14 dígitos. PENDENTE: consulta padrão; saudação HomeScreen/AgendaScreen do vet)
+Anterior: 2026-06-29 (Product Context atualizado: marketplace multi-lados — clínicas veterinárias + passeadores; consulta padrão; pivô vet→clínica (CNPJ + responsável técnico) marcado como PENDENTE no código)
+Anterior: 2026-06-27 (telas do vet `HomeScreen`/`AgendaScreen` com mock; foto via `useMyVetProfile`; nav aninhada Home → Perfil; tipografia brand-themed tokenizada em `theme/brandText`; **fonte do app inteiro unificada em Nunito + Baloo 2** — `fontFamily.sans/heading` repontados, Rubik/Montserrat removidos)

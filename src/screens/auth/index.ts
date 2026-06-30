@@ -1,3 +1,4 @@
 export { LoginScreen } from './LoginScreen'
-export { CreateAccountScreen } from './CreateAccountScreen'
 export { VetCadastroScreen } from './VetCadastroScreen'
+export { CadastroTutorScreen } from './CadastroTutorScreen'
+export { CadastroPasseadorScreen } from './CadastroPasseadorScreen'

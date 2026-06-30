@@ -27,9 +27,9 @@ export const ROLE_OPTIONS: RoleOption[] = [
   },
   {
     id: 'vet',
-    title: 'Sou veterinário(a)',
+    title: 'Tenho uma clínica',
     description: 'Receber e gerenciar agendamentos',
-    emoji: '🩺',
+    emoji: '🏥',
     tileGradient: ['#BFE0F5', '#8FC8EC'],
   },
   {

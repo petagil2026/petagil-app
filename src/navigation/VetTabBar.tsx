@@ -7,6 +7,7 @@ import { View, Text, Pressable, StyleSheet } from 'react-native'
 import Svg, { Path, Rect, Line, Circle } from 'react-native-svg'
 import { useSafeAreaInsets } from 'react-native-safe-area-context'
 import type { BottomTabBarProps } from '@react-navigation/bottom-tabs'
+import { brandText, brandFonts } from '@/theme'
 
 const ACTIVE = '#2E7CB8'
 const INACTIVE = '#9AA7BA'
@@ -16,8 +17,8 @@ function TabGlyph({ name, color }: { name: string; color: string }) {
     case 'Home':
       return (
         <Svg
-          width={22}
-          height={22}
+          width={26}
+          height={26}
           viewBox="0 0 24 24"
           fill="none"
           stroke={color}
@@ -29,8 +30,8 @@ function TabGlyph({ name, color }: { name: string; color: string }) {
     case 'Agenda':
       return (
         <Svg
-          width={22}
-          height={22}
+          width={26}
+          height={26}
           viewBox="0 0 24 24"
           fill="none"
           stroke={color}
@@ -43,8 +44,8 @@ function TabGlyph({ name, color }: { name: string; color: string }) {
     case 'Avaliacoes':
       return (
         <Svg
-          width={22}
-          height={22}
+          width={26}
+          height={26}
           viewBox="0 0 24 24"
           fill="none"
           stroke={color}
@@ -80,7 +81,7 @@ export function VetTabBar({ state, descriptors, navigation }: BottomTabBarProps)
   }
 
   return (
-    <View style={[styles.wrap, { bottom: insets.bottom > 0 ? insets.bottom : 13 }]}>
+    <View style={[styles.wrap, { bottom: insets.bottom > 0 ? insets.bottom : 16 }]}>
       {state.routes.map((route, index) => {
         const focused = state.index === index
         const color = focused ? ACTIVE : INACTIVE
@@ -119,24 +120,24 @@ export function VetTabBar({ state, descriptors, navigation }: BottomTabBarProps)
 const styles = StyleSheet.create({
   wrap: {
     position: 'absolute',
-    left: 13,
-    right: 13,
-    height: 66,
+    left: 16,
+    right: 16,
+    height: 78,
     backgroundColor: '#FFFFFF',
-    borderRadius: 24,
+    borderRadius: 28,
     flexDirection: 'row',
     justifyContent: 'space-around',
     alignItems: 'center',
-    paddingHorizontal: 6,
+    paddingHorizontal: 8,
     shadowColor: '#1E5F92',
     shadowOpacity: 0.22,
     shadowRadius: 16,
     shadowOffset: { width: 0, height: 12 },
     elevation: 12,
   },
-  item: { alignItems: 'center', gap: 2 },
-  indicator: { width: 18, height: 4, borderRadius: 99, backgroundColor: 'transparent' },
+  item: { alignItems: 'center', gap: 3 },
+  indicator: { width: 22, height: 5, borderRadius: 99, backgroundColor: 'transparent' },
   indicatorOn: { backgroundColor: ACTIVE },
-  label: { fontFamily: 'Nunito_700Bold', fontSize: 11 },
-  labelActive: { fontFamily: 'Nunito_800ExtraBold' },
+  label: { ...brandText.tabLabel },
+  labelActive: { fontFamily: brandFonts.nun800 },
 })

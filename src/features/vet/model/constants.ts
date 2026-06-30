@@ -3,6 +3,25 @@
  * Usadas nos selects (BottomSheet) do formulário de perfil.
  */
 
+/**
+ * Duração padrão da consulta (minutos) — fonte ÚNICA no app. Espelha o
+ * `@default(30)` do schema Prisma e a forma vazia do `findMine` no backend.
+ */
+export const DEFAULT_SLOT_DURATION_MIN = 30
+
+/**
+ * Opções de horário (06:00–22:00, de 30 em 30 min), zero-padded "HH:MM".
+ * Compartilhadas pelos selects de horário da disponibilidade e das folgas.
+ */
+export const TIME_OPTIONS: { value: string; label: string }[] = (() => {
+  const out: { value: string; label: string }[] = []
+  for (let m = 6 * 60; m <= 22 * 60; m += 30) {
+    const v = `${String(Math.floor(m / 60)).padStart(2, '0')}:${String(m % 60).padStart(2, '0')}`
+    out.push({ value: v, label: v })
+  }
+  return out
+})()
+
 export interface UfOption {
   value: string
   label: string

@@ -2,58 +2,65 @@
  * Inner AI Design System v2.0 - Typography
  */
 
-// Mapeamento interno das fontes por peso
-const rubikFonts = {
-  '300': 'Rubik_300Light',
-  '400': 'Rubik_400Regular',
-  '500': 'Rubik_500Medium',
-  '600': 'Rubik_600SemiBold',
-  '700': 'Rubik_700Bold',
-} as const;
+// Mapeamento interno das fontes por peso.
+// Fonte da marca (Claude Design): Nunito (corpo/sans) + Baloo 2 (headings).
+// `sans`/`heading` mantêm a mesma API de pesos; só a família mudou — Rubik/Montserrat
+// eram um desvio do port pro Figma. As telas brand-themed do vet usam `brandText`,
+// que casa com estas mesmas famílias.
+const nunitoFonts = {
+  '300': 'Nunito_300Light',
+  '400': 'Nunito_400Regular',
+  '500': 'Nunito_500Medium',
+  '600': 'Nunito_600SemiBold',
+  '700': 'Nunito_700Bold',
+} as const
 
-const montserratFonts = {
-  '400': 'Montserrat_400Regular',
-  '600': 'Montserrat_600SemiBold',
-} as const;
+// Baloo 2 só tem pesos 400–800; os textStyles de heading usam 400 e 600.
+const baloo2Fonts = {
+  '400': 'Baloo2_400Regular',
+  '600': 'Baloo2_600SemiBold',
+} as const
 
 export const fontWeight = {
   light: '300' as const,
   normal: '400' as const,
   medium: '500' as const,
   semibold: '600' as const,
-};
+}
 
 // Helper para obter a fonte correta baseado no peso
-type FontWeight = '300' | '400' | '500' | '600' | '700';
+type FontWeight = '300' | '400' | '500' | '600' | '700'
 
 export const fontFamily = {
-  sans: (weight: FontWeight = '400') => rubikFonts[weight] || rubikFonts['400'],
-  heading: (weight: '400' | '600' = '400') => montserratFonts[weight] || montserratFonts['400'],
-} as const;
+  sans: (weight: FontWeight = '400') => nunitoFonts[weight] || nunitoFonts['400'],
+  heading: (weight: '400' | '600' = '400') => baloo2Fonts[weight] || baloo2Fonts['400'],
+} as const
 
+// Escala "device-real" (~+20% vs. a escala original do mock/DS de 316px) — aplicada
+// a TODO o app via os tokens. Casa com a escala maior das telas brand-themed (brandText).
 export const fontSize = {
-  sm: 12,
-  base: 14,
-  lg: 16,
-  xl: 18,
-  h5: 16,
-  h4: 20,
-  h3: 24,
-  h2: 30,
-  h1: 36,
-} as const;
+  sm: 14,
+  base: 16,
+  lg: 19,
+  xl: 21,
+  h5: 19,
+  h4: 24,
+  h3: 28,
+  h2: 36,
+  h1: 43,
+} as const
 
 export const lineHeight = {
-  sm: 20,
-  base: 22,
-  lg: 24,
-  xl: 26,
-  h5: 24,
-  h4: 28,
-  h3: 32,
-  h2: 38,
-  h1: 44,
-} as const;
+  sm: 24,
+  base: 26,
+  lg: 28,
+  xl: 31,
+  h5: 28,
+  h4: 33,
+  h3: 38,
+  h2: 45,
+  h1: 52,
+} as const
 
 // Pre-defined text styles
 export const textStyles = {
@@ -204,4 +211,4 @@ export const textStyles = {
     fontSize: fontSize.h1,
     lineHeight: lineHeight.h1,
   },
-} as const;
+} as const
