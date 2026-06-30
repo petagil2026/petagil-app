@@ -15,7 +15,7 @@ msgstr ""
 msgid "— até —"
 msgstr "— até —"
 
-#: src/screens/vet/AgendaScreen.tsx:92
+#: src/screens/vet/AgendaScreen.tsx:84
 msgid "{confirmedCount} confirmados"
 msgstr "{confirmedCount} confirmados"
 
@@ -31,19 +31,19 @@ msgstr "+ Bloquear um dia"
 msgid "+ Bloquear um horário"
 msgstr "+ Bloquear um horário"
 
-#: src/screens/vet/AgendaScreen.tsx:95
+#: src/screens/vet/AgendaScreen.tsx:87
 msgid "⏰ Próxima {nextTime}"
 msgstr "⏰ Próxima {nextTime}"
 
-#: src/features/vet/view/VetProfileForm.tsx:379
+#: src/features/vet/view/VetProfileForm.tsx:382
 msgid "🏠 Também atende a domicílio"
 msgstr "🏠 Também atende a domicílio"
 
-#: src/screens/vet/PerfilScreen.tsx:197
+#: src/screens/vet/PerfilScreen.tsx:200
 msgid "0 avaliações"
 msgstr "0 avaliações"
 
-#: src/features/vet/view/VetProfileForm.tsx:298
+#: src/features/vet/view/VetProfileForm.tsx:301
 msgid "00.000.000/0000-00"
 msgstr "00.000.000/0000-00"
 
@@ -64,7 +64,7 @@ msgstr "Abrir menu"
 msgid "Adicionar logo da clínica"
 msgstr "Adicionar logo da clínica"
 
-#: src/screens/vet/PerfilScreen.tsx:377
+#: src/screens/vet/PerfilScreen.tsx:380
 msgid "Ajuda & suporte"
 msgstr "Ajuda & suporte"
 
@@ -81,19 +81,19 @@ msgstr "Alterar logo"
 msgid "Alterar logo da clínica"
 msgstr "Alterar logo da clínica"
 
-#: src/features/vet/view/VetProfileForm.tsx:344
+#: src/features/vet/view/VetProfileForm.tsx:347
 msgid "Anexar carteira do CRMV"
 msgstr "Anexar carteira do CRMV"
 
-#: src/features/vet/view/VetProfileForm.tsx:353
+#: src/features/vet/view/VetProfileForm.tsx:356
 msgid "Anexar carteira do CRMV (opcional)"
 msgstr "Anexar carteira do CRMV (opcional)"
 
-#: src/screens/vet/PerfilScreen.tsx:198
+#: src/screens/vet/PerfilScreen.tsx:201
 msgid "ano"
 msgstr "ano"
 
-#: src/screens/vet/PerfilScreen.tsx:198
+#: src/screens/vet/PerfilScreen.tsx:201
 msgid "anos"
 msgstr "anos"
 
@@ -101,11 +101,11 @@ msgstr "anos"
 msgid "Ao continuar você aceita os Termos de Uso"
 msgstr "Ao continuar você aceita os Termos de Uso"
 
-#: src/features/vet/view/VetProfileForm.tsx:390
+#: src/features/vet/view/VetProfileForm.tsx:393
 msgid "Após o envio, o CRMV do responsável técnico é conferido no Siscad Web (CFMV) e aprovado em até 24h."
 msgstr "Após o envio, o CRMV do responsável técnico é conferido no Siscad Web (CFMV) e aprovado em até 24h."
 
-#: src/screens/vet/HomeScreen.tsx:170
+#: src/screens/vet/HomeScreen.tsx:164
 msgid "Atalhos rápidos"
 msgstr "Atalhos rápidos"
 
@@ -122,11 +122,11 @@ msgstr "Atualize os dados da sua clínica"
 msgid "automaticamente"
 msgstr "automaticamente"
 
-#: src/screens/vet/HomeScreen.tsx:227
+#: src/screens/vet/HomeScreen.tsx:221
 msgid "Avaliações"
 msgstr "Avaliações"
 
-#: src/screens/vet/PerfilScreen.tsx:313
+#: src/screens/vet/PerfilScreen.tsx:316
 msgid "Avaliações dos tutores"
 msgstr "Avaliações dos tutores"
 
@@ -148,15 +148,15 @@ msgstr "Bloqueio"
 msgid "Bloqueio criado!"
 msgstr "Bloqueio criado!"
 
-#: src/screens/vet/HomeScreen.tsx:63
+#: src/screens/vet/HomeScreen.tsx:54
 msgid "Boa noite"
 msgstr "Boa noite"
 
-#: src/screens/vet/HomeScreen.tsx:62
+#: src/screens/vet/HomeScreen.tsx:53
 msgid "Boa tarde"
 msgstr "Boa tarde"
 
-#: src/screens/vet/HomeScreen.tsx:61
+#: src/screens/vet/HomeScreen.tsx:52
 msgid "Bom dia"
 msgstr "Bom dia"
 
@@ -174,7 +174,7 @@ msgstr "Cadastre-se"
 msgid "Cancelar"
 msgstr "Cancelar"
 
-#: src/features/vet/view/VetProfileForm.tsx:353
+#: src/features/vet/view/VetProfileForm.tsx:356
 msgid "Carteira anexada ✓"
 msgstr "Carteira anexada ✓"
 
@@ -200,7 +200,7 @@ msgstr "Clínica enviada! Avisaremos quando o CRMV for aprovado."
 msgid "CNPJ"
 msgstr "CNPJ"
 
-#: src/features/vet/view/VetProfileForm.tsx:299
+#: src/features/vet/view/VetProfileForm.tsx:302
 msgid "CNPJ da clínica"
 msgstr "CNPJ da clínica"
 
@@ -212,11 +212,11 @@ msgstr "CNPJ deve ter 14 dígitos"
 msgid "Comece a oferecer passeios 🦮"
 msgstr "Comece a oferecer passeios 🦮"
 
-#: src/screens/vet/HomeScreen.tsx:166
+#: src/screens/vet/HomeScreen.tsx:160
 msgid "Comparecimento"
 msgstr "Comparecimento"
 
-#: src/screens/vet/HomeScreen.tsx:165
+#: src/screens/vet/HomeScreen.tsx:159
 msgid "Confirmadas"
 msgstr "Confirmadas"
 
@@ -228,11 +228,11 @@ msgstr "Confirmar"
 msgid "Confirmar exclusão"
 msgstr "Confirmar exclusão"
 
-#: src/screens/vet/PerfilScreen.tsx:196
+#: src/screens/vet/PerfilScreen.tsx:199
 msgid "Consultas"
 msgstr "Consultas"
 
-#: src/screens/vet/HomeScreen.tsx:164
+#: src/screens/vet/HomeScreen.tsx:158
 msgid "Consultas hoje"
 msgstr "Consultas hoje"
 
@@ -246,7 +246,7 @@ msgstr "Continuar com Google"
 msgid "Crie sua conta"
 msgstr "Crie sua conta"
 
-#: src/features/vet/view/VetProfileForm.tsx:317
+#: src/features/vet/view/VetProfileForm.tsx:320
 msgid "CRMV"
 msgstr "CRMV"
 
@@ -321,11 +321,11 @@ msgstr "Editar horário de início"
 msgid "Editar horário de término"
 msgstr "Editar horário de término"
 
-#: src/screens/vet/PerfilScreen.tsx:260
+#: src/screens/vet/PerfilScreen.tsx:263
 msgid "Editar perfil e logo"
 msgstr "Editar perfil e logo"
 
-#: src/screens/vet/HomeScreen.tsx:139
+#: src/screens/vet/HomeScreen.tsx:133
 msgid "EM {inMin} MIN"
 msgstr "EM {inMin} MIN"
 
@@ -333,11 +333,11 @@ msgstr "EM {inMin} MIN"
 msgid "Em breve"
 msgstr "Em breve"
 
-#: src/features/vet/view/VetProfileForm.tsx:307
+#: src/features/vet/view/VetProfileForm.tsx:310
 msgid "Endereço"
 msgstr "Endereço"
 
-#: src/features/vet/view/VetProfileForm.tsx:306
+#: src/features/vet/view/VetProfileForm.tsx:309
 msgid "Endereço · rua, nº, bairro"
 msgstr "Endereço · rua, nº, bairro"
 
@@ -345,7 +345,7 @@ msgstr "Endereço · rua, nº, bairro"
 msgid "Entrar"
 msgstr "Entrar"
 
-#: src/features/vet/view/VetProfileForm.tsx:397
+#: src/features/vet/view/VetProfileForm.tsx:400
 msgid "Enviar para verificação"
 msgstr "Enviar para verificação"
 
@@ -353,10 +353,10 @@ msgstr "Enviar para verificação"
 msgid "Escolha os dias que você atende"
 msgstr "Escolha os dias que você atende"
 
-#: src/features/vet/view/VetProfileForm.tsx:361
 #: src/features/vet/view/VetProfileForm.tsx:364
-#: src/features/vet/view/VetProfileForm.tsx:419
-#: src/screens/vet/PerfilScreen.tsx:202
+#: src/features/vet/view/VetProfileForm.tsx:367
+#: src/features/vet/view/VetProfileForm.tsx:422
+#: src/screens/vet/PerfilScreen.tsx:205
 msgid "Especialidades"
 msgstr "Especialidades"
 
@@ -364,8 +364,8 @@ msgstr "Especialidades"
 msgid "Esses períodos não recebem agendamentos"
 msgstr "Esses períodos não recebem agendamentos"
 
-#: src/features/vet/view/VetProfileForm.tsx:335
-#: src/features/vet/view/VetProfileForm.tsx:408
+#: src/features/vet/view/VetProfileForm.tsx:338
+#: src/features/vet/view/VetProfileForm.tsx:411
 msgid "Estado (UF) do CRMV"
 msgstr "Estado (UF) do CRMV"
 
@@ -392,12 +392,12 @@ msgstr "Excluir {entityName}"
 msgid "Fechar"
 msgstr "Fechar"
 
-#: src/screens/vet/HomeScreen.tsx:207
+#: src/screens/vet/HomeScreen.tsx:201
 msgid "Folgas"
 msgstr "Folgas"
 
 #: src/screens/vet/FolgasScreen.tsx:213
-#: src/screens/vet/PerfilScreen.tsx:296
+#: src/screens/vet/PerfilScreen.tsx:299
 msgid "Folgas & bloqueios"
 msgstr "Folgas & bloqueios"
 
@@ -445,7 +445,7 @@ msgstr "Informe sua cidade"
 msgid "Informe uma data válida (DD/MM/AAAA)."
 msgstr "Informe uma data válida (DD/MM/AAAA)."
 
-#: src/screens/vet/PerfilScreen.tsx:356
+#: src/screens/vet/PerfilScreen.tsx:359
 msgid "Lembretes & notificações"
 msgstr "Lembretes & notificações"
 
@@ -457,9 +457,9 @@ msgstr "Leva menos de 1 minuto 🐾"
 msgid "Login com Google em breve"
 msgstr "Login com Google em breve"
 
-#: src/screens/vet/HomeScreen.tsx:190
+#: src/screens/vet/HomeScreen.tsx:184
 #: src/screens/vet/MeusHorariosScreen.tsx:203
-#: src/screens/vet/PerfilScreen.tsx:277
+#: src/screens/vet/PerfilScreen.tsx:280
 msgid "Meus horários"
 msgstr "Meus horários"
 
@@ -472,7 +472,7 @@ msgstr "Mostrar senha"
 msgid "Motivo (opcional)"
 msgstr "Motivo (opcional)"
 
-#: src/screens/vet/PerfilScreen.tsx:198
+#: src/screens/vet/PerfilScreen.tsx:201
 msgid "Na PetÁgil"
 msgstr "Na PetÁgil"
 
@@ -535,7 +535,7 @@ msgstr "Não tem conta? <0>Cadastre-se</0>"
 msgid "Nenhuma folga cadastrada ainda."
 msgstr "Nenhuma folga cadastrada ainda."
 
-#: src/features/vet/view/VetProfileForm.tsx:324
+#: src/features/vet/view/VetProfileForm.tsx:327
 msgid "Nº"
 msgstr "Nº"
 
@@ -549,7 +549,7 @@ msgstr "Nome completo"
 msgid "Nome da clínica"
 msgstr "Nome da clínica"
 
-#: src/screens/vet/PerfilScreen.tsx:183
+#: src/screens/vet/PerfilScreen.tsx:186
 msgid "Novo"
 msgstr "Novo"
 
@@ -557,7 +557,7 @@ msgstr "Novo"
 msgid "Novo nome"
 msgstr "Novo nome"
 
-#: src/features/vet/view/VetProfileForm.tsx:325
+#: src/features/vet/view/VetProfileForm.tsx:328
 msgid "Número do CRMV do responsável técnico"
 msgstr "Número do CRMV do responsável técnico"
 
@@ -574,9 +574,9 @@ msgstr "O horário final deve ser após o inicial."
 msgid "Ocultar senha"
 msgstr "Ocultar senha"
 
-#: src/screens/vet/AgendaScreen.tsx:87
-msgid "Olá, {name} 🩺"
-msgstr "Olá, {name} 🩺"
+#: src/screens/vet/AgendaScreen.tsx:79
+msgid "Olá, {name} 🏥"
+msgstr "Olá, {name} 🏥"
 
 #: src/components/ui/ItemActionsMenu.tsx:48
 msgid "Opções"
@@ -594,7 +594,7 @@ msgstr "Períodos de atendimento"
 msgid "PetÁgil"
 msgstr "PetÁgil"
 
-#: src/screens/vet/PerfilScreen.tsx:332
+#: src/screens/vet/PerfilScreen.tsx:335
 msgid "Plano & pagamento"
 msgstr "Plano & pagamento"
 
@@ -602,11 +602,11 @@ msgstr "Plano & pagamento"
 msgid "Precisamos de acesso às suas fotos para anexar a imagem."
 msgstr "Precisamos de acesso às suas fotos para anexar a imagem."
 
-#: src/screens/vet/PerfilScreen.tsx:333
+#: src/screens/vet/PerfilScreen.tsx:336
 msgid "Profissional"
 msgstr "Profissional"
 
-#: src/screens/vet/AgendaScreen.tsx:124
+#: src/screens/vet/AgendaScreen.tsx:116
 msgid "PRÓXIMA"
 msgstr "PRÓXIMA"
 
@@ -614,8 +614,8 @@ msgstr "PRÓXIMA"
 msgid "Próximo →"
 msgstr "Próximo →"
 
-#: src/screens/vet/PerfilScreen.tsx:244
-#: src/screens/vet/PerfilScreen.tsx:250
+#: src/screens/vet/PerfilScreen.tsx:247
+#: src/screens/vet/PerfilScreen.tsx:253
 msgid "Recebendo agendamentos"
 msgstr "Recebendo agendamentos"
 
@@ -636,12 +636,12 @@ msgstr "Renomear"
 msgid "Renomear {entityName}"
 msgstr "Renomear {entityName}"
 
-#: src/features/vet/view/VetProfileForm.tsx:312
+#: src/features/vet/view/VetProfileForm.tsx:315
 msgid "Responsável técnico"
 msgstr "Responsável técnico"
 
-#: src/screens/vet/PerfilScreen.tsx:401
-#: src/screens/vet/PerfilScreen.tsx:418
+#: src/screens/vet/PerfilScreen.tsx:404
+#: src/screens/vet/PerfilScreen.tsx:421
 msgid "Sair da conta"
 msgstr "Sair da conta"
 
@@ -655,7 +655,7 @@ msgstr "Salvando..."
 msgid "Salvar"
 msgstr "Salvar"
 
-#: src/features/vet/view/VetProfileForm.tsx:397
+#: src/features/vet/view/VetProfileForm.tsx:400
 msgid "Salvar alterações"
 msgstr "Salvar alterações"
 
@@ -689,20 +689,25 @@ msgstr "Seus dados de acesso"
 msgid "Sim, quero excluir"
 msgstr "Sim, quero excluir"
 
-#: src/features/vet/view/VetProfileForm.tsx:371
+#: src/features/vet/view/VetProfileForm.tsx:374
 msgid "Sobre a clínica"
 msgstr "Sobre a clínica"
 
-#: src/features/vet/view/VetProfileForm.tsx:370
+#: src/features/vet/view/VetProfileForm.tsx:373
 msgid "Sobre a clínica · breve bio"
 msgstr "Sobre a clínica · breve bio"
 
-#: src/screens/vet/AgendaScreen.tsx:88
+#: src/screens/vet/AgendaScreen.tsx:80
 msgid "Sua agenda · hoje"
 msgstr "Sua agenda · hoje"
 
-#: src/screens/vet/HomeScreen.tsx:133
-#: src/screens/vet/HomeScreen.tsx:137
+#: src/screens/vet/AgendaScreen.tsx:62
+#: src/screens/vet/HomeScreen.tsx:71
+msgid "Sua clínica"
+msgstr "Sua clínica"
+
+#: src/screens/vet/HomeScreen.tsx:127
+#: src/screens/vet/HomeScreen.tsx:131
 msgid "Sua próxima consulta"
 msgstr "Sua próxima consulta"
 
@@ -723,17 +728,17 @@ msgstr "Tentar novamente"
 msgid "Tente reiniciar o aplicativo."
 msgstr "Tente reiniciar o aplicativo."
 
-#: src/screens/vet/AgendaScreen.tsx:120
+#: src/screens/vet/AgendaScreen.tsx:112
 msgid "Tutor: {nextTutor} · {nextType}"
 msgstr "Tutor: {nextTutor} · {nextType}"
 
-#: src/screens/vet/AgendaScreen.tsx:149
+#: src/screens/vet/AgendaScreen.tsx:141
 msgid "Tutor: {tutor} · Confirmado"
 msgstr "Tutor: {tutor} · Confirmado"
 
-#: src/screens/vet/HomeScreen.tsx:156
-msgid "Tutor: {tutor} · Consulta de rotina"
-msgstr "Tutor: {tutor} · Consulta de rotina"
+#: src/screens/vet/HomeScreen.tsx:150
+msgid "Tutor: {tutor} · Consulta padrão"
+msgstr "Tutor: {tutor} · Consulta padrão"
 
 #: src/screens/vet/FolgasScreen.tsx:295
 msgid "Tutores com consulta num período bloqueado são avisados para remarcar."
@@ -744,7 +749,7 @@ msgid "Tutores confiam mais em clínicas com logo 💙"
 msgstr "Tutores confiam mais em clínicas com logo 💙"
 
 #: src/features/vet/view/VetProfileForm.tsx:174
-#: src/features/vet/view/VetProfileForm.tsx:332
+#: src/features/vet/view/VetProfileForm.tsx:335
 msgid "UF"
 msgstr "UF"
 
@@ -752,14 +757,9 @@ msgstr "UF"
 msgid "Validamos o CRMV do responsável técnico"
 msgstr "Validamos o CRMV do responsável técnico"
 
-#: src/screens/vet/HomeScreen.tsx:173
+#: src/screens/vet/HomeScreen.tsx:167
 msgid "Ver agenda"
 msgstr "Ver agenda"
-
-#: src/screens/vet/AgendaScreen.tsx:70
-#: src/screens/vet/HomeScreen.tsx:80
-msgid "Veterinário(a)"
-msgstr "Veterinário(a)"
 
 #: src/features/vet/view/VetProfileForm.tsx:222
 #: src/screens/vet/FolgasScreen.tsx:207
