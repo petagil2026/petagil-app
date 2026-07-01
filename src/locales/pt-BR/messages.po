@@ -35,11 +35,20 @@ msgstr "🏥 Na clínica"
 msgid "0 avaliações"
 msgstr "0 avaliações"
 
+msgid "A espécie \"Outros\" chega em breve 🐾"
+msgstr "A espécie \"Outros\" chega em breve 🐾"
+
 msgid "A senha precisa de ao menos 8 caracteres"
 msgstr "A senha precisa de ao menos 8 caracteres"
 
 msgid "Abrir menu"
 msgstr "Abrir menu"
+
+msgid "Adicionar"
+msgstr "Adicionar"
+
+msgid "Adicionar carteira de vacinação"
+msgstr "Adicionar carteira de vacinação"
 
 msgid "Adicionar foto"
 msgstr "Adicionar foto"
@@ -119,8 +128,8 @@ msgstr "Cão"
 msgid "Carteira anexada ✓"
 msgstr "Carteira anexada ✓"
 
-msgid "Carteira de vacinação você adiciona depois, com calma."
-msgstr "Carteira de vacinação você adiciona depois, com calma."
+msgid "Carteira de vacinação"
+msgstr "Carteira de vacinação"
 
 msgid "Celular (WhatsApp)"
 msgstr "Celular (WhatsApp)"
@@ -333,11 +342,14 @@ msgstr "Ocultar senha"
 msgid "Onde você atende?"
 msgstr "Onde você atende?"
 
-msgid "Opcional 💙"
-msgstr "Opcional 💙"
+msgid "Opcional · adicione quando quiser"
+msgstr "Opcional · adicione quando quiser"
 
 msgid "Opções"
 msgstr "Opções"
+
+msgid "Outros"
+msgstr "Outros"
 
 msgid "Perfil atualizado!"
 msgstr "Perfil atualizado!"
