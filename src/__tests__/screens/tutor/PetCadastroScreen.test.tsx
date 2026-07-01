@@ -85,20 +85,33 @@ describe('PetCadastroScreen', () => {
     expect(mockMutate).not.toHaveBeenCalled()
   })
 
-  it('AC5: idade decimal bloqueia o submit', () => {
+  it('idade aceita apenas dígitos (filtra não-numéricos)', () => {
+    renderScreen()
+    fireEvent.changeText(screen.getByTestId('pet-age'), '1a2.b3')
+    expect(screen.getByTestId('pet-age').props.value).toBe('123')
+  })
+
+  it('AC5: idade fora de 0–100 bloqueia o submit', () => {
     renderScreen()
     fireEvent.changeText(screen.getByTestId('pet-name'), 'Rex')
-    fireEvent.changeText(screen.getByTestId('pet-age'), '12.5')
+    fireEvent.changeText(screen.getByTestId('pet-age'), '150')
     fireEvent.press(screen.getByTestId('pet-save'))
     expect(mockMutate).not.toHaveBeenCalled()
   })
 
-  it('AC5: idade não-numérica bloqueia o submit', () => {
+  it('AC5: espécie "Outros" bloqueia o submit (placeholder, backend não aceita)', () => {
     renderScreen()
     fireEvent.changeText(screen.getByTestId('pet-name'), 'Rex')
-    fireEvent.changeText(screen.getByTestId('pet-age'), 'abc')
+    fireEvent.press(screen.getByTestId('pet-species-other'))
     fireEvent.press(screen.getByTestId('pet-save'))
     expect(mockMutate).not.toHaveBeenCalled()
+  })
+
+  it('renderiza a faixa de vacinação com botão "Adicionar" (sem navegação)', () => {
+    renderScreen()
+    expect(screen.getByTestId('pet-vaccine-add')).toBeTruthy()
+    // Não deve quebrar ao tocar (ação "em breve", sem navegar).
+    fireEvent.press(screen.getByTestId('pet-vaccine-add'))
   })
 
   it('AC6: "Salvar pet" com sucesso chama onDone', () => {

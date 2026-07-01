@@ -1,7 +1,7 @@
 /**
- * PetCadastroScreen — cadastro do pet do tutor. Visual fiel ao mock
- * (`cadastropet.html`): header em gradiente, foto com badge de câmera, nome,
- * espécie (pílulas), raça/idade e um aviso informativo de carteira de vacinação.
+ * PetCadastroScreen — cadastro do pet do tutor. Visual brand-themed: header em
+ * gradiente, foto com badge de câmera, nome, espécie (pílulas com animação),
+ * raça/idade e uma faixa de carteira de vacinação (opcional, ação "em breve").
  *
  * Papel de GATE: é renderizada pelo `TutorRoot` (shell do tutor) enquanto o tutor
  * não tem ≥1 pet. NÃO recebe param de navegação e NÃO chama `completeOnboarding`
@@ -25,6 +25,7 @@ import {
   BackHandler,
   type TextInputProps,
 } from 'react-native'
+import Animated, { useAnimatedStyle, useSharedValue, withTiming } from 'react-native-reanimated'
 import { KeyboardAwareScrollView } from 'react-native-keyboard-controller'
 import { LinearGradient } from 'expo-linear-gradient'
 import { StatusBar } from 'expo-status-bar'
@@ -61,6 +62,15 @@ const C = {
 type PendingAction = 'save' | 'add' | null
 
 /**
+ * Espécie no nível da UI: as 4 aceitas pela API + `other` (placeholder visual).
+ * `other` NÃO é persistível (o backend só aceita dog|cat|bird|reptile) — o submit
+ * fica bloqueado enquanto estiver selecionada. Suporte real fica para spec futura.
+ */
+type UiSpecies = ApiSpecies | 'other'
+
+const AnimatedPressable = Animated.createAnimatedComponent(Pressable)
+
+/**
  * Rótulo traduzível da espécie. Usa literais estáticos do macro `t` (extraíveis
  * pelo Lingui) — o emoji vem de `SPECIES_OPTIONS`. Mantém a espécie enumerável
  * e localizável (pt-BR/es) sem traduzir um valor dinâmico.
@@ -87,7 +97,7 @@ export function PetCadastroScreen({ onDone }: PetCadastroScreenProps) {
   const mutation = useCreatePet()
 
   const [name, setName] = useState('')
-  const [species, setSpecies] = useState<ApiSpecies>('dog')
+  const [species, setSpecies] = useState<UiSpecies>('dog')
   const [breed, setBreed] = useState('')
   const [age, setAge] = useState('')
   const [photo, setPhoto] = useState<PickedImage | null>(null)
@@ -127,6 +137,8 @@ export function PetCadastroScreen({ onDone }: PetCadastroScreenProps) {
   const validate = (): boolean => {
     const next: Record<string, string | undefined> = {}
     if (name.trim().length < 1) next.name = t`Informe o nome do pet`
+    // "Outros" ainda não é suportado pelo backend → bloqueia o submit.
+    if (species === 'other') next.species = t`A espécie "Outros" chega em breve 🐾`
     // Idade é opcional; se preenchida, precisa ser inteiro 0–100 (rejeita decimais, NaN, 1e2).
     const ageRaw = age.trim()
     if (ageRaw) {
@@ -141,7 +153,8 @@ export function PetCadastroScreen({ onDone }: PetCadastroScreenProps) {
 
   const buildPayload = () => ({
     name: name.trim(),
-    species,
+    // validate() bloqueia 'other', então aqui species é sempre uma ApiSpecies.
+    species: species as ApiSpecies,
     breed: breed.trim() || undefined,
     ageYears: age.trim() ? Number(age.trim()) : undefined,
   })
@@ -182,6 +195,17 @@ export function PetCadastroScreen({ onDone }: PetCadastroScreenProps) {
   }
 
   const handleConcluir = () => onDone()
+
+  // "Outros": seleciona visualmente + avisa "em breve". O submit fica bloqueado
+  // enquanto estiver selecionada (validate) — backend ainda não aceita essa espécie.
+  const handleSelectOther = () => {
+    setSpecies('other')
+    clearError('species')
+    toast.info(t`Em breve`)
+  }
+
+  // Carteira de vacinação: ação ainda não implementada (sem navegação por ora).
+  const handleAddVaccine = () => toast.info(t`Em breve`)
 
   const isPending = mutation.isPending
   // Trava anti-duplicação (AC9): durante a criação OU após um "Salvar" bem-sucedido
@@ -226,15 +250,14 @@ export function PetCadastroScreen({ onDone }: PetCadastroScreenProps) {
                 {avatarUri ? (
                   <Image source={{ uri: avatarUri }} style={styles.avatarImage} />
                 ) : (
-                  <IconUser size={32} color={C.blue} />
+                  <IconUser size={44} color={C.blue} />
                 )}
               </View>
               <View style={styles.cameraBadge}>
-                <IconImage size={14} color="#FFFFFF" />
+                <IconImage size={18} color="#FFFFFF" />
               </View>
             </Pressable>
-            <Text style={[theme.textStyles.sm600, styles.photoTitle]}>{t`Adicionar foto`}</Text>
-            <Text style={[theme.textStyles.sm400, styles.photoHint]}>{t`Opcional 💙`}</Text>
+            <Text style={[theme.textStyles.base600, styles.photoTitle]}>{t`Adicionar foto`}</Text>
           </View>
 
           {/* Nome do pet */}
@@ -253,34 +276,36 @@ export function PetCadastroScreen({ onDone }: PetCadastroScreenProps) {
           {/* Espécie */}
           <Text style={[theme.textStyles.base600, styles.sectionTitle]}>{t`Espécie`}</Text>
           <View style={styles.speciesRow} accessibilityRole="radiogroup">
-            {SPECIES_OPTIONS.map(option => {
-              const selected = species === option.value
-              return (
-                <Pressable
-                  key={option.value}
-                  onPress={() => setSpecies(option.value)}
-                  accessibilityRole="radio"
-                  accessibilityState={{ selected }}
-                  accessibilityLabel={speciesLabel(option.value)}
-                  testID={`pet-species-${option.value}`}
-                  style={[
-                    styles.speciesPill,
-                    selected
-                      ? { backgroundColor: C.blue, borderColor: C.blue }
-                      : { backgroundColor: C.card, borderColor: C.pillBorder },
-                  ]}
-                >
-                  <Text style={styles.speciesEmoji}>{option.emoji}</Text>
-                  <Text
-                    style={[theme.textStyles.sm600, { color: selected ? '#FFFFFF' : C.blueDark }]}
-                    numberOfLines={1}
-                  >
-                    {speciesLabel(option.value)}
-                  </Text>
-                </Pressable>
-              )
-            })}
+            {SPECIES_OPTIONS.map(option => (
+              <SpeciesPill
+                key={option.value}
+                emoji={option.emoji}
+                label={speciesLabel(option.value)}
+                selected={species === option.value}
+                onPress={() => {
+                  setSpecies(option.value)
+                  clearError('species')
+                }}
+                testID={`pet-species-${option.value}`}
+              />
+            ))}
+            {/* "Outros": placeholder visual (backend ainda não aceita) — ver handleSelectOther. */}
+            <SpeciesPill
+              emoji="🐾"
+              label={t`Outros`}
+              selected={species === 'other'}
+              onPress={handleSelectOther}
+              testID="pet-species-other"
+            />
           </View>
+          {errors.species ? (
+            <Text
+              style={[theme.textStyles.sm400, { color: theme.colors.error[6] }]}
+              accessibilityLiveRegion="polite"
+            >
+              {errors.species}
+            </Text>
+          ) : null}
 
           {/* Raça + Idade */}
           <View style={styles.row}>
@@ -297,7 +322,8 @@ export function PetCadastroScreen({ onDone }: PetCadastroScreenProps) {
               <Field
                 value={age}
                 onChangeText={v => {
-                  setAge(v)
+                  // Aceita apenas dígitos (remove qualquer caractere não-numérico).
+                  setAge(v.replace(/[^0-9]/g, ''))
                   clearError('age')
                 }}
                 error={errors.age}
@@ -309,13 +335,30 @@ export function PetCadastroScreen({ onDone }: PetCadastroScreenProps) {
             </View>
           </View>
 
-          {/* Carteira de vacinação — informativo (sem ação nesta etapa) */}
-          <View style={styles.infoBox}>
-            <Text style={styles.infoEmoji}>💉</Text>
-            <Text style={[theme.textStyles.sm400, styles.infoText]}>
-              {t`Carteira de vacinação você adiciona depois, com calma.`}
-            </Text>
+          {/* Carteira de vacinação — opcional, com ação "Adicionar" (em breve) */}
+          <View style={styles.vaccineBox}>
+            <Text style={styles.vaccineEmoji}>💉</Text>
+            <View style={styles.vaccineTexts}>
+              <Text style={[theme.textStyles.sm600, { color: C.ink }]}>
+                {t`Carteira de vacinação`}
+              </Text>
+              <Text style={[theme.textStyles.sm400, { color: C.inkSoft }]}>
+                {t`Opcional · adicione quando quiser`}
+              </Text>
+            </View>
+            <Pressable
+              onPress={handleAddVaccine}
+              accessibilityRole="button"
+              accessibilityLabel={t`Adicionar carteira de vacinação`}
+              testID="pet-vaccine-add"
+              style={styles.vaccineAddBtn}
+            >
+              <Text style={[theme.textStyles.sm600, { color: C.blue }]}>{t`Adicionar`}</Text>
+            </Pressable>
           </View>
+
+          {/* Empurra os CTAs para o rodapé — conteúdo ocupa a tela toda. */}
+          <View style={styles.spacer} />
 
           <GradientButton
             testID="pet-save"
@@ -356,6 +399,59 @@ export function PetCadastroScreen({ onDone }: PetCadastroScreenProps) {
         </View>
       </KeyboardAwareScrollView>
     </View>
+  )
+}
+
+// ---------------------------------------------------------------------------
+// SpeciesPill — pílula de espécie. Animação única e leve: ao ser SELECIONADA,
+// cresce um pouco (scale 1.06) com um timing curto. Sem feedback de toque nem
+// animação de emoji (mantém fluido em devices/emuladores mais lentos).
+// ---------------------------------------------------------------------------
+function SpeciesPill({
+  emoji,
+  label,
+  selected,
+  onPress,
+  testID,
+}: {
+  emoji: string
+  label: string
+  selected: boolean
+  onPress: () => void
+  testID: string
+}) {
+  const theme = useTheme()
+  const scale = useSharedValue(1)
+
+  useEffect(() => {
+    scale.value = withTiming(selected ? 1.06 : 1, { duration: 160 })
+  }, [selected, scale])
+
+  const pillStyle = useAnimatedStyle(() => ({ transform: [{ scale: scale.value }] }))
+
+  return (
+    <AnimatedPressable
+      onPress={onPress}
+      accessibilityRole="radio"
+      accessibilityState={{ selected }}
+      accessibilityLabel={label}
+      testID={testID}
+      style={[
+        styles.speciesPill,
+        pillStyle,
+        selected
+          ? { backgroundColor: C.blue, borderColor: C.blue }
+          : { backgroundColor: C.card, borderColor: C.pillBorder },
+      ]}
+    >
+      <Text style={styles.speciesEmoji}>{emoji}</Text>
+      <Text
+        style={[theme.textStyles.sm600, { color: selected ? '#FFFFFF' : C.blueDark }]}
+        numberOfLines={1}
+      >
+        {label}
+      </Text>
+    </AnimatedPressable>
   )
 }
 
@@ -413,22 +509,24 @@ const styles = StyleSheet.create({
     marginTop: 2,
   },
   body: {
+    flex: 1,
     paddingHorizontal: 20,
-    paddingTop: 20,
-    gap: 12,
+    paddingTop: 22,
+    gap: 14,
   },
   photoBlock: {
     alignItems: 'center',
     marginBottom: 4,
+    paddingTop: 4,
   },
   avatarWrap: {
-    width: 84,
-    height: 84,
+    width: 104,
+    height: 104,
   },
   avatar: {
-    width: 84,
-    height: 84,
-    borderRadius: 42,
+    width: 104,
+    height: 104,
+    borderRadius: 52,
     borderWidth: 3,
     borderColor: '#FFFFFF',
     backgroundColor: '#D3E8F7',
@@ -442,11 +540,11 @@ const styles = StyleSheet.create({
   },
   cameraBadge: {
     position: 'absolute',
-    right: -2,
-    bottom: -2,
-    width: 30,
-    height: 30,
-    borderRadius: 15,
+    right: 0,
+    bottom: 0,
+    width: 34,
+    height: 34,
+    borderRadius: 17,
     borderWidth: 3,
     borderColor: '#FFFFFF',
     backgroundColor: C.blue,
@@ -457,17 +555,13 @@ const styles = StyleSheet.create({
     color: C.blue,
     marginTop: 10,
   },
-  photoHint: {
-    color: C.placeholder,
-    marginTop: 2,
-  },
   fieldContainer: {
     width: '100%',
   },
   fieldCard: {
     flexDirection: 'row',
     alignItems: 'center',
-    minHeight: 46,
+    minHeight: 52,
     backgroundColor: C.card,
     borderWidth: 1,
     borderRadius: 14,
@@ -476,7 +570,7 @@ const styles = StyleSheet.create({
   },
   fieldInput: {
     flex: 1,
-    paddingVertical: 12,
+    paddingVertical: 14,
   },
   fieldError: {
     marginTop: 4,
@@ -487,21 +581,24 @@ const styles = StyleSheet.create({
   },
   speciesRow: {
     flexDirection: 'row',
+    flexWrap: 'wrap',
     gap: 8,
   },
   speciesPill: {
-    flex: 1,
+    flexGrow: 1,
+    flexBasis: '30%',
+    minWidth: 96,
     flexDirection: 'row',
     alignItems: 'center',
     justifyContent: 'center',
     gap: 6,
-    height: 44,
+    height: 50,
     borderRadius: 14,
     borderWidth: 1,
     paddingHorizontal: 6,
   },
   speciesEmoji: {
-    fontSize: 16,
+    fontSize: 18,
   },
   row: {
     flexDirection: 'row',
@@ -513,9 +610,9 @@ const styles = StyleSheet.create({
   flex2: {
     flex: 2,
   },
-  infoBox: {
+  vaccineBox: {
     flexDirection: 'row',
-    gap: 8,
+    gap: 10,
     alignItems: 'center',
     backgroundColor: C.infoBg,
     borderWidth: 1,
@@ -523,16 +620,28 @@ const styles = StyleSheet.create({
     borderRadius: 15,
     padding: 13,
   },
-  infoEmoji: {
-    fontSize: 17,
+  vaccineEmoji: {
+    fontSize: 20,
   },
-  infoText: {
+  vaccineTexts: {
     flex: 1,
-    color: C.inkSoft,
+    gap: 1,
+  },
+  vaccineAddBtn: {
+    paddingHorizontal: 16,
+    paddingVertical: 9,
+    borderRadius: 12,
+    borderWidth: 1,
+    borderColor: C.blue,
+    backgroundColor: C.card,
+  },
+  spacer: {
+    flexGrow: 1,
+    minHeight: 16,
   },
   saveButton: {
     height: 54,
-    marginTop: 8,
+    marginTop: 4,
   },
   secondaryButton: {
     height: 50,
