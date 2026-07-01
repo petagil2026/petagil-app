@@ -202,7 +202,12 @@ jest.mock('react-native', () => {
     },
     Keyboard: { dismiss: jest.fn() },
     useColorScheme: () => 'light',
-    BackHandler: { addEventListener: jest.fn(() => ({ remove: jest.fn() })) },
+    // Funções comuns (não jest.fn) pra sobreviver ao `resetMocks` — telas que usam
+    // BackHandler precisam que `addEventListener` ainda retorne a subscription no cleanup.
+    BackHandler: {
+      addEventListener: () => ({ remove: () => {} }),
+      removeEventListener: () => {},
+    },
     Easing: { out: () => () => 0, in: () => () => 0, inOut: () => () => 0, ease: () => 0 },
   }
 })

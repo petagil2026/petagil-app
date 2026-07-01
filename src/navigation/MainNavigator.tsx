@@ -1,14 +1,21 @@
 /**
  * MainNavigator — shell por papel.
- * Lê `selectedRole` do AuthProvider e monta o bottom-tab do tutor (5 tabs) ou do
- * vet (4 tabs). Se (por algum motivo) estiver autenticado sem papel, cai num
- * fallback de RoleSelect — nunca monta tabs com papel nulo (AC6b).
+ * Lê `selectedRole` do AuthProvider e monta o bottom-tab do tutor (5 tabs, via
+ * `TutorRoot`) ou do vet (4 tabs). Se (por algum motivo) estiver autenticado sem
+ * papel, cai num fallback de RoleSelect — nunca monta tabs com papel nulo (AC6b).
+ *
+ * Gate de pets: o tutor não entra direto nas tabs — passa pelo `TutorRoot`, que
+ * garante a regra "todo tutor tem ≥1 pet" (ver JSDoc do `TutorRoot`).
  */
+import { useEffect } from 'react'
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs'
 import type { BottomTabNavigationOptions } from '@react-navigation/bottom-tabs'
 import { createNativeStackNavigator } from '@react-navigation/native-stack'
 import { useAuth } from '@/app/providers'
 import { useTheme } from '@/theme'
+import { ScreenStateWrapper } from '@/components/ui'
+import { useHasPetFlag, useMyPets } from '@/features/pets'
+import { SplashScreen } from '@/screens/SplashScreen'
 import type { TutorTabParamList, VetTabParamList, VetProfileStackParamList } from './types'
 import { VetTabBar } from './VetTabBar'
 import {
@@ -17,6 +24,7 @@ import {
   ConsultasScreen,
   PetsScreen,
   PerfilScreen as TutorPerfil,
+  PetCadastroScreen,
 } from '@/screens/tutor'
 import {
   HomeScreen as VetHome,
@@ -111,6 +119,53 @@ function TutorTabNavigator() {
   )
 }
 
+/**
+ * TutorRoot — shell do tutor com GATE de pets (regra: todo tutor tem ≥1 pet).
+ *
+ * Decide entre cadastro de pet e tabs com fast-path por flag persistido:
+ * - `flag.status === 'has'`  → entra direto nas tabs SEM rede (offline-OK);
+ * - `flag.status === 'loading'` → splash enquanto lê o flag no boot;
+ * - `flag.status === 'unknown'` → consulta `GET /pets` (gate): vazio → cadastro;
+ *   ≥1 → seta o flag e entra; carregando → spinner; erro → retry (não libera as tabs).
+ *
+ * Isolado num componente próprio porque o `MainNavigator` tem early-returns
+ * (não pode chamar hooks de query): aqui todos os hooks ficam no topo, antes de
+ * qualquer return. `staleTime: Infinity` (em `useMyPets`) evita refetch churn.
+ */
+export function TutorRoot() {
+  const { user } = useAuth()
+  // `id` é alias de `sub`; cai para `sub` se o backend não populou o alias.
+  const flag = useHasPetFlag(user?.id ?? user?.sub)
+  const pets = useMyPets({ enabled: flag.status === 'unknown' })
+
+  // GET /pets retornou ≥1 → seta o flag (libera as tabs e acelera o próximo boot).
+  // Guarda em `status !== 'has'` evita re-setar o estado a cada identidade nova de `data`.
+  useEffect(() => {
+    if (flag.status !== 'has' && (pets.data?.length ?? 0) > 0) {
+      flag.markHasPet()
+    }
+  }, [pets.data, flag.status, flag.markHasPet])
+
+  if (flag.status === 'loading') {
+    return <SplashScreen />
+  }
+  if (flag.status === 'has') {
+    return <TutorTabNavigator />
+  }
+
+  return (
+    <ScreenStateWrapper
+      isLoading={pets.isPending}
+      isError={pets.isError}
+      isEmpty={(pets.data?.length ?? 0) === 0}
+      onRetry={() => void pets.refetch()}
+      emptyComponent={<PetCadastroScreen onDone={flag.markHasPet} />}
+    >
+      <TutorTabNavigator />
+    </ScreenStateWrapper>
+  )
+}
+
 function VetTabNavigator() {
   return (
     <VetTab.Navigator
@@ -146,5 +201,5 @@ export function MainNavigator() {
     return <PlaceholderScreen title="Passeador(a)" subtitle="Em construção" />
   }
 
-  return selectedRole === 'vet' ? <VetTabNavigator /> : <TutorTabNavigator />
+  return selectedRole === 'vet' ? <VetTabNavigator /> : <TutorRoot />
 }
