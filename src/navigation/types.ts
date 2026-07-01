@@ -3,28 +3,17 @@ import type { NativeStackScreenProps } from '@react-navigation/native-stack'
 import type { BottomTabScreenProps } from '@react-navigation/bottom-tabs'
 
 // ============================================================================
-// Auth Stack — onboarding: Login → Crie sua conta → Seleção de papel → (vet) Perfil
+// Auth Stack — onboarding: Login → Seleção de papel → Cadastro{Tutor|Vet|Passeador}
+// O papel é a bifurcação inicial; o `register` ocorre no submit de cada cadastro.
 // ============================================================================
-
-/**
- * Rascunho da conta coletado em "Crie sua conta", carregado até a seleção de
- * papel (onde o `POST /auth/register` acontece, pois precisa do `role`).
- * Trafega apenas em memória (não há persistência de estado de navegação).
- */
-export interface AccountDraft {
-  name: string
-  email: string
-  phone: string
-  city: string
-  password: string
-}
 
 export type AuthStackParamList = {
   Login: undefined
-  CreateAccount: undefined
-  // `account` ausente = RoleSelect usado como fallback (já autenticado, sem papel).
-  RoleSelect: { account: AccountDraft } | undefined
-  VetProfile: undefined
+  RoleSelect: undefined
+  CadastroTutor: undefined
+  // Form único do vet (conta + dados da clínica/CRMV no mesmo cadastro).
+  CadastroVet: undefined
+  CadastroPasseador: undefined
 }
 
 // ============================================================================
@@ -47,7 +36,9 @@ export type VetTabParamList = {
   Home: undefined
   Agenda: undefined
   Avaliacoes: undefined
-  Perfil: undefined
+  // Aba Perfil é um stack aninhado — aceita navegação direta às telas internas
+  // (ex.: da Home → "Meus horários"/"Folgas"). `undefined` = abre o PerfilMain.
+  Perfil: NavigatorScreenParams<VetProfileStackParamList> | undefined
 }
 
 // Stack interno da aba "Perfil" do vet (perfil + telas de gestão).

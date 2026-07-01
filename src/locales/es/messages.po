@@ -14,6 +14,9 @@ msgstr ""
 msgid "— até —"
 msgstr "— hasta —"
 
+msgid "{confirmedCount} confirmados"
+msgstr "{confirmedCount} confirmados"
+
 msgid "{slotsPerDay} horários/dia"
 msgstr "{slotsPerDay} horarios/día"
 
@@ -26,14 +29,20 @@ msgstr "+ Bloquear un día"
 msgid "+ Bloquear um horário"
 msgstr "+ Bloquear un horario"
 
-msgid "🏠 A domicílio"
-msgstr "🏠 A domicilio"
+msgid "⏰ Próxima {nextTime}"
+msgstr "⏰ Próxima {nextTime}"
 
-msgid "🏥 Na clínica"
-msgstr "🏥 En la clínica"
+msgid "🏠 Também atende a domicílio"
+msgstr "🏠 También atiende a domicilio"
 
 msgid "0 avaliações"
 msgstr "0 evaluaciones"
+
+msgid "00.000.000/0000-00"
+msgstr "00.000.000/0000-00"
+
+msgid "A data final deve ser após a inicial."
+msgstr "La fecha final debe ser posterior a la inicial."
 
 msgid "A espécie \"Outros\" chega em breve 🐾"
 msgstr "La especie «Otros» llega pronto 🐾"
@@ -56,8 +65,8 @@ msgstr "Agregar foto"
 msgid "Adicionar foto do pet"
 msgstr "Agregar foto de la mascota"
 
-msgid "Adicionar foto do profissional"
-msgstr "Agregar foto del profesional"
+msgid "Adicionar logo da clínica"
+msgstr "Agregar logo de la clínica"
 
 msgid "Adicionar outro pet"
 msgstr "Agregar otra mascota"
@@ -68,11 +77,11 @@ msgstr "Ayuda y soporte"
 msgid "Algo deu errado"
 msgstr "Algo salió mal"
 
-msgid "Alterar foto"
-msgstr "Cambiar foto"
+msgid "Alterar logo"
+msgstr "Cambiar logo"
 
-msgid "Alterar foto do profissional"
-msgstr "Cambiar foto del profesional"
+msgid "Alterar logo da clínica"
+msgstr "Cambiar logo de la clínica"
 
 msgid "Anexar carteira do CRMV"
 msgstr "Adjuntar credencial del CRMV"
@@ -89,17 +98,23 @@ msgstr "años"
 msgid "Ao continuar você aceita os Termos de Uso"
 msgstr "Al continuar aceptas los Términos de Uso"
 
-msgid "Após o envio, seu registro é conferido no Siscad Web (CFMV) e aprovado em até 24h."
-msgstr "Después del envío, tu registro se verifica en el Siscad Web (CFMV) y se aprueba en hasta 24h."
+msgid "Após o envio, o CRMV do responsável técnico é conferido no Siscad Web (CFMV) e aprovado em até 24h."
+msgstr "Tras el envío, el CRMV del responsable técnico se verifica en Siscad Web (CFMV) y se aprueba en hasta 24h."
+
+msgid "Atalhos rápidos"
+msgstr "Accesos rápidos"
 
 msgid "até"
 msgstr "hasta"
 
-msgid "Atualize seus dados e sua foto"
-msgstr "Actualiza tus datos y tu foto"
+msgid "Atualize os dados da sua clínica"
+msgstr "Actualiza los datos de tu clínica"
 
 msgid "automaticamente"
 msgstr "automáticamente"
+
+msgid "Avaliações"
+msgstr "Evaluaciones"
 
 msgid "Avaliações dos tutores"
 msgstr "Evaluaciones de los tutores"
@@ -113,8 +128,26 @@ msgstr "Bloquear un día"
 msgid "Bloquear um horário"
 msgstr "Bloquear un horario"
 
+msgid "Bloqueio"
+msgstr "Bloqueo"
+
+msgid "Bloqueio criado!"
+msgstr "¡Bloqueo creado!"
+
+msgid "Boa noite"
+msgstr "Buenas noches"
+
+msgid "Boa tarde"
+msgstr "Buenas tardes"
+
+msgid "Bom dia"
+msgstr "Buenos días"
+
 msgid "Cadastre seu pet"
 msgstr "Registra tu mascota"
+
+msgid "Cadastre sua clínica"
+msgstr "Registra tu clínica"
 
 msgid "Cadastre-se"
 msgstr "Regístrate"
@@ -137,8 +170,32 @@ msgstr "Celular (WhatsApp)"
 msgid "Cidade"
 msgstr "Ciudad"
 
+msgid "Clínica"
+msgstr "Clínica"
+
+msgid "Clínica enviada! Avisaremos quando o CRMV for aprovado."
+msgstr "¡Clínica enviada! Te avisaremos cuando el CRMV sea aprobado."
+
+msgid "CNPJ"
+msgstr "CNPJ"
+
+msgid "CNPJ da clínica"
+msgstr "CNPJ de la clínica"
+
+msgid "CNPJ deve ter 14 dígitos"
+msgstr "El CNPJ debe tener 14 dígitos"
+
+msgid "Comece a oferecer passeios 🦮"
+msgstr "Empieza a ofrecer paseos 🦮"
+
+msgid "Comparecimento"
+msgstr "Asistencia"
+
 msgid "Concluir"
 msgstr "Finalizar"
+
+msgid "Confirmadas"
+msgstr "Confirmadas"
 
 msgid "Confirmar"
 msgstr "Confirmar"
@@ -148,6 +205,9 @@ msgstr "Confirmar eliminación"
 
 msgid "Consultas"
 msgstr "Consultas"
+
+msgid "Consultas hoje"
+msgstr "Consultas hoy"
 
 msgid "Continuar com Google"
 msgstr "Continuar con Google"
@@ -161,6 +221,24 @@ msgstr "CRMV"
 msgid "Cuidar do seu pet ficou simples"
 msgstr "Cuidar de tu mascota nunca fue tan simple"
 
+msgid "Dados da clínica"
+msgstr "Datos de la clínica"
+
+msgid "Data"
+msgstr "Fecha"
+
+msgid "Data final"
+msgstr "Fecha final"
+
+msgid "Data inicial"
+msgstr "Fecha inicial"
+
+msgid "dia inteiro"
+msgstr "todo el día"
+
+msgid "Dia inteiro"
+msgstr "Todo el día"
+
 msgid "Digite sua senha"
 msgstr "Ingresa tu contraseña"
 
@@ -170,11 +248,17 @@ msgstr "Ingresa un celular válido con DDD"
 msgid "Digite um e-mail válido"
 msgstr "Ingresa un correo electrónico válido"
 
+msgid "Disponibilidade salva!"
+msgstr "¡Disponibilidad guardada!"
+
 msgid "Duração da consulta"
 msgstr "Duración de la consulta"
 
 msgid "E-mail"
 msgstr "Correo electrónico"
+
+msgid "Editar clínica"
+msgstr "Editar clínica"
 
 msgid "Editar horário de início"
 msgstr "Editar horario de inicio"
@@ -182,11 +266,11 @@ msgstr "Editar horario de inicio"
 msgid "Editar horário de término"
 msgstr "Editar horario de término"
 
-msgid "Editar perfil"
-msgstr "Editar perfil"
+msgid "Editar perfil e logo"
+msgstr "Editar perfil y logo"
 
-msgid "Editar perfil e foto"
-msgstr "Editar perfil y foto"
+msgid "EM {inMin} MIN"
+msgstr "EN {inMin} MIN"
 
 msgid "Em breve"
 msgstr "Próximamente"
@@ -203,9 +287,6 @@ msgstr "Entrar"
 msgid "Enviar para verificação"
 msgstr "Enviar para verificación"
 
-msgid "Escolha ao menos um local de atendimento"
-msgstr "Elige al menos un lugar de atención"
-
 msgid "Escolha os dias que você atende"
 msgstr "Elige los días en que atiendes"
 
@@ -221,6 +302,9 @@ msgstr "Estos períodos no reciben citas"
 msgid "Estado (UF) do CRMV"
 msgstr "Estado (UF) del CRMV"
 
+msgid "Ex.: Férias, congresso…"
+msgstr "Ej.: Vacaciones, congreso…"
+
 msgid "Excluindo..."
 msgstr "Eliminando..."
 
@@ -233,6 +317,9 @@ msgstr "Eliminar {entityName}"
 msgid "Fechar"
 msgstr "Cerrar"
 
+msgid "Folgas"
+msgstr "Ausencias"
+
 msgid "Folgas & bloqueios"
 msgstr "Ausencias y bloqueos"
 
@@ -241,6 +328,9 @@ msgstr "Gato"
 
 msgid "Gera"
 msgstr "Genera"
+
+msgid "Horário"
+msgstr "Horario"
 
 msgid "Horário de início"
 msgstr "Horario de inicio"
@@ -257,20 +347,26 @@ msgstr "Edad en años"
 msgid "Idade inválida (anos, 0 a 100)"
 msgstr "Edad inválida (años, 0 a 100)"
 
+msgid "Informe datas válidas (DD/MM/AAAA)."
+msgstr "Ingresa fechas válidas (DD/MM/AAAA)."
+
+msgid "Informe o CRMV do responsável técnico"
+msgstr "Indica el CRMV del responsable técnico"
+
 msgid "Informe o nome da clínica"
 msgstr "Indica el nombre de la clínica"
 
 msgid "Informe o nome do pet"
 msgstr "Indica el nombre de la mascota"
 
-msgid "Informe o número do CRMV"
-msgstr "Indica el número del CRMV"
-
 msgid "Informe seu nome completo"
 msgstr "Indica tu nombre completo"
 
 msgid "Informe sua cidade"
 msgstr "Indica tu ciudad"
+
+msgid "Informe uma data válida (DD/MM/AAAA)."
+msgstr "Ingresa una fecha válida (DD/MM/AAAA)."
 
 msgid "Lembretes & notificações"
 msgstr "Recordatorios y notificaciones"
@@ -287,8 +383,17 @@ msgstr "Mis horarios"
 msgid "Mostrar senha"
 msgstr "Mostrar contraseña"
 
+msgid "Motivo (opcional)"
+msgstr "Motivo (opcional)"
+
 msgid "Na PetÁgil"
 msgstr "En PetÁgil"
+
+msgid "Não foi possível carregar a disponibilidade."
+msgstr "No fue posible cargar la disponibilidad."
+
+msgid "Não foi possível carregar as folgas."
+msgstr "No fue posible cargar las ausencias."
 
 msgid ""
 "Não foi possível carregar os dados.\n"
@@ -300,11 +405,20 @@ msgstr ""
 msgid "Não foi possível carregar seu perfil. Tente novamente."
 msgstr "No fue posible cargar tu perfil. Inténtalo de nuevo."
 
+msgid "Não foi possível criar sua conta."
+msgstr "No fue posible crear tu cuenta."
+
+msgid "Não foi possível criar. Tente novamente."
+msgstr "No fue posible crear. Inténtalo de nuevo."
+
 msgid "Não foi possível entrar. Tente novamente."
 msgstr "No fue posible iniciar sesión. Inténtalo de nuevo."
 
-msgid "Não foi possível enviar seu perfil."
-msgstr "No fue posible enviar tu perfil."
+msgid "Não foi possível enviar o perfil da clínica."
+msgstr "No fue posible enviar el perfil de la clínica."
+
+msgid "Não foi possível remover. Tente novamente."
+msgstr "No fue posible eliminar. Inténtalo de nuevo."
 
 msgid "Não foi possível salvar as alterações."
 msgstr "No fue posible guardar los cambios."
@@ -312,8 +426,14 @@ msgstr "No fue posible guardar los cambios."
 msgid "Não foi possível salvar o pet. Tente novamente."
 msgstr "No fue posible guardar la mascota. Inténtalo de nuevo."
 
+msgid "Não foi possível salvar. Tente novamente."
+msgstr "No fue posible guardar. Inténtalo de nuevo."
+
 msgid "Não tem conta? <0>Cadastre-se</0>"
 msgstr "¿No tienes cuenta? <0>Regístrate</0>"
+
+msgid "Nenhuma folga cadastrada ainda."
+msgstr "Aún no hay ausencias registradas."
 
 msgid "Nº"
 msgstr "Nº"
@@ -333,14 +453,20 @@ msgstr "Nuevo"
 msgid "Novo nome"
 msgstr "Nuevo nombre"
 
-msgid "Número do CRMV"
-msgstr "Número del CRMV"
+msgid "Número do CRMV do responsável técnico"
+msgstr "Número del CRMV del responsable técnico"
+
+msgid "O bloqueio não pode exceder {MAX_TIMEOFF_DAYS} dias."
+msgstr "El bloqueo no puede exceder {MAX_TIMEOFF_DAYS} días."
+
+msgid "O horário final deve ser após o inicial."
+msgstr "El horario final debe ser posterior al inicial."
 
 msgid "Ocultar senha"
 msgstr "Ocultar contraseña"
 
-msgid "Onde você atende?"
-msgstr "¿Dónde atiendes?"
+msgid "Olá, {name} 🏥"
+msgstr "Hola, {name} 🏥"
 
 msgid "Opcional · adicione quando quiser"
 msgstr "Opcional · agrégala cuando quieras"
@@ -353,9 +479,6 @@ msgstr "Otros"
 
 msgid "Perfil atualizado!"
 msgstr "¡Perfil actualizado!"
-
-msgid "Perfil enviado! Avisaremos quando o CRMV for aprovado."
-msgstr "¡Perfil enviado! Te avisaremos cuando el CRMV sea aprobado."
 
 msgid "Períodos de atendimento"
 msgstr "Períodos de atención"
@@ -374,6 +497,9 @@ msgstr "Necesitamos acceso a tus fotos para adjuntar la imagen."
 
 msgid "Profissional"
 msgstr "Profesional"
+
+msgid "PRÓXIMA"
+msgstr "PRÓXIMA"
 
 msgid "Próximo →"
 msgstr "Siguiente →"
@@ -402,6 +528,9 @@ msgstr "Renombrar {entityName}"
 msgid "Réptil"
 msgstr "Reptil"
 
+msgid "Responsável técnico"
+msgstr "Responsable técnico"
+
 msgid "Sair da conta"
 msgstr "Cerrar sesión"
 
@@ -426,26 +555,35 @@ msgstr "Guardar mascota"
 msgid "Selecione ao menos uma especialidade"
 msgstr "Selecciona al menos una especialidad"
 
+msgid "Selecione pelo menos um dia e um período."
+msgstr "Selecciona al menos un día y un período."
+
 msgid "Senha"
 msgstr "Contraseña"
-
-msgid "Sessão expirada. Faça login novamente."
-msgstr "Sesión expirada. Inicia sesión de nuevo."
-
-msgid "Seu perfil profissional"
-msgstr "Tu perfil profesional"
 
 msgid "seu@email.com"
 msgstr "tu@correo.com"
 
+msgid "Seus dados de acesso"
+msgstr "Tus datos de acceso"
+
 msgid "Sim, quero excluir"
 msgstr "Sí, quiero eliminar"
 
-msgid "Sobre você"
-msgstr "Sobre ti"
+msgid "Sobre a clínica"
+msgstr "Sobre la clínica"
 
-msgid "Sobre você · breve bio"
-msgstr "Sobre ti · breve bio"
+msgid "Sobre a clínica · breve bio"
+msgstr "Sobre la clínica · breve bio"
+
+msgid "Sua agenda · hoje"
+msgstr "Tu agenda · hoy"
+
+msgid "Sua clínica"
+msgstr "Tu clínica"
+
+msgid "Sua próxima consulta"
+msgstr "Tu próxima consulta"
 
 msgid "Sua senha"
 msgstr "Tu contraseña"
@@ -462,20 +600,29 @@ msgstr "Intenta reiniciar la aplicación."
 msgid "Todo tutor precisa de ao menos um pet 🐾"
 msgstr "Todo tutor necesita al menos una mascota 🐾"
 
+msgid "Tutor: {nextTutor} · {nextType}"
+msgstr "Tutor: {nextTutor} · {nextType}"
+
+msgid "Tutor: {tutor} · Confirmado"
+msgstr "Tutor: {tutor} · Confirmado"
+
+msgid "Tutor: {tutor} · Consulta padrão"
+msgstr "Tutor: {tutor} · Consulta estándar"
+
 msgid "Tutores com consulta num período bloqueado são avisados para remarcar."
 msgstr "Los tutores con cita en un período bloqueado son avisados para reagendar."
 
-msgid "Tutores confiam mais em quem eles veem 💙"
-msgstr "Los tutores confían más en quien pueden ver 💙"
+msgid "Tutores confiam mais em clínicas com logo 💙"
+msgstr "Los tutores confían más en clínicas con logo 💙"
 
 msgid "UF"
 msgstr "UF"
 
-msgid "Validamos seu CRMV para gerar confiança"
-msgstr "Validamos tu CRMV para generar confianza"
+msgid "Validamos o CRMV do responsável técnico"
+msgstr "Validamos el CRMV del responsable técnico"
 
-msgid "Veterinário(a)"
-msgstr "Veterinario(a)"
+msgid "Ver agenda"
+msgstr "Ver agenda"
 
 msgid "Voltar"
 msgstr "Volver"

@@ -198,8 +198,8 @@ export function AuthProvider({ children }: AuthProviderProps) {
    *
    * NÃO mexe em `isLoading`: esse flag controla o gate do RootNavigator
    * (Splash vs Auth vs Main). Ligá-lo aqui desmontaria o AuthNavigator (mostrando
-   * a Splash) e, ao voltar, ele remontaria no `initialRoute` Login — perdendo o
-   * `navigate('VetProfile')`. O loading do botão é local (`isSubmitting` na tela).
+   * a Splash) e, ao voltar, ele remontaria no `initialRoute` Login — perdendo a
+   * posição no fluxo de cadastro do papel. O loading do botão é local (na tela).
    */
   const register = useCallback(
     async (input: RegisterInput): Promise<User> => {

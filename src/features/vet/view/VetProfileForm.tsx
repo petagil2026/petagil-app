@@ -1,8 +1,8 @@
 /**
- * VetProfileForm — formulário do perfil do veterinário, reutilizado na CRIAÇÃO
- * (onboarding) e na EDIÇÃO (aba Perfil). Visual fiel ao Figma (node 411:225):
- * header em gradiente, foto com badge de câmera, CRMV (nº + UF), especialidades,
- * bio, modos de atendimento, dados da clínica e anexo da carteira do CRMV.
+ * VetProfileForm — formulário do perfil da CLÍNICA (papel `vet`), reutilizado na
+ * CRIAÇÃO (onboarding) e na EDIÇÃO (aba Perfil): logo da clínica, dados da clínica
+ * (nome + CNPJ + endereço), responsável técnico (CRMV nº + UF + carteira),
+ * especialidades, bio e atendimento a domicílio (opcional).
  *
  * É "burro": só coleta/valida e devolve os valores via `onSubmit`. Quem chama
  * decide a chamada de rede (POST no create, PATCH no edit) e o pós-sucesso.
@@ -61,6 +61,28 @@ interface VetProfileFormProps {
   onSubmit: (data: VetProfileFormSubmit) => void
   /** Edição: callback do botão voltar (chevron no header). */
   onBack?: () => void
+  /**
+   * Onboarding do vet (form único): bloco de campos de acesso (conta) renderizado
+   * no topo do corpo. Quando presente, `extraValidate` roda junto com a validação
+   * da clínica no submit — assim conta + clínica são criadas em um só formulário.
+   */
+  accountSlot?: ReactNode
+  /** Valida o `accountSlot` no submit (retorna `false` para abortar). */
+  extraValidate?: () => boolean
+}
+
+/** Só os dígitos de uma string (remove máscara de CNPJ etc.). */
+const onlyDigits = (value: string): string => value.replace(/\D/g, '')
+
+/** Formata dígitos como CNPJ (XX.XXX.XXX/XXXX-XX) para exibição no input. */
+function formatCnpj(value: string): string {
+  const d = onlyDigits(value).slice(0, 14)
+  let out = d.slice(0, 2)
+  if (d.length > 2) out += `.${d.slice(2, 5)}`
+  if (d.length > 5) out += `.${d.slice(5, 8)}`
+  if (d.length > 8) out += `/${d.slice(8, 12)}`
+  if (d.length > 12) out += `-${d.slice(12, 14)}`
+  return out
 }
 
 // Paleta fiel ao mock (brand-themed, independente de tema claro/escuro).
@@ -87,17 +109,21 @@ export function VetProfileForm({
   submitting,
   onSubmit,
   onBack,
+  accountSlot,
+  extraValidate,
 }: VetProfileFormProps) {
   const theme = useTheme()
   const insets = useSafeAreaInsets()
   const toast = useToast()
   useLingui()
 
+  const [cnpj, setCnpj] = useState(initial?.cnpj ?? '')
   const [crmvNumber, setCrmvNumber] = useState(initial?.crmvNumber ?? '')
   const [crmvUf, setCrmvUf] = useState(initial?.crmvUf ?? '')
   const [specialties, setSpecialties] = useState<string[]>(initial?.specialties ?? [])
   const [bio, setBio] = useState(initial?.bio ?? '')
-  const [servesAtClinic, setServesAtClinic] = useState(initial?.servesAtClinic ?? true)
+  // A entidade É a clínica: `servesAtClinic` é sempre verdadeiro; só o
+  // atendimento a domicílio é opcional (toggle abaixo).
   const [servesAtHome, setServesAtHome] = useState(initial?.servesAtHome ?? false)
   const [clinicName, setClinicName] = useState(initial?.clinicName ?? '')
   const [clinicAddress, setClinicAddress] = useState(initial?.clinicAddress ?? '')
@@ -142,27 +168,30 @@ export function VetProfileForm({
 
   const validate = (): boolean => {
     const next: Record<string, string | undefined> = {}
-    if (crmvNumber.trim().length < 1) next.crmvNumber = t`Informe o número do CRMV`
+    if (clinicName.trim().length < 2) next.clinicName = t`Informe o nome da clínica`
+    if (onlyDigits(cnpj).length !== 14) next.cnpj = t`CNPJ deve ter 14 dígitos`
+    if (crmvNumber.trim().length < 1) next.crmvNumber = t`Informe o CRMV do responsável técnico`
     if (crmvUf.trim().length !== 2) next.crmvUf = t`UF`
     if (specialties.length === 0) next.specialties = t`Selecione ao menos uma especialidade`
-    if (!servesAtClinic && !servesAtHome) next.serves = t`Escolha ao menos um local de atendimento`
-    if (servesAtClinic && clinicName.trim().length < 2)
-      next.clinicName = t`Informe o nome da clínica`
     setErrors(next)
     return Object.values(next).every(v => !v)
   }
 
   const handleSubmit = () => {
-    if (!validate()) return
+    // Valida AMBOS (conta + clínica) antes de abortar, para mostrar todos os erros.
+    const accountOk = extraValidate ? extraValidate() : true
+    const clinicOk = validate()
+    if (!accountOk || !clinicOk) return
     onSubmit({
       values: {
+        cnpj: onlyDigits(cnpj),
         crmvNumber: crmvNumber.trim(),
         crmvUf: crmvUf.trim().toUpperCase(),
         specialties,
         bio: bio.trim() || undefined,
-        servesAtClinic,
+        servesAtClinic: true,
         servesAtHome,
-        clinicName: servesAtClinic ? clinicName.trim() || undefined : undefined,
+        clinicName: clinicName.trim(),
         clinicAddress: clinicAddress.trim() || undefined,
       },
       photo,
@@ -198,22 +227,32 @@ export function VetProfileForm({
             </Pressable>
           ) : null}
           <Text style={[theme.textStyles.h3600, styles.headerTitle]}>
-            {isEdit ? t`Editar perfil` : t`Seu perfil profissional`}
+            {isEdit ? t`Editar clínica` : t`Cadastre sua clínica`}
           </Text>
           <Text style={[theme.textStyles.sm400, styles.headerSubtitle]}>
             {isEdit
-              ? t`Atualize seus dados e sua foto`
-              : t`Validamos seu CRMV para gerar confiança`}
+              ? t`Atualize os dados da sua clínica`
+              : t`Validamos o CRMV do responsável técnico`}
           </Text>
         </LinearGradient>
 
         <View style={styles.body}>
-          {/* Foto do profissional */}
+          {/* Dados de acesso (conta) — onboarding do vet em form único */}
+          {accountSlot ? (
+            <>
+              <Text style={[theme.textStyles.base600, styles.sectionTitle]}>
+                {t`Seus dados de acesso`}
+              </Text>
+              {accountSlot}
+            </>
+          ) : null}
+
+          {/* Logo da clínica */}
           <View style={styles.photoBlock}>
             <Pressable
               onPress={() => void pickImage(setPhoto)}
               accessibilityRole="button"
-              accessibilityLabel={t`Alterar foto do profissional`}
+              accessibilityLabel={t`Alterar logo da clínica`}
               style={styles.avatarWrap}
             >
               <View style={styles.avatar}>
@@ -228,26 +267,65 @@ export function VetProfileForm({
               </View>
             </Pressable>
             <Text style={[theme.textStyles.sm600, styles.photoTitle]}>
-              {isEdit ? t`Alterar foto` : t`Adicionar foto do profissional`}
+              {isEdit ? t`Alterar logo` : t`Adicionar logo da clínica`}
             </Text>
             <Text style={[theme.textStyles.sm400, styles.photoHint]}>
-              {t`Tutores confiam mais em quem eles veem 💙`}
+              {t`Tutores confiam mais em clínicas com logo 💙`}
             </Text>
           </View>
 
-          {/* CRMV nº + UF */}
+          {/* Dados da clínica */}
+          <Text style={[theme.textStyles.base600, styles.sectionTitle]}>{t`Dados da clínica`}</Text>
+          <Field
+            prefix="🏥"
+            value={clinicName}
+            onChangeText={v => {
+              setClinicName(v)
+              clearError('clinicName')
+            }}
+            error={errors.clinicName}
+            placeholder={t`Nome da clínica`}
+            accessibilityLabel={t`Nome da clínica`}
+          />
+          <Field
+            prefix={t`CNPJ`}
+            value={formatCnpj(cnpj)}
+            onChangeText={v => {
+              // Corta em 14 dígitos no ESTADO (igual ao display de `formatCnpj`).
+              // Sem o slice, um 15º dígito ficava escondido no display mas reprovava
+              // a validação (`onlyDigits(cnpj).length !== 14`).
+              setCnpj(onlyDigits(v).slice(0, 14))
+              clearError('cnpj')
+            }}
+            error={errors.cnpj}
+            placeholder={t`00.000.000/0000-00`}
+            accessibilityLabel={t`CNPJ da clínica`}
+            keyboardType="number-pad"
+          />
+          <Field
+            icon={<IconAttachment size={16} color={C.blue} />}
+            value={clinicAddress}
+            onChangeText={setClinicAddress}
+            placeholder={t`Endereço · rua, nº, bairro`}
+            accessibilityLabel={t`Endereço`}
+          />
+
+          {/* Responsável técnico (CRMV nº + UF + carteira) */}
+          <Text style={[theme.textStyles.base600, styles.sectionTitle]}>
+            {t`Responsável técnico`}
+          </Text>
           <View style={styles.row}>
             <View style={styles.crmvNumber}>
               <Field
-                prefix={t`Nº`}
+                prefix={t`CRMV`}
                 value={crmvNumber}
                 onChangeText={v => {
                   setCrmvNumber(v)
                   clearError('crmvNumber')
                 }}
                 error={errors.crmvNumber}
-                placeholder={t`CRMV`}
-                accessibilityLabel={t`Número do CRMV`}
+                placeholder={t`Nº`}
+                accessibilityLabel={t`Número do CRMV do responsável técnico`}
                 keyboardType="number-pad"
               />
             </View>
@@ -261,75 +339,6 @@ export function VetProfileForm({
               />
             </View>
           </View>
-
-          <SelectField
-            prefix="🏥"
-            value={specialties.join(', ')}
-            placeholder={t`Especialidades`}
-            error={errors.specialties}
-            onPress={() => setSpecSheet(true)}
-            accessibilityLabel={t`Especialidades`}
-          />
-
-          <Field
-            value={bio}
-            onChangeText={setBio}
-            placeholder={t`Sobre você · breve bio`}
-            accessibilityLabel={t`Sobre você`}
-            multiline
-            inputStyle={styles.bioInput}
-          />
-
-          {/* Onde você atende? */}
-          <Text style={[theme.textStyles.base600, styles.sectionTitle]}>
-            {t`Onde você atende?`}
-          </Text>
-          {errors.serves ? (
-            <Text style={[theme.textStyles.sm400, { color: theme.colors.error[6] }]}>
-              {errors.serves}
-            </Text>
-          ) : null}
-          <View style={styles.row}>
-            <Toggle
-              label={t`🏥 Na clínica`}
-              active={servesAtClinic}
-              onPress={() => {
-                setServesAtClinic(v => !v)
-                clearError('serves')
-              }}
-            />
-            <Toggle
-              label={t`🏠 A domicílio`}
-              active={servesAtHome}
-              onPress={() => {
-                setServesAtHome(v => !v)
-                clearError('serves')
-              }}
-            />
-          </View>
-
-          {servesAtClinic ? (
-            <>
-              <Field
-                prefix="🏥"
-                value={clinicName}
-                onChangeText={v => {
-                  setClinicName(v)
-                  clearError('clinicName')
-                }}
-                error={errors.clinicName}
-                placeholder={t`Nome da clínica`}
-                accessibilityLabel={t`Nome da clínica`}
-              />
-              <Field
-                icon={<IconAttachment size={16} color={C.blue} />}
-                value={clinicAddress}
-                onChangeText={setClinicAddress}
-                placeholder={t`Endereço · rua, nº, bairro`}
-                accessibilityLabel={t`Endereço`}
-              />
-            </>
-          ) : null}
 
           {/* Anexar carteira do CRMV */}
           <Pressable
@@ -348,12 +357,40 @@ export function VetProfileForm({
             </Text>
           </Pressable>
 
+          {/* Especialidades + bio */}
+          <SelectField
+            prefix="🩺"
+            value={specialties.join(', ')}
+            placeholder={t`Especialidades`}
+            error={errors.specialties}
+            onPress={() => setSpecSheet(true)}
+            accessibilityLabel={t`Especialidades`}
+          />
+
+          <Field
+            value={bio}
+            onChangeText={setBio}
+            placeholder={t`Sobre a clínica · breve bio`}
+            accessibilityLabel={t`Sobre a clínica`}
+            multiline
+            inputStyle={styles.bioInput}
+          />
+
+          {/* Atendimento a domicílio (opcional) */}
+          <View style={styles.row}>
+            <Toggle
+              label={t`🏠 Também atende a domicílio`}
+              active={servesAtHome}
+              onPress={() => setServesAtHome(v => !v)}
+            />
+          </View>
+
           {/* Info Siscad (só na criação) */}
           {isEdit ? null : (
             <View style={styles.infoBox}>
               <Text style={styles.infoEmoji}>⏳</Text>
               <Text style={[theme.textStyles.sm400, styles.infoText]}>
-                {t`Após o envio, seu registro é conferido no Siscad Web (CFMV) e aprovado em até 24h.`}
+                {t`Após o envio, o CRMV do responsável técnico é conferido no Siscad Web (CFMV) e aprovado em até 24h.`}
               </Text>
             </View>
           )}

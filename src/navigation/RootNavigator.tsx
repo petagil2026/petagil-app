@@ -14,10 +14,10 @@ const linking: LinkingOptions<RootStackParamList> = {
       Auth: {
         screens: {
           Login: 'login',
-          CreateAccount: 'criar-conta',
-          RoleSelect: 'role-select',
-          // VetProfile não é exposto como deep link: depende do rascunho de conta
-          // em memória (criado em CreateAccount) e da sessão recém-criada.
+          RoleSelect: 'cadastro',
+          CadastroTutor: 'cadastro/tutor',
+          CadastroVet: 'cadastro/clinica',
+          CadastroPasseador: 'cadastro/passeador',
         },
       },
       Main: 'app',
